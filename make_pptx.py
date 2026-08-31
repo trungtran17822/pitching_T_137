@@ -234,8 +234,8 @@ def card_group(items: list[tuple[str, str]], y: float = 4.08, cols: int = 3) -> 
         x = x0 + col * (w + gap)
         yy = y + row * 1.32
         out += rect(x, yy, w, h)
-        out += text_box(x + 0.16, yy + 0.13, w - 0.32, 0.28, head, 17.5, True, "#EEFDF8")
-        out += text_box(x + 0.16, yy + 0.45, w - 0.32, 0.46, body, 10.4, False, "#A8C4C0")
+        out += text_box(x + 0.16, yy + 0.13, w - 0.32, 0.28, head, 15.6, True, "#EEFDF8")
+        out += text_box(x + 0.16, yy + 0.45, w - 0.32, 0.46, body, 9.4, False, "#A8C4C0")
     return out
 
 
@@ -244,8 +244,8 @@ def metric_group(items: list[tuple[str, str]]) -> str:
     for i, (num, body) in enumerate(items):
         x = 0.92 + i * 3.93
         out += rect(x, 4.05, 3.65, 1.32, fill="#1A2B20", line="#B8D8A4")
-        out += text_box(x + 0.18, 4.24, 3.25, 0.45, num, 30, True, "#70F0A8")
-        out += text_box(x + 0.18, 4.83, 3.25, 0.35, body, 10.5, False, "#A8C4C0")
+        out += text_box(x + 0.18, 4.24, 3.25, 0.45, num, 26.5, True, "#70F0A8")
+        out += text_box(x + 0.18, 4.83, 3.25, 0.35, body, 9.6, False, "#A8C4C0")
     return out
 
 
@@ -257,8 +257,8 @@ def steps_group(items: list[tuple[str, str, str]]) -> str:
         x = 0.92 + i * (w + gap)
         out += rect(x, 3.85, w, 1.65, fill="#1A2B20", line="#B8D8A4")
         out += text_box(x + 0.13, 4.04, w - 0.26, 0.26, num, 13, True, "#70F0A8")
-        out += text_box(x + 0.13, 4.52, w - 0.26, 0.28, head, 15.5, True, "#EEFDF8")
-        out += text_box(x + 0.13, 4.91, w - 0.26, 0.42, body, 9.4, False, "#A8C4C0")
+        out += text_box(x + 0.13, 4.52, w - 0.26, 0.28, head, 14.2, True, "#EEFDF8")
+        out += text_box(x + 0.13, 4.91, w - 0.26, 0.42, body, 8.7, False, "#A8C4C0")
     return out
 
 
@@ -276,7 +276,7 @@ def build_slide(slide: dict, index: int, total: int) -> str:
         shapes += topbar()
         shapes += text_box(0.92, 1.35, 6.8, 0.34, slide["kicker"], 12, True, "#59E0D0")
         shapes += text_box(0.88, 1.82, 4.1, 1.05, slide["title"], 72, True)
-        shapes += text_box(0.96, 3.0, 6.5, 0.68, slide["lead"], 19.5, False, "#D8F4EF")
+        shapes += text_box(0.96, 3.0, 6.5, 0.68, slide["lead"], 18, False, "#D8F4EF")
         x = 0.96
         for chip in slide["chips"]:
             shapes += rect(x, 3.95, 1.68, 0.36, fill="#E7D8B5", line="#B8D8A4", alpha=17000)
@@ -285,9 +285,9 @@ def build_slide(slide: dict, index: int, total: int) -> str:
     else:
         shapes += topbar()
         shapes += text_box(0.92, 1.02, 4.8, 0.28, slide["kicker"], 11.5, True, "#59E0D0")
-        shapes += text_box(0.88, 1.47, 11.5, 1.15, slide["title"], 32.5, True)
+        shapes += text_box(0.88, 1.47, 11.5, 1.15, slide["title"], 29, True)
         if "lead" in slide:
-            shapes += text_box(0.94, 2.78, 9.4, 0.55, slide["lead"], 14.3, False, "#CFE7E3")
+            shapes += text_box(0.94, 2.78, 9.4, 0.55, slide["lead"], 13.2, False, "#CFE7E3")
         if "metrics" in slide:
             shapes += metric_group(slide["metrics"])
         if "steps" in slide:
@@ -304,7 +304,7 @@ def build_slide(slide: dict, index: int, total: int) -> str:
             shapes += image("rId3", 6.32, 3.37, 6.1, 2.58, "overview-diagram.png")
         if "quote" in slide:
             shapes += rect(0.92, 5.78, 10.8, 0.55, fill="#2B3A24", line="#7FB069", alpha=76000)
-            shapes += text_box(1.12, 5.93, 10.2, 0.22, slide["quote"], 12.5, False, "#D8F4EF")
+            shapes += text_box(1.12, 5.93, 10.2, 0.22, slide["quote"], 11.5, False, "#D8F4EF")
 
     shapes += footer(index, total)
     return f"""<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
