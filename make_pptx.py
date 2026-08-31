@@ -1,13 +1,14 @@
 from __future__ import annotations
 
 import html
-import os
 import zipfile
 from pathlib import Path
 
 
-OUT = Path("SYL_pitch_deck_10_slides.pptx")
+OUT = Path("SYL_pitch_deck_12_slides.pptx")
 HERO = Path("assets/syl-hero.png")
+DIAGRAM = Path("assets/overview-diagram.png")
+LOGO = Path("assets/logo.jpg")
 EMU = 914400
 SLIDE_W = 13.333333 * EMU
 SLIDE_H = 7.5 * EMU
@@ -21,86 +22,93 @@ def esc(text: str) -> str:
     return html.escape(text, quote=True)
 
 
-def color(hex_color: str) -> str:
-    return hex_color.replace("#", "").upper()
+def color(value: str) -> str:
+    return value.replace("#", "").upper()
 
 
-def text_box(x, y, w, h, text, size=24, bold=False, color_hex="#EEFDF8", align="l"):
-    weight = "<a:b/>" if bold else ""
-    paragraphs = ""
-    for line in text.split("\n"):
-        paragraphs += f"""
-        <a:p>
-          <a:pPr algn="{align}"/>
-          <a:r><a:rPr lang="vi-VN" sz="{int(size*100)}" dirty="0">{weight}<a:solidFill><a:srgbClr val="{color(color_hex)}"/></a:solidFill><a:latin typeface="Aptos Display"/><a:cs typeface="Arial"/></a:rPr><a:t>{esc(line)}</a:t></a:r>
-        </a:p>"""
+def reset_ids() -> None:
+    shape._id = 10
+
+
+def next_id() -> int:
+    shape._id += 1
+    return shape._id
+
+
+def shape_id() -> int:
+    return next_id()
+
+
+def shape(xml: str) -> str:
+    return xml
+
+
+shape._id = 10
+
+
+def bg(fill: str = "#102018") -> str:
+    return f"""<p:bg><p:bgPr><a:solidFill><a:srgbClr val="{color(fill)}"/></a:solidFill><a:effectLst/></p:bgPr></p:bg>"""
+
+
+def rect(x: float, y: float, w: float, h: float, fill: str = "#1F3022", line: str = "#B8D8A4", alpha: int = 85000) -> str:
     return f"""
     <p:sp>
-      <p:nvSpPr><p:cNvPr id="{text_box.next_id()}" name="Text"/><p:cNvSpPr txBox="1"/><p:nvPr/></p:nvSpPr>
-      <p:spPr><a:xfrm><a:off x="{emu(x)}" y="{emu(y)}"/><a:ext cx="{emu(w)}" cy="{emu(h)}"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom><a:noFill/><a:ln><a:noFill/></a:ln></p:spPr>
-      <p:txBody><a:bodyPr wrap="square" anchor="t"/><a:lstStyle/>{paragraphs}</p:txBody>
-    </p:sp>"""
-
-
-def reset_ids():
-    text_box._id = 10
-
-
-def next_id():
-    text_box._id += 1
-    return text_box._id
-
-
-text_box._id = 10
-text_box.next_id = next_id
-
-
-def rect(x, y, w, h, fill="#1F3022", line="#B8D8A4", alpha=85000, radius="roundRect"):
-    return f"""
-    <p:sp>
-      <p:nvSpPr><p:cNvPr id="{text_box.next_id()}" name="Panel"/><p:cNvSpPr/><p:nvPr/></p:nvSpPr>
+      <p:nvSpPr><p:cNvPr id="{shape_id()}" name="Panel"/><p:cNvSpPr/><p:nvPr/></p:nvSpPr>
       <p:spPr>
         <a:xfrm><a:off x="{emu(x)}" y="{emu(y)}"/><a:ext cx="{emu(w)}" cy="{emu(h)}"/></a:xfrm>
-        <a:prstGeom prst="{radius}"><a:avLst/></a:prstGeom>
+        <a:prstGeom prst="roundRect"><a:avLst/></a:prstGeom>
         <a:solidFill><a:srgbClr val="{color(fill)}"><a:alpha val="{alpha}"/></a:srgbClr></a:solidFill>
         <a:ln w="12700"><a:solidFill><a:srgbClr val="{color(line)}"><a:alpha val="52000"/></a:srgbClr></a:solidFill></a:ln>
       </p:spPr>
     </p:sp>"""
 
 
-def bg(fill="#102018"):
-    return f"""<p:bg><p:bgPr><a:solidFill><a:srgbClr val="{color(fill)}"/></a:solidFill><a:effectLst/></p:bgPr></p:bg>"""
+def text_box(x: float, y: float, w: float, h: float, text: str, size: float = 24, bold: bool = False, color_hex: str = "#EEFDF8", align: str = "l") -> str:
+    bold_xml = "<a:b/>" if bold else ""
+    paragraphs = ""
+    for line in text.split("\n"):
+        paragraphs += f"""
+        <a:p>
+          <a:pPr algn="{align}"/>
+          <a:r><a:rPr lang="vi-VN" sz="{int(size * 100)}" dirty="0">{bold_xml}<a:solidFill><a:srgbClr val="{color(color_hex)}"/></a:solidFill><a:latin typeface="Aptos Display"/><a:cs typeface="Arial"/></a:rPr><a:t>{esc(line)}</a:t></a:r>
+        </a:p>"""
+    return f"""
+    <p:sp>
+      <p:nvSpPr><p:cNvPr id="{shape_id()}" name="Text"/><p:cNvSpPr txBox="1"/><p:nvPr/></p:nvSpPr>
+      <p:spPr><a:xfrm><a:off x="{emu(x)}" y="{emu(y)}"/><a:ext cx="{emu(w)}" cy="{emu(h)}"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom><a:noFill/><a:ln><a:noFill/></a:ln></p:spPr>
+      <p:txBody><a:bodyPr wrap="square" anchor="t"/><a:lstStyle/>{paragraphs}</p:txBody>
+    </p:sp>"""
 
 
-def hero_pic():
+def image(rel_id: str, x: float, y: float, w: float, h: float, name: str) -> str:
     return f"""
     <p:pic>
-      <p:nvPicPr><p:cNvPr id="{text_box.next_id()}" name="syl-hero.png"/><p:cNvPicPr><a:picLocks noChangeAspect="1"/></p:cNvPicPr><p:nvPr/></p:nvPicPr>
-      <p:blipFill><a:blip r:embed="rId2"/><a:stretch><a:fillRect/></a:stretch></p:blipFill>
-      <p:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="{int(SLIDE_W)}" cy="{int(SLIDE_H)}"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></p:spPr>
-    </p:pic>
-    <p:sp>
-      <p:nvSpPr><p:cNvPr id="{text_box.next_id()}" name="Overlay"/><p:cNvSpPr/><p:nvPr/></p:nvSpPr>
-      <p:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="{int(SLIDE_W)}" cy="{int(SLIDE_H)}"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom><a:solidFill><a:srgbClr val="102018"><a:alpha val="30000"/></a:srgbClr></a:solidFill><a:ln><a:noFill/></a:ln></p:spPr>
-    </p:sp>"""
+      <p:nvPicPr><p:cNvPr id="{shape_id()}" name="{esc(name)}"/><p:cNvPicPr><a:picLocks noChangeAspect="1"/></p:cNvPicPr><p:nvPr/></p:nvPicPr>
+      <p:blipFill><a:blip r:embed="{rel_id}"/><a:stretch><a:fillRect/></a:stretch></p:blipFill>
+      <p:spPr><a:xfrm><a:off x="{emu(x)}" y="{emu(y)}"/><a:ext cx="{emu(w)}" cy="{emu(h)}"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></p:spPr>
+    </p:pic>"""
+
+
+def footer(index: int, total: int) -> str:
+    return text_box(11.72, 6.86, 0.95, 0.16, f"{index:02d} / {total}", 8.5, True, "#A8C4C0", "r")
 
 
 slides = [
     {
-        "kicker": "AI Safety Camera · 2026",
+        "type": "hero",
+        "kicker": "Fall detection · Stranger alert · Privacy by role",
         "title": "SYL",
-        "lead": "Camera cảnh báo té ngã ở người già và phát hiện người lạ.",
-        "chips": ["Fall detection", "Stranger alert", "Privacy by role", "B2B2C"],
-        "hero": True,
+        "lead": "Lớp AI an toàn cho gia đình có người cao tuổi: phát hiện té ngã, cảnh báo người lạ và kích hoạt hỗ trợ khẩn cấp đúng lúc.",
+        "chips": ["YOLO Pose", "Real-time alerts", "WebRTC/HLS streaming", "B2B2C"],
     },
     {
         "kicker": "Problem",
-        "title": "Người già ngã tại nhà, gia đình biết quá muộn.",
-        "lead": "Camera chuyển động gây nhiễu; sản phẩm fall detection nhập khẩu lại đắt và chưa phổ biến tại Việt Nam.",
+        "title": "Khoảnh khắc nguy hiểm nhất thường xảy ra khi không ai đang nhìn.",
+        "lead": "Gia đình cần một hệ thống biết phân biệt sự cố thật với chuyển động bình thường, thay vì chỉ gửi thêm nhiều thông báo nhiễu.",
         "cards": [
-            ("Phát hiện trễ", "Người đi làm hoặc sống xa không có tín hiệu đủ nhanh khi cha mẹ gặp sự cố."),
-            ("Bỏ lỡ cảnh báo", "Motion alert quá nhiều khiến chủ nhà tắt thông báo và bỏ qua sự kiện thật."),
-            ("Rủi ro riêng tư", "Camera gia đình có nguy cơ bị truy cập trái phép, lộ ảnh hoặc video nhạy cảm."),
+            ("Phát hiện trễ", "Người đi làm hoặc sống xa không thể luôn theo dõi camera để biết cha mẹ gặp sự cố."),
+            ("Alert fatigue", "Motion alert quá nhiều khiến người dùng dễ tắt thông báo và bỏ lỡ cảnh báo quan trọng."),
+            ("Rủi ro riêng tư", "Camera gia đình phải kiểm soát ai được xem, xem trong bao lâu và xem vì lý do gì."),
         ],
     },
     {
@@ -115,145 +123,190 @@ slides = [
     },
     {
         "kicker": "Solution",
-        "title": "SYL biến camera thành hệ thống chăm sóc chủ động.",
-        "lead": "Gateway AI kết nối camera, phát hiện té ngã và người lạ, rồi gửi cảnh báo đúng người đúng quyền.",
+        "title": "SYL biến camera hiện có thành hệ thống chăm sóc chủ động.",
+        "lead": "Gateway AI kết nối camera IP, phân tích hình ảnh thời gian thực và gửi cảnh báo có bằng chứng đến đúng người xử lý.",
         "cards": [
-            ("Té ngã", "Ưu tiên recall cao để giảm nguy cơ bỏ sót ca ngã thật."),
-            ("Người lạ", "Nhận diện người nhà và cảnh báo khi phát hiện đối tượng lạ."),
-            ("Quyền 5 phút", "Bác sĩ được cấp quyền tạm thời khi có sự cố, sau đó tự thu hồi."),
+            ("Phát hiện té ngã", "Nhận biết tư thế/ngữ cảnh nguy hiểm để kích hoạt cảnh báo khẩn."),
+            ("Phát hiện người lạ", "Đối chiếu người nhà với người lạ để giảm rủi ro an ninh trong nhà."),
+            ("Bằng chứng tức thì", "Email/app gửi snapshot hoặc video evidence để gia đình xác minh nhanh."),
         ],
     },
     {
-        "kicker": "How It Works",
-        "title": "Từ tín hiệu camera đến hành động khẩn cấp.",
+        "kicker": "Product Flow",
+        "title": "Từ camera đến hành động khẩn cấp trong vài bước.",
         "steps": [
-            ("01", "Camera", "Ghi nhận khu vực đã cấu hình."),
-            ("02", "AI pose", "Phân tích tư thế, chuyển động, đối tượng."),
-            ("03", "Cảnh báo", "Tạo alert theo mức ưu tiên."),
-            ("04", "Liên hệ", "Gọi admin, gia đình hoặc bác sĩ."),
-            ("05", "Thu hồi", "Quyền xem khẩn cấp hết hạn sau 5 phút."),
+            ("01", "Stream", "Camera IP gửi RTSP qua mạng LAN hoặc tunnel bảo mật."),
+            ("02", "Infer", "Model pose/face chạy inference và bám theo người trong khung hình."),
+            ("03", "Classify", "Temporal classifier xác định té ngã, bất động hoặc người lạ."),
+            ("04", "Alert", "Hệ thống gửi cảnh báo real-time kèm bằng chứng."),
+            ("05", "Respond", "Gia đình/admin/bác sĩ phối hợp xử lý trên app."),
         ],
     },
     {
-        "kicker": "Technical Edge",
-        "title": "Ưu tiên không bỏ sót sự cố thật.",
-        "metrics": [
-            ("≥85%", "recall mục tiêu cho phát hiện té ngã."),
-            ("83.05%", "F1 cho phát hiện người lạ trong thử nghiệm nội bộ."),
-            ("85.96%", "recall cho stranger detection."),
-        ],
-        "quote": "Báo động giả có thể xử lý ở tầng xác nhận; bỏ sót ca ngã thật là rủi ro lớn hơn.",
-    },
-    {
-        "kicker": "Users & Roles",
-        "title": "Thiết kế cho gia đình, chủ nhà và người chăm sóc.",
+        "type": "architecture",
+        "kicker": "System Architecture",
+        "title": "Kiến trúc triển khai thật: camera LAN, AI services, streaming và web app.",
         "cards": [
-            ("Admin", "Thêm camera, phân quyền, kiểm tra lỗi trên dashboard."),
-            ("Gia đình", "Chỉ xem camera được cấp phép và nhận cảnh báo liên quan."),
-            ("Bác sĩ", "Xem tạm thời camera phòng người lớn tuổi khi có sự cố."),
-            ("Người cao tuổi", "Không cần thao tác, không cần nhớ đeo thiết bị."),
+            ("Ingestion", "IMOU/IP Camera qua RTSP, SSH reverse tunnel, MediaMTX và FFmpeg."),
+            ("AI pipeline", "YOLO Pose ONNX, ONNX Runtime, OpenCV, ByteTrack, Temporal Fall Classifier, YuNet & SFace."),
+            ("Backend", "FastAPI, WebSocket, Pydantic, LangChain/LangGraph điều phối alert và quyền truy cập."),
+            ("Data layer", "PostgreSQL metadata, Redis cache, MinIO cho snapshot/video evidence."),
+        ],
+    },
+    {
+        "kicker": "Tech Stack",
+        "title": "Nền tảng đủ sâu để chạy real-time, đủ gọn để triển khai thực tế.",
+        "cards": [
+            ("Computer Vision", "YOLO Pose, ONNX Runtime, OpenCV, ByteTrack, Temporal Fall Classifier, YuNet & SFace."),
+            ("Streaming", "MediaMTX, WebRTC/HLS, FFmpeg và SSH Reverse Tunnel cho camera LAN."),
+            ("Frontend", "React, TypeScript, Vite, hls.js, Canvas overlay; prototype React Native."),
+            ("Backend", "FastAPI, WebSocket, Pydantic, LangChain/LangGraph cho workflow cảnh báo."),
+            ("Storage", "PostgreSQL, Redis và MinIO để lưu metadata, cache và object evidence."),
+            ("DevOps", "Docker Compose, Caddy HTTPS, uv, pnpm, Pytest, Ruff và MyPy."),
+        ],
+    },
+    {
+        "kicker": "Traction",
+        "title": "Không chỉ là ý tưởng: hệ thống đã chạy được end-to-end.",
+        "metrics": [
+            ("240/240", "automated tests passed; Ruff và TypeScript type-check đạt 100%."),
+            ("8–15 FPS", "runtime YOLO26n-pose, phụ thuộc cấu hình máy và điều kiện mạng."),
+            ("83.05%", "F1 cho bài toán phát hiện người lạ trong thử nghiệm nội bộ."),
+        ],
+        "quote": "Web, API và Media Gateway đã triển khai trên VPS; kết nối thành công camera IP LAN qua SSH Tunnel và gửi email kèm snapshot/video evidence.",
+    },
+    {
+        "kicker": "Privacy & Roles",
+        "title": "Cảnh báo khẩn cấp phải đi cùng quyền riêng tư có kiểm soát.",
+        "cards": [
+            ("Admin", "Thêm camera, phân quyền, xem dashboard và kiểm tra lỗi hệ thống."),
+            ("Gia đình", "Chỉ xem camera được cấp phép và nhận cảnh báo liên quan đến người thân."),
+            ("Bác sĩ", "Được cấp quyền tạm thời khi có sự cố, phục vụ tư vấn hoặc đánh giá nhanh."),
+            ("5 phút", "Quyền xem tình huống khẩn cấp tự thu hồi để giảm rủi ro lạm dụng dữ liệu."),
         ],
     },
     {
         "kicker": "Business Model",
         "title": "Gateway AI + hợp tác phân phối B2B2C.",
         "prices": [
-            ("Standard", "5.2tr", "Raspberry Pi 5 4GB + hệ thống SYL."),
-            ("Plus", "8.5tr", "Raspberry Pi 5 8GB + hệ thống SYL."),
-            ("Pro", "10tr", "8GB + nâng cấp bản mới nhất, miễn phí 6 tháng đầu."),
+            ("Standard", "5.2tr", "Raspberry Pi 5 4GB + hệ thống SYL cho nhu cầu cơ bản."),
+            ("Plus", "8.5tr", "Raspberry Pi 5 8GB + hệ thống SYL cho cấu hình mạnh hơn."),
+            ("Pro", "10tr", "8GB + nâng cấp bản mới nhất, miễn phí 6 tháng đăng ký đầu."),
         ],
-        "lead": "Giai đoạn đầu bán sỉ qua đối tác camera; dài hạn chuyển sang hoa hồng/doanh thu.",
+        "lead": "Giai đoạn đầu bán sỉ qua đối tác camera; dài hạn chuyển sang hoa hồng/doanh thu theo sản phẩm bán ra.",
     },
     {
-        "kicker": "Competition",
-        "title": "Nằm giữa camera phổ thông và hệ thống chuyên dụng đắt tiền.",
+        "kicker": "Competitive Position",
+        "title": "SYL nằm giữa camera phổ thông và hệ thống chuyên dụng đắt tiền.",
         "cards": [
-            ("Camera phổ thông", "EZVIZ/IMOU mạnh về giá, nhưng chủ yếu motion/human detection."),
-            ("Camera chuyên dụng", "Hanwha, i-PRO, Hikvision có fall detection nhưng chi phí cao hoặc khó mua tại VN."),
-            ("SYL", "Tập trung fall detection + stranger alert, gateway phổ biến, dễ tích hợp."),
+            ("EZVIZ/IMOU", "Mạnh về giá và phân phối, nhưng chủ yếu là motion detection hoặc human detection."),
+            ("Hanwha/i-PRO/Hikvision", "Có hướng fall detection chuyên dụng nhưng chi phí cao hoặc chưa dễ tiếp cận tại Việt Nam."),
+            ("SYL", "Định vị là lớp AI chăm sóc: fall detection, stranger alert, evidence và phân quyền."),
         ],
     },
     {
-        "kicker": "Roadmap & Ask",
-        "title": "Cần phần cứng thật, dữ liệu thật, đối tác thật.",
+        "kicker": "Next Step",
+        "title": "Cần phần cứng thật, dữ liệu thật và đối tác pilot thật.",
         "cards": [
-            ("0–3 tháng", "Hoàn thiện MVP, dashboard admin, phân quyền, cảnh báo khẩn."),
-            ("3–6 tháng", "Benchmark trên camera/gateway phổ biến, dữ liệu đồng ý/ẩn danh."),
-            ("6–12 tháng", "Pilot với đối tác camera, chủ nhà hoặc cơ sở chăm sóc."),
-            ("Kêu gọi", "Tìm 1–2 đối tác thử nghiệm, bộ camera/gateway và cố vấn AI biên."),
+            ("0–3 tháng", "Hoàn thiện MVP, dashboard admin, phân quyền, cảnh báo khẩn và demo ổn định."),
+            ("3–6 tháng", "Benchmark trên camera/gateway phổ biến, mở rộng dữ liệu đồng ý/ẩn danh."),
+            ("6–12 tháng", "Pilot với đối tác camera, chủ nhà hoặc cơ sở chăm sóc để kiểm chứng giá bán."),
+            ("Kêu gọi", "Tìm 1–2 đối tác thử nghiệm, bộ camera/gateway và cố vấn AI biên/quyền riêng tư."),
         ],
     },
 ]
 
 
-def card_group(items, y=4.25, cols=3):
+def topbar(label: str = "SYL") -> str:
+    return image("rId2", 0.72, 0.28, 1.12, 0.55, "logo.jpg")
+
+
+def card_group(items: list[tuple[str, str]], y: float = 4.08, cols: int = 3) -> str:
     out = ""
     gap = 0.18
     total_w = 11.5
     w = (total_w - gap * (cols - 1)) / cols
+    h = 1.08
     x0 = 0.92
     for i, (head, body) in enumerate(items):
         row = i // cols
         col = i % cols
         x = x0 + col * (w + gap)
-        yy = y + row * 1.35
-        out += rect(x, yy, w, 1.08)
-        out += text_box(x + 0.16, yy + 0.13, w - 0.32, 0.28, head, 18, True, "#EEFDF8")
-        out += text_box(x + 0.16, yy + 0.45, w - 0.32, 0.46, body, 10.7, False, "#A8C4C0")
+        yy = y + row * 1.32
+        out += rect(x, yy, w, h)
+        out += text_box(x + 0.16, yy + 0.13, w - 0.32, 0.28, head, 17.5, True, "#EEFDF8")
+        out += text_box(x + 0.16, yy + 0.45, w - 0.32, 0.46, body, 10.4, False, "#A8C4C0")
     return out
 
 
-def metric_group(items):
+def metric_group(items: list[tuple[str, str]]) -> str:
     out = ""
     for i, (num, body) in enumerate(items):
         x = 0.92 + i * 3.93
         out += rect(x, 4.05, 3.65, 1.32, fill="#1A2B20", line="#B8D8A4")
-        out += text_box(x + 0.18, 4.24, 3.25, 0.45, num, 31, True, "#70F0A8")
-        out += text_box(x + 0.18, 4.83, 3.25, 0.35, body, 10.8, False, "#A8C4C0")
+        out += text_box(x + 0.18, 4.24, 3.25, 0.45, num, 30, True, "#70F0A8")
+        out += text_box(x + 0.18, 4.83, 3.25, 0.35, body, 10.5, False, "#A8C4C0")
     return out
 
 
-def build_slide(slide, index):
+def steps_group(items: list[tuple[str, str, str]]) -> str:
+    out = ""
+    gap = 0.13
+    w = (11.5 - gap * 4) / 5
+    for i, (num, head, body) in enumerate(items):
+        x = 0.92 + i * (w + gap)
+        out += rect(x, 3.85, w, 1.65, fill="#1A2B20", line="#B8D8A4")
+        out += text_box(x + 0.13, 4.04, w - 0.26, 0.26, num, 13, True, "#70F0A8")
+        out += text_box(x + 0.13, 4.52, w - 0.26, 0.28, head, 15.5, True, "#EEFDF8")
+        out += text_box(x + 0.13, 4.91, w - 0.26, 0.42, body, 9.4, False, "#A8C4C0")
+    return out
+
+
+def build_slide(slide: dict, index: int, total: int) -> str:
     reset_ids()
     shapes = bg()
-    if slide.get("hero"):
-        shapes += hero_pic()
-        shapes += text_box(0.75, 0.45, 4.5, 0.3, "SYL", 15, True)
+
+    if slide.get("type") == "hero":
+        shapes += image("rId3", 0, 0, 13.333333, 7.5, "syl-hero.png")
+        shapes += f"""
+        <p:sp>
+          <p:nvSpPr><p:cNvPr id="{shape_id()}" name="Overlay"/><p:cNvSpPr/><p:nvPr/></p:nvSpPr>
+          <p:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="{int(SLIDE_W)}" cy="{int(SLIDE_H)}"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom><a:solidFill><a:srgbClr val="102018"><a:alpha val="28000"/></a:srgbClr></a:solidFill><a:ln><a:noFill/></a:ln></p:spPr>
+        </p:sp>"""
+        shapes += topbar()
         shapes += text_box(0.92, 1.35, 6.8, 0.34, slide["kicker"], 12, True, "#59E0D0")
         shapes += text_box(0.88, 1.82, 4.1, 1.05, slide["title"], 72, True)
-        shapes += text_box(0.96, 3.0, 6.5, 0.58, slide["lead"], 22, False, "#D8F4EF")
+        shapes += text_box(0.96, 3.0, 6.5, 0.68, slide["lead"], 19.5, False, "#D8F4EF")
         x = 0.96
         for chip in slide["chips"]:
-            shapes += rect(x, 3.85, 1.55, 0.36, fill="#E7D8B5", line="#B8D8A4", alpha=17000)
-            shapes += text_box(x + 0.08, 3.94, 1.38, 0.13, chip, 8.5, True, "#D8F4EF", "ctr")
-            x += 1.72
+            shapes += rect(x, 3.95, 1.68, 0.36, fill="#E7D8B5", line="#B8D8A4", alpha=17000)
+            shapes += text_box(x + 0.08, 4.04, 1.5, 0.13, chip, 8.4, True, "#D8F4EF", "ctr")
+            x += 1.86
     else:
-        shapes += text_box(0.75, 0.42, 4.2, 0.28, "SYL", 13, True, "#EEFDF8")
+        shapes += topbar()
         shapes += text_box(0.92, 1.02, 4.8, 0.28, slide["kicker"], 11.5, True, "#59E0D0")
-        shapes += text_box(0.88, 1.47, 11.5, 1.15, slide["title"], 34, True)
+        shapes += text_box(0.88, 1.47, 11.5, 1.15, slide["title"], 32.5, True)
         if "lead" in slide:
-            shapes += text_box(0.94, 2.78, 9.4, 0.55, slide["lead"], 15, False, "#CFE7E3")
+            shapes += text_box(0.94, 2.78, 9.4, 0.55, slide["lead"], 14.3, False, "#CFE7E3")
         if "metrics" in slide:
             shapes += metric_group(slide["metrics"])
-        if "cards" in slide:
-            cols = 4 if len(slide["cards"]) == 4 else 3
-            shapes += card_group(slide["cards"], y=4.1 if "lead" in slide else 3.9, cols=cols)
-        if "prices" in slide:
-            shapes += card_group([(f"{a} · {b}", c) for a, b, c in slide["prices"]], y=4.0, cols=3)
         if "steps" in slide:
-            gap = 0.13
-            w = (11.5 - gap * 4) / 5
-            for i, (num, head, body) in enumerate(slide["steps"]):
-                x = 0.92 + i * (w + gap)
-                shapes += rect(x, 3.85, w, 1.65, fill="#1A2B20", line="#B8D8A4")
-                shapes += text_box(x + 0.13, 4.04, w - 0.26, 0.26, num, 13, True, "#70F0A8")
-                shapes += text_box(x + 0.13, 4.52, w - 0.26, 0.28, head, 16, True, "#EEFDF8")
-                shapes += text_box(x + 0.13, 4.91, w - 0.26, 0.42, body, 9.7, False, "#A8C4C0")
+            shapes += steps_group(slide["steps"])
+        if "cards" in slide and slide.get("type") != "architecture":
+            cols = 4 if len(slide["cards"]) == 4 else 3
+            y = 3.75 if len(slide["cards"]) > 4 else (4.1 if "lead" in slide else 3.9)
+            shapes += card_group(slide["cards"], y=y, cols=cols)
+        if "prices" in slide:
+            shapes += card_group([(f"{name} · {price}", body) for name, price, body in slide["prices"]], y=4.0, cols=3)
+        if slide.get("type") == "architecture":
+            shapes += card_group(slide["cards"], y=3.45, cols=2)
+            shapes += rect(6.2, 3.25, 6.35, 2.84, fill="#FFFFFF", line="#B8D8A4", alpha=95000)
+            shapes += image("rId3", 6.32, 3.37, 6.1, 2.58, "overview-diagram.png")
         if "quote" in slide:
             shapes += rect(0.92, 5.78, 10.8, 0.55, fill="#2B3A24", line="#7FB069", alpha=76000)
-            shapes += text_box(1.12, 5.93, 10.2, 0.22, slide["quote"], 13, False, "#D8F4EF")
+            shapes += text_box(1.12, 5.93, 10.2, 0.22, slide["quote"], 12.5, False, "#D8F4EF")
 
-    shapes += text_box(11.78, 6.86, 0.9, 0.16, f"{index:02d} / 10", 8.5, True, "#A8C4C0", "r")
+    shapes += footer(index, total)
     return f"""<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <p:sld xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:p="http://schemas.openxmlformats.org/presentationml/2006/main">
   <p:cSld>{shapes}</p:cSld>
@@ -261,34 +314,42 @@ def build_slide(slide, index):
 </p:sld>"""
 
 
-def slide_rels(has_image=False):
+def slide_rels(slide: dict) -> str:
     rels = [
-        '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideLayout" Target="../slideLayouts/slideLayout1.xml"/>'
+        '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideLayout" Target="../slideLayouts/slideLayout1.xml"/>',
+        '<Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="../media/logo.jpg"/>',
     ]
-    if has_image:
-        rels.append('<Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="../media/syl-hero.png"/>')
+    if slide.get("type") == "hero":
+        rels.append('<Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="../media/syl-hero.png"/>')
+    if slide.get("type") == "architecture":
+        rels.append('<Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="../media/overview-diagram.png"/>')
     return f"""<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">{''.join(rels)}</Relationships>"""
 
 
-def build_pptx():
-    if not HERO.exists():
-        raise FileNotFoundError(HERO)
+def build_pptx() -> None:
+    for asset in (HERO, DIAGRAM, LOGO):
+        if not asset.exists():
+            raise FileNotFoundError(asset)
     if OUT.exists():
         OUT.unlink()
 
+    total = len(slides)
+    theme_rid = f"rId{total + 2}"
     content_types = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
   <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>
   <Default Extension="xml" ContentType="application/xml"/>
   <Default Extension="png" ContentType="image/png"/>
+  <Default Extension="jpg" ContentType="image/jpeg"/>
+  <Default Extension="jpeg" ContentType="image/jpeg"/>
   <Override PartName="/ppt/presentation.xml" ContentType="application/vnd.openxmlformats-officedocument.presentationml.presentation.main+xml"/>
   <Override PartName="/ppt/slideMasters/slideMaster1.xml" ContentType="application/vnd.openxmlformats-officedocument.presentationml.slideMaster+xml"/>
   <Override PartName="/ppt/slideLayouts/slideLayout1.xml" ContentType="application/vnd.openxmlformats-officedocument.presentationml.slideLayout+xml"/>
   <Override PartName="/ppt/theme/theme1.xml" ContentType="application/vnd.openxmlformats-officedocument.theme+xml"/>
 """ + "".join(
         f'  <Override PartName="/ppt/slides/slide{i}.xml" ContentType="application/vnd.openxmlformats-officedocument.presentationml.slide+xml"/>\n'
-        for i in range(1, len(slides) + 1)
+        for i in range(1, total + 1)
     ) + "</Types>"
 
     presentation_rels = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -296,14 +357,14 @@ def build_pptx():
   <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideMaster" Target="slideMasters/slideMaster1.xml"/>
 """ + "".join(
         f'  <Relationship Id="rId{i+1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/slide" Target="slides/slide{i}.xml"/>\n'
-        for i in range(1, len(slides) + 1)
-    ) + """  <Relationship Id="rId12" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme" Target="theme/theme1.xml"/>
+        for i in range(1, total + 1)
+    ) + f"""  <Relationship Id="{theme_rid}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme" Target="theme/theme1.xml"/>
 </Relationships>"""
 
     presentation = f"""<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <p:presentation xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:p="http://schemas.openxmlformats.org/presentationml/2006/main">
   <p:sldMasterIdLst><p:sldMasterId id="2147483648" r:id="rId1"/></p:sldMasterIdLst>
-  <p:sldIdLst>{''.join(f'<p:sldId id="{256+i}" r:id="rId{i+2}"/>' for i in range(len(slides)))}</p:sldIdLst>
+  <p:sldIdLst>{''.join(f'<p:sldId id="{256+i}" r:id="rId{i+2}"/>' for i in range(total))}</p:sldIdLst>
   <p:sldSz cx="{int(SLIDE_W)}" cy="{int(SLIDE_H)}" type="wide"/>
   <p:notesSz cx="6858000" cy="9144000"/>
   <p:defaultTextStyle/>
@@ -359,9 +420,11 @@ def build_pptx():
         z.writestr("ppt/slideLayouts/_rels/slideLayout1.xml.rels", layout_rels)
         z.writestr("ppt/theme/theme1.xml", theme)
         z.write(HERO, "ppt/media/syl-hero.png")
+        z.write(DIAGRAM, "ppt/media/overview-diagram.png")
+        z.write(LOGO, "ppt/media/logo.jpg")
         for i, slide in enumerate(slides, start=1):
-            z.writestr(f"ppt/slides/slide{i}.xml", build_slide(slide, i))
-            z.writestr(f"ppt/slides/_rels/slide{i}.xml.rels", slide_rels(has_image=bool(slide.get("hero"))))
+            z.writestr(f"ppt/slides/slide{i}.xml", build_slide(slide, i, total))
+            z.writestr(f"ppt/slides/_rels/slide{i}.xml.rels", slide_rels(slide))
 
     print(f"Wrote {OUT.resolve()} ({OUT.stat().st_size:,} bytes)")
 
