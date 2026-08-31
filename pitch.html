@@ -1,0 +1,466 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SYL Pitch Deck</title>
+  <style>
+    :root {
+      --bg: #102018;
+      --panel: rgba(31, 48, 34, 0.82);
+      --panel-2: rgba(255, 255, 255, 0.08);
+      --line: rgba(231, 216, 181, 0.30);
+      --text: #eefcf8;
+      --muted: #a8c4c0;
+      --cyan: #59e0d0;
+      --green: #70f0a8;
+      --gold: #ffd166;
+      --rose: #ff8a9a;
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.38);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; background: var(--bg); color: var(--text); }
+    body {
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(184, 216, 164, 0.18), transparent 32%),
+        linear-gradient(135deg, #102018 0%, #1a2b20 48%, #3a3322 100%);
+    }
+
+    .deck {
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      padding: clamp(28px, 5vw, 72px);
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(24px);
+      transition: opacity .45s ease, transform .45s ease;
+      background:
+        linear-gradient(90deg, rgba(3, 11, 14, 0.92), rgba(3, 11, 14, 0.58)),
+        var(--slide-bg, transparent);
+      background-size: cover;
+      background-position: center;
+    }
+
+    .slide.active {
+      opacity: 1;
+      transform: translateX(0);
+      pointer-events: auto;
+    }
+
+    .topbar, .footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      color: var(--muted);
+      font-size: 13px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      position: relative;
+      z-index: 2;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text);
+      font-weight: 800;
+    }
+
+    .mark {
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--cyan), var(--green));
+      box-shadow: 0 0 28px rgba(89, 224, 208, .42);
+      position: relative;
+    }
+
+    .mark:after {
+      content: "";
+      position: absolute;
+      inset: 8px;
+      border: 2px solid rgba(6, 16, 20, .75);
+      border-radius: 50%;
+    }
+
+    .content {
+      align-self: center;
+      width: min(1180px, 100%);
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    .kicker {
+      color: var(--cyan);
+      font-size: clamp(12px, 1.35vw, 15px);
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+
+    h1, h2 {
+      margin: 0;
+      max-width: 980px;
+      letter-spacing: 0;
+      line-height: .98;
+    }
+
+    h1 { font-size: clamp(56px, 9vw, 126px); }
+    h2 { font-size: clamp(38px, 5.8vw, 78px); }
+
+    .lead {
+      max-width: 760px;
+      margin: 22px 0 0;
+      color: #cfe7e3;
+      font-size: clamp(18px, 2vw, 28px);
+      line-height: 1.35;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 34px;
+    }
+
+    .grid.two { grid-template-columns: repeat(2, 1fr); }
+    .grid.four { grid-template-columns: repeat(4, 1fr); }
+
+    .card, .metric, .price {
+      min-height: 142px;
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    .metric strong, .price strong {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--text);
+      font-size: clamp(30px, 4vw, 56px);
+      line-height: 1;
+    }
+
+    .metric span, .card p, .price p {
+      margin: 0;
+      color: var(--muted);
+      font-size: clamp(15px, 1.45vw, 18px);
+      line-height: 1.45;
+    }
+
+    .card h3, .price h3 {
+      margin: 0 0 12px;
+      color: var(--text);
+      font-size: clamp(19px, 2vw, 26px);
+    }
+
+    .chiprow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 28px;
+    }
+
+    .chip {
+      padding: 9px 13px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      color: #d9f5f0;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .02em;
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+      margin-top: 34px;
+    }
+
+    .step {
+      padding: 18px;
+      min-height: 170px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: linear-gradient(180deg, rgba(89, 224, 208, .13), rgba(255, 255, 255, .05));
+    }
+
+    .num {
+      color: var(--green);
+      font-weight: 900;
+      font-size: 14px;
+      margin-bottom: 34px;
+    }
+
+    .step b { display: block; font-size: 21px; margin-bottom: 8px; }
+    .step span { color: var(--muted); line-height: 1.35; }
+
+    .quote {
+      margin-top: 30px;
+      padding-left: 22px;
+      border-left: 4px solid var(--cyan);
+      color: #dff8f4;
+      font-size: clamp(20px, 2vw, 29px);
+      line-height: 1.35;
+      max-width: 960px;
+    }
+
+    .price strong { color: var(--gold); }
+    .warn strong { color: var(--rose); }
+    .good strong { color: var(--green); }
+
+    .progress {
+      width: min(320px, 36vw);
+      height: 3px;
+      background: rgba(255,255,255,.12);
+      overflow: hidden;
+      border-radius: 999px;
+    }
+
+    .bar { height: 100%; width: 10%; background: linear-gradient(90deg, var(--cyan), var(--green)); }
+
+    .controls {
+      display: flex;
+      gap: 8px;
+    }
+
+    button {
+      width: 42px;
+      height: 42px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255,255,255,.08);
+      color: var(--text);
+      font-size: 22px;
+      cursor: pointer;
+    }
+
+    button:hover { border-color: rgba(89, 224, 208, .75); background: rgba(89, 224, 208, .14); }
+    .hero .content { margin-left: 0; }
+    .hero:after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(0deg, rgba(6,16,20,.72), transparent 36%);
+      pointer-events: none;
+    }
+
+    @media (max-width: 900px) {
+      body { overflow: auto; }
+      .deck { height: auto; }
+      .slide {
+        position: relative;
+        min-height: 100vh;
+        opacity: 1;
+        pointer-events: auto;
+        transform: none;
+        display: grid;
+      }
+      .grid, .grid.two, .grid.four, .flow { grid-template-columns: 1fr; }
+      .flow .step { min-height: auto; }
+      .num { margin-bottom: 14px; }
+      .controls, .progress { display: none; }
+      h1 { font-size: clamp(48px, 16vw, 82px); }
+      h2 { font-size: clamp(34px, 11vw, 58px); }
+    }
+
+    @media print {
+      body { overflow: visible; background: #102018; }
+      .deck { height: auto; }
+      .slide { position: relative; opacity: 1; transform: none; page-break-after: always; height: 100vh; }
+      .controls { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck" id="deck">
+    <section class="slide hero active" style="--slide-bg: url('assets/syl-hero.png')">
+      <div class="topbar"><div class="brand"><span class="mark"></span>SYL</div><span>AI Safety Camera · 2026</span></div>
+      <div class="content">
+        <div class="kicker">Camera cảnh báo té ngã & phát hiện người lạ</div>
+        <h1>SYL</h1>
+        <p class="lead">Không chỉ là camera, mà là lớp chăm sóc thụ động cho người lớn tuổi trong gia đình.</p>
+        <div class="chiprow">
+          <span class="chip">Fall detection</span>
+          <span class="chip">Stranger alert</span>
+          <span class="chip">Quyền riêng tư theo vai trò</span>
+          <span class="chip">B2B2C</span>
+        </div>
+      </div>
+      <footer class="footer"><span>01 / 10</span><div class="progress"><div class="bar"></div></div><div class="controls"><button data-prev>‹</button><button data-next>›</button></div></footer>
+    </section>
+
+    <section class="slide">
+      <div class="topbar"><div class="brand"><span class="mark"></span>SYL</div><span>Vấn đề</span></div>
+      <div class="content">
+        <div class="kicker">Problem</div>
+        <h2>Người già ngã tại nhà, nhưng gia đình biết quá muộn.</h2>
+        <p class="lead">Camera chuyển động tạo quá nhiều thông báo nhiễu, còn camera fall detection chuyên dụng nhập khẩu lại có chi phí cao.</p>
+        <div class="grid">
+          <div class="card warn"><h3>Phát hiện trễ</h3><p>Người đi làm hoặc sống xa không có tín hiệu đủ nhanh khi cha mẹ gặp sự cố.</p></div>
+          <div class="card warn"><h3>Thông báo bị bỏ qua</h3><p>Motion alert quá nhiều khiến chủ nhà dễ tắt thông báo và bỏ lỡ cảnh báo thật.</p></div>
+          <div class="card warn"><h3>Rủi ro dữ liệu</h3><p>Camera gia đình có nguy cơ bị truy cập trái phép, lộ ảnh/video riêng tư.</p></div>
+        </div>
+      </div>
+      <footer class="footer"><span>02 / 10</span><div class="progress"><div class="bar" style="width:20%"></div></div><div class="controls"><button data-prev>‹</button><button data-next>›</button></div></footer>
+    </section>
+
+    <section class="slide">
+      <div class="topbar"><div class="brand"><span class="mark"></span>SYL</div><span>Thị trường</span></div>
+      <div class="content">
+        <div class="kicker">Market Signal</div>
+        <h2>Thị trường chăm sóc người cao tuổi đã đủ lớn để bắt đầu.</h2>
+        <div class="grid">
+          <div class="metric good"><strong>16,1 triệu</strong><span>người cao tuổi tại Việt Nam theo dữ liệu dân cư quốc gia, cập nhật năm 2025.</span></div>
+          <div class="metric"><strong>&gt;16%</strong><span>dân số Việt Nam là người cao tuổi; dân số trung bình năm 2025 khoảng 102,3 triệu người.</span></div>
+          <div class="metric"><strong>1,5–1,9 triệu</strong><span>người cao tuổi té ngã mỗi năm, tạo nhu cầu cảnh báo sớm tại nhà và cơ sở chăm sóc.</span></div>
+        </div>
+        <p class="quote">Luận điểm thị trường: dân số già hóa nhanh + con cái đi làm xa + camera gia đình đã phổ biến tạo thời điểm phù hợp cho một lớp AI an toàn giá hợp lý.</p>
+      </div>
+      <footer class="footer"><span>03 / 10</span><div class="progress"><div class="bar" style="width:30%"></div></div><div class="controls"><button data-prev>‹</button><button data-next>›</button></div></footer>
+    </section>
+
+    <section class="slide">
+      <div class="topbar"><div class="brand"><span class="mark"></span>SYL</div><span>Giải pháp</span></div>
+      <div class="content">
+        <div class="kicker">Solution</div>
+        <h2>SYL biến camera thành hệ thống chăm sóc chủ động.</h2>
+        <p class="lead">Một gateway AI đặt tại nhà, kết nối camera, phát hiện té ngã và người lạ, rồi gửi cảnh báo đúng người đúng quyền.</p>
+        <div class="grid three">
+          <div class="card"><h3>Té ngã</h3><p>Ưu tiên recall cao để giảm nguy cơ bỏ sót ca ngã thật.</p></div>
+          <div class="card"><h3>Người lạ</h3><p>Nhận diện người trong gia đình và cảnh báo khi phát hiện đối tượng lạ.</p></div>
+          <div class="card"><h3>Truy cập 5 phút</h3><p>Bác sĩ được cấp quyền tạm thời để xem tình huống khẩn cấp, sau đó tự thu hồi.</p></div>
+        </div>
+      </div>
+      <footer class="footer"><span>04 / 10</span><div class="progress"><div class="bar" style="width:40%"></div></div><div class="controls"><button data-prev>‹</button><button data-next>›</button></div></footer>
+    </section>
+
+    <section class="slide">
+      <div class="topbar"><div class="brand"><span class="mark"></span>SYL</div><span>Luồng sản phẩm</span></div>
+      <div class="content">
+        <div class="kicker">How It Works</div>
+        <h2>Từ tín hiệu camera đến hành động khẩn cấp.</h2>
+        <div class="flow">
+          <div class="step"><div class="num">01</div><b>Camera</b><span>Ghi nhận hình ảnh trong khu vực đã cấu hình.</span></div>
+          <div class="step"><div class="num">02</div><b>AI pose</b><span>YOLOv26-pose phân tích tư thế, chuyển động và đối tượng.</span></div>
+          <div class="step"><div class="num">03</div><b>Cảnh báo</b><span>App tạo cảnh báo té ngã hoặc người lạ theo mức ưu tiên.</span></div>
+          <div class="step"><div class="num">04</div><b>Liên hệ</b><span>Gia đình, admin hoặc bác sĩ được gọi trực tiếp trong app.</span></div>
+          <div class="step"><div class="num">05</div><b>Thu hồi</b><span>Quyền xem khẩn cấp của bác sĩ tự hết hạn sau 5 phút.</span></div>
+        </div>
+      </div>
+      <footer class="footer"><span>05 / 10</span><div class="progress"><div class="bar" style="width:50%"></div></div><div class="controls"><button data-prev>‹</button><button data-next>›</button></div></footer>
+    </section>
+
+    <section class="slide">
+      <div class="topbar"><div class="brand"><span class="mark"></span>SYL</div><span>Lợi thế kỹ thuật</span></div>
+      <div class="content">
+        <div class="kicker">Technical Edge</div>
+        <h2>Ưu tiên không bỏ sót sự cố thật.</h2>
+        <div class="grid">
+          <div class="metric good"><strong>≥85%</strong><span>recall mục tiêu cho phát hiện té ngã, phù hợp tính năng liên quan an toàn con người.</span></div>
+          <div class="metric"><strong>83.05%</strong><span>F1 cho phát hiện người lạ trong dữ liệu thử nghiệm nội bộ.</span></div>
+          <div class="metric"><strong>80.32%</strong><span>precision và 85.96% recall cho stranger detection.</span></div>
+        </div>
+        <p class="quote">Không đặt ngưỡng precision cứng cho té ngã: báo động giả có thể xử lý ở tầng xác nhận, nhưng bỏ sót ca ngã thật là rủi ro lớn hơn.</p>
+      </div>
+      <footer class="footer"><span>06 / 10</span><div class="progress"><div class="bar" style="width:60%"></div></div><div class="controls"><button data-prev>‹</button><button data-next>›</button></div></footer>
+    </section>
+
+    <section class="slide">
+      <div class="topbar"><div class="brand"><span class="mark"></span>SYL</div><span>Khách hàng</span></div>
+      <div class="content">
+        <div class="kicker">Users & Roles</div>
+        <h2>Thiết kế cho gia đình, chủ nhà và người chăm sóc.</h2>
+        <div class="grid four">
+          <div class="card"><h3>Admin</h3><p>Thêm camera, phân quyền, kiểm tra lỗi hệ thống trên dashboard.</p></div>
+          <div class="card"><h3>Gia đình</h3><p>Chỉ xem camera được cấp phép và nhận cảnh báo liên quan.</p></div>
+          <div class="card"><h3>Bác sĩ</h3><p>Xem tạm thời camera phòng người lớn tuổi khi có sự cố khẩn cấp.</p></div>
+          <div class="card"><h3>Người cao tuổi</h3><p>Không cần thao tác, không cần nhớ đeo thiết bị, vẫn được bảo vệ.</p></div>
+        </div>
+      </div>
+      <footer class="footer"><span>07 / 10</span><div class="progress"><div class="bar" style="width:70%"></div></div><div class="controls"><button data-prev>‹</button><button data-next>›</button></div></footer>
+    </section>
+
+    <section class="slide">
+      <div class="topbar"><div class="brand"><span class="mark"></span>SYL</div><span>Kinh doanh</span></div>
+      <div class="content">
+        <div class="kicker">Business Model</div>
+        <h2>Gateway AI + hợp tác phân phối B2B2C.</h2>
+        <div class="grid">
+          <div class="price"><h3>Standard</h3><strong>5.2tr</strong><p>Raspberry Pi 5 4GB + hệ thống SYL cho nhu cầu cơ bản.</p></div>
+          <div class="price"><h3>Plus</h3><strong>8.5tr</strong><p>Raspberry Pi 5 8GB + hệ thống SYL cho cấu hình mạnh hơn.</p></div>
+          <div class="price"><h3>Pro</h3><strong>10tr</strong><p>8GB + nâng cấp bản mới nhất, miễn phí 6 tháng đăng ký đầu.</p></div>
+        </div>
+        <p class="lead">Giai đoạn đầu bán sỉ qua đối tác camera; về dài hạn chuyển sang hoa hồng/doanh thu theo sản phẩm bán ra.</p>
+      </div>
+      <footer class="footer"><span>08 / 10</span><div class="progress"><div class="bar" style="width:80%"></div></div><div class="controls"><button data-prev>‹</button><button data-next>›</button></div></footer>
+    </section>
+
+    <section class="slide">
+      <div class="topbar"><div class="brand"><span class="mark"></span>SYL</div><span>Cạnh tranh</span></div>
+      <div class="content">
+        <div class="kicker">Competition</div>
+        <h2>SYL nằm giữa camera phổ thông và hệ thống chuyên dụng đắt tiền.</h2>
+        <div class="grid">
+          <div class="card"><h3>Camera phổ thông</h3><p>EZVIZ/IMOU mạnh về giá, nhưng chủ yếu là motion detection và human detection.</p></div>
+          <div class="card warn"><h3>Thiết bị chuyên dụng</h3><p>Hanwha, i-PRO, Hikvision có fall detection nhưng chi phí cao hoặc chưa phổ biến giá tại Việt Nam.</p></div>
+          <div class="card good"><h3>SYL</h3><p>Tập trung fall detection + stranger alert, dùng gateway phổ biến, dễ hợp tác với hệ sinh thái camera hiện có.</p></div>
+        </div>
+      </div>
+      <footer class="footer"><span>09 / 10</span><div class="progress"><div class="bar" style="width:90%"></div></div><div class="controls"><button data-prev>‹</button><button data-next>›</button></div></footer>
+    </section>
+
+    <section class="slide">
+      <div class="topbar"><div class="brand"><span class="mark"></span>SYL</div><span>Roadmap & Ask</span></div>
+      <div class="content">
+        <div class="kicker">Next Step</div>
+        <h2>Cần phần cứng thật, dữ liệu thật, đối tác thật.</h2>
+        <div class="grid two">
+          <div class="card"><h3>0–3 tháng</h3><p>Hoàn thiện MVP, dashboard admin, luồng phân quyền và cảnh báo khẩn.</p></div>
+          <div class="card"><h3>3–6 tháng</h3><p>Benchmark trên camera/gateway phổ biến, thu thập dữ liệu đồng ý/ẩn danh.</p></div>
+          <div class="card"><h3>6–12 tháng</h3><p>Pilot với đối tác camera, chủ nhà hoặc cơ sở chăm sóc; kiểm chứng giá bán.</p></div>
+          <div class="card good"><h3>Kêu gọi</h3><p>Tìm 1–2 đối tác thử nghiệm, bộ camera/gateway và cố vấn AI biên/quyền riêng tư.</p></div>
+        </div>
+      </div>
+      <footer class="footer"><span>10 / 10</span><div class="progress"><div class="bar" style="width:100%"></div></div><div class="controls"><button data-prev>‹</button><button data-next>›</button></div></footer>
+    </section>
+  </main>
+
+  <script>
+    const slides = [...document.querySelectorAll('.slide')];
+    let current = 0;
+
+    function show(index) {
+      current = Math.max(0, Math.min(slides.length - 1, index));
+      slides.forEach((slide, i) => slide.classList.toggle('active', i === current));
+    }
+
+    document.querySelectorAll('[data-next]').forEach(btn => btn.addEventListener('click', () => show(current + 1)));
+    document.querySelectorAll('[data-prev]').forEach(btn => btn.addEventListener('click', () => show(current - 1)));
+    window.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowRight' || event.key === ' ') show(current + 1);
+      if (event.key === 'ArrowLeft') show(current - 1);
+    });
+  </script>
+</body>
+</html>
