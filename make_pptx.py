@@ -5,7 +5,7 @@ import zipfile
 from pathlib import Path
 
 
-OUT = Path("SYL_pitch_deck_12_slides.pptx")
+OUT = Path("SYL_pitch_deck_13_slides.pptx")
 HERO = Path("assets/syl-hero.png")
 DIAGRAM = Path("assets/overview-diagram.png")
 LOGO = Path("assets/logo.jpg")
@@ -113,13 +113,13 @@ slides = [
     },
     {
         "kicker": "Market Signal",
-        "title": "Thị trường chăm sóc người cao tuổi đã đủ lớn để bắt đầu.",
+        "title": "Survey xác nhận nỗi lo thật và mức sẵn sàng thử nghiệm.",
         "metrics": [
-            ("16,1 triệu", "người cao tuổi tại Việt Nam theo dữ liệu dân cư quốc gia, cập nhật năm 2025."),
-            (">16%", "dân số Việt Nam là người cao tuổi; dân số trung bình năm 2025 khoảng 102,3 triệu."),
-            ("1,5–1,9 triệu", "người cao tuổi té ngã mỗi năm, tạo nhu cầu cảnh báo sớm tại nhà."),
+            ("85%", "người khảo sát có người lớn tuổi trong gia đình và lo lắng khi họ ở nhà một mình."),
+            ("66,7%", "tin dùng thiết bị điện tử để theo dõi hoặc hỗ trợ người thân lớn tuổi tại nhà."),
+            ("59% / 38,5%", "quan tâm đến sản phẩm / chắc chắn muốn tham gia trải nghiệm demo."),
         ],
-        "quote": "Dân số già hóa nhanh + con cái đi làm xa + camera gia đình đã phổ biến tạo thời điểm phù hợp cho một lớp AI an toàn giá hợp lý.",
+        "quote": "Nền thị trường: khoảng 16,1 triệu người cao tuổi tại Việt Nam và 1,5–1,9 triệu ca té ngã mỗi năm tạo nhu cầu rõ cho cảnh báo sớm tại nhà.",
     },
     {
         "kicker": "Solution",
@@ -205,14 +205,22 @@ slides = [
         ],
     },
     {
+        "type": "roadmap",
         "kicker": "Next Step",
-        "title": "Cần phần cứng thật, dữ liệu thật và đối tác pilot thật.",
+        "title": "Từ ý tưởng đến sản phẩm thị trường trong 19 tuần.",
         "cards": [
-            ("0–3 tháng", "Hoàn thiện MVP, dashboard admin, phân quyền, cảnh báo khẩn và demo ổn định."),
-            ("3–6 tháng", "Benchmark trên camera/gateway phổ biến, mở rộng dữ liệu đồng ý/ẩn danh."),
-            ("6–12 tháng", "Pilot với đối tác camera, chủ nhà hoặc cơ sở chăm sóc để kiểm chứng giá bán."),
-            ("Kêu gọi", "Tìm 1–2 đối tác thử nghiệm, bộ camera/gateway và cố vấn AI biên/quyền riêng tư."),
+            ("Phase 1 · 0–1 tháng", "Hoàn thiện MVP: access control, emergency alerts và demo run ổn định."),
+            ("Phase 2 · 3 tuần", "Benchmark trên các gateway/camera phổ biến để đo FPS, độ trễ và độ ổn định."),
+            ("Phase 3 · 1–3 tháng", "Trial với đối tác camera, chủ nhà, viện dưỡng lão hoặc trung tâm phục hồi chức năng để kiểm chứng chức năng và giá."),
+            ("Kêu gọi đối tác", "Tìm 1–2 cặp đối tác thử nghiệm và cùng đưa sản phẩm Việt Nam ra thị trường quốc tế với tính năng ổn định hơn, giá thấp hơn."),
         ],
+        "quote": "Kết luận: SYL có thể triển khai và launch ra thị trường trong 19 tuần, tính từ lúc hình thành ý tưởng đến sản phẩm hoàn chỉnh.",
+    },
+    {
+        "type": "closing",
+        "kicker": "Thank you",
+        "title": "SYL",
+        "lead": "melphins",
     },
 ]
 
@@ -282,6 +290,10 @@ def build_slide(slide: dict, index: int, total: int) -> str:
             shapes += rect(x, 3.95, 1.68, 0.36, fill="#E7D8B5", line="#B8D8A4", alpha=17000)
             shapes += text_box(x + 0.08, 4.04, 1.5, 0.13, chip, 8.4, True, "#D8F4EF", "ctr")
             x += 1.86
+    elif slide.get("type") == "closing":
+        shapes += rect(1.48, 0.7, 10.38, 5.0, fill="#FFFFFF", line="#B8D8A4", alpha=98000)
+        shapes += image("rId2", 1.95, 1.2, 9.45, 4.05, "logo.jpg")
+        shapes += text_box(0.92, 6.0, 11.5, 0.45, slide["lead"], 25, True, "#EEFDF8", "ctr")
     else:
         shapes += topbar()
         shapes += text_box(0.92, 1.02, 4.8, 0.28, slide["kicker"], 11.5, True, "#59E0D0")
@@ -292,19 +304,31 @@ def build_slide(slide: dict, index: int, total: int) -> str:
             shapes += metric_group(slide["metrics"])
         if "steps" in slide:
             shapes += steps_group(slide["steps"])
-        if "cards" in slide and slide.get("type") != "architecture":
+        if slide.get("type") == "roadmap":
+            for i, (head, body) in enumerate(slide["cards"]):
+                x = 0.92 + (i % 2) * 5.86
+                yy = 3.2 + (i // 2) * 1.32
+                shapes += rect(x, yy, 5.55, 1.05, fill="#1A2B20", line="#B8D8A4")
+                shapes += text_box(x + 0.17, yy + 0.12, 5.18, 0.24, head, 13.8, True, "#EEFDF8")
+                shapes += text_box(x + 0.17, yy + 0.43, 5.15, 0.43, body, 8.8, False, "#A8C4C0")
+        if "cards" in slide and slide.get("type") not in ("architecture", "roadmap"):
             cols = 4 if len(slide["cards"]) == 4 else 3
             y = 3.75 if len(slide["cards"]) > 4 else (4.1 if "lead" in slide else 3.9)
             shapes += card_group(slide["cards"], y=y, cols=cols)
         if "prices" in slide:
             shapes += card_group([(f"{name} · {price}", body) for name, price, body in slide["prices"]], y=4.0, cols=3)
         if slide.get("type") == "architecture":
-            shapes += card_group(slide["cards"], y=3.45, cols=2)
-            shapes += rect(6.2, 3.25, 6.35, 2.84, fill="#FFFFFF", line="#B8D8A4", alpha=95000)
-            shapes += image("rId3", 6.32, 3.37, 6.1, 2.58, "overview-diagram.png")
+            shapes += rect(0.72, 2.72, 7.75, 3.72, fill="#FFFFFF", line="#B8D8A4", alpha=98000)
+            shapes += image("rId3", 0.9, 2.9, 7.38, 3.36, "overview-diagram.png")
+            for i, (head, body) in enumerate(slide["cards"]):
+                yy = 2.72 + i * 0.93
+                shapes += rect(8.72, yy, 3.88, 0.76, fill="#1A2B20", line="#B8D8A4")
+                shapes += text_box(8.9, yy + 0.11, 3.5, 0.2, head, 11.8, True, "#EEFDF8")
+                shapes += text_box(8.9, yy + 0.36, 3.48, 0.22, body, 7.5, False, "#A8C4C0")
         if "quote" in slide:
-            shapes += rect(0.92, 5.78, 10.8, 0.55, fill="#2B3A24", line="#7FB069", alpha=76000)
-            shapes += text_box(1.12, 5.93, 10.2, 0.22, slide["quote"], 11.5, False, "#D8F4EF")
+            qy = 5.92 if slide.get("type") == "roadmap" else 5.78
+            shapes += rect(0.92, qy, 10.8, 0.55, fill="#2B3A24", line="#7FB069", alpha=76000)
+            shapes += text_box(1.12, qy + 0.15, 10.2, 0.22, slide["quote"], 11.2 if slide.get("type") == "roadmap" else 11.5, False, "#D8F4EF")
 
     shapes += footer(index, total)
     return f"""<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
