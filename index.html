@@ -140,6 +140,9 @@
     }
 
     .split { display: grid; grid-template-columns: .82fr 1.18fr; gap: 16px; align-items: center; margin-top: 20px; }
+    .split.arch { grid-template-columns: .54fr 1.46fr; align-items: start; }
+    .split.arch .grid.two { grid-template-columns: 1fr; gap: 10px; margin-top: 0; }
+    .split.arch .card { min-height: 86px; padding: 12px; }
     .diagram {
       border: 1px solid var(--line);
       border-radius: 8px;
@@ -148,6 +151,21 @@
       box-shadow: var(--shadow);
     }
     .diagram img { display: block; width: 100%; height: auto; border-radius: 4px; }
+    .closing-lockup { display: grid; justify-items: center; gap: 28px; text-align: center; }
+    .closing-logo {
+      width: min(720px, 74vw);
+      border-radius: 12px;
+      background: #fff;
+      box-shadow: var(--shadow);
+    }
+    .team-name {
+      margin: 0;
+      color: #dff8f4;
+      font-size: clamp(24px, 3vw, 40px);
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: lowercase;
+    }
 
     .progress { width: min(320px, 36vw); height: 3px; background: rgba(255,255,255,.12); overflow: hidden; border-radius: 999px; }
     .bar { height: 100%; width: var(--progress); background: linear-gradient(90deg, var(--cyan), var(--green)); }
@@ -186,7 +204,9 @@
       .step b { font-size: 16px; }
       .step span { font-size: 12.5px; }
       .split { gap: 12px; margin-top: 14px; }
+      .split.arch { grid-template-columns: .5fr 1.5fr; }
       .split .grid { margin-top: 0; }
+      .split.arch .card { min-height: 72px; padding: 10px; }
       .diagram { padding: 6px; }
       button { width: 34px; height: 34px; }
     }
@@ -195,7 +215,7 @@
       body { overflow: auto; }
       .deck { height: auto; }
       .slide { position: relative; min-height: 100vh; opacity: 1; pointer-events: auto; transform: none; }
-      .grid, .grid.two, .grid.four, .flow, .split { grid-template-columns: 1fr; }
+      .grid, .grid.two, .grid.four, .flow, .split, .split.arch { grid-template-columns: 1fr; }
       .flow .step { min-height: auto; }
       .num { margin-bottom: 14px; }
       .controls, .progress { display: none; }
@@ -232,9 +252,9 @@
       <div class="topbar"><div class="brand"><span class="mark"></span>SYL</div><span>Thị trường</span></div>
       <div class="content">
         <div class="kicker">Market Signal</div>
-        <h2>Thị trường chăm sóc người cao tuổi đã đủ lớn để bắt đầu.</h2>
-        <div class="grid"><div class="metric good"><strong>16,1 triệu</strong><span>người cao tuổi tại Việt Nam theo dữ liệu dân cư quốc gia, cập nhật năm 2025.</span></div><div class="metric"><strong>&gt;16%</strong><span>dân số Việt Nam là người cao tuổi; dân số trung bình năm 2025 khoảng 102,3 triệu người.</span></div><div class="metric"><strong>1,5–1,9 triệu</strong><span>người cao tuổi té ngã mỗi năm, tạo nhu cầu cảnh báo sớm tại nhà và cơ sở chăm sóc.</span></div></div>
-        <p class="quote">Dân số già hóa nhanh + con cái đi làm xa + camera gia đình đã phổ biến tạo thời điểm phù hợp cho một lớp AI an toàn giá hợp lý.</p>
+        <h2>Survey xác nhận nỗi lo thật và mức sẵn sàng thử nghiệm.</h2>
+        <div class="grid"><div class="metric good"><strong>85%</strong><span>người khảo sát có người lớn tuổi trong gia đình và lo lắng khi họ ở nhà một mình.</span></div><div class="metric"><strong>66,7%</strong><span>tin dùng thiết bị điện tử để theo dõi hoặc hỗ trợ người thân lớn tuổi tại nhà.</span></div><div class="metric"><strong>59% / 38,5%</strong><span>quan tâm đến sản phẩm / chắc chắn muốn tham gia trải nghiệm demo.</span></div></div>
+        <p class="quote">Nền thị trường: khoảng 16,1 triệu người cao tuổi tại Việt Nam và 1,5–1,9 triệu ca té ngã mỗi năm tạo nhu cầu rõ cho cảnh báo sớm tại nhà.</p>
       </div>
       <footer class="footer"><span>03 / 12</span><div class="progress"><div class="bar"></div></div><div class="controls"><button data-prev>‹</button><button data-next>›</button></div></footer>
     </section>
@@ -265,7 +285,7 @@
       <div class="content">
         <div class="kicker">System Architecture</div>
         <h2>Kiến trúc triển khai thật: camera LAN, AI services, streaming và web app.</h2>
-        <div class="split">
+        <div class="split arch">
           <div class="grid two"><div class="card"><h3>Ingestion</h3><p>IMOU/IP Camera qua RTSP, SSH reverse tunnel, MediaMTX và FFmpeg để đưa luồng về server.</p></div><div class="card"><h3>AI pipeline</h3><p>YOLO Pose ONNX, ONNX Runtime, OpenCV, ByteTrack, Temporal Fall Classifier, YuNet & SFace.</p></div><div class="card"><h3>Backend</h3><p>FastAPI, WebSocket, Pydantic, LangChain/LangGraph; điều phối model, alert và quyền truy cập.</p></div><div class="card"><h3>Data layer</h3><p>PostgreSQL cho metadata, Redis cache, MinIO Object Storage cho snapshot/video evidence.</p></div></div>
           <figure class="diagram"><img src="assets/overview-diagram.png" alt="SYL overview architecture diagram" /></figure>
         </div>
@@ -329,16 +349,31 @@
       <div class="topbar"><div class="brand"><span class="mark"></span>SYL</div><span>Roadmap & Ask</span></div>
       <div class="content">
         <div class="kicker">Next Step</div>
-        <h2>Cần phần cứng thật, dữ liệu thật và đối tác pilot thật.</h2>
-        <div class="grid two"><div class="card"><h3>0–3 tháng</h3><p>Hoàn thiện MVP, dashboard admin, phân quyền, cảnh báo khẩn và demo ổn định.</p></div><div class="card"><h3>3–6 tháng</h3><p>Benchmark trên camera/gateway phổ biến, mở rộng dữ liệu đồng ý/ẩn danh.</p></div><div class="card"><h3>6–12 tháng</h3><p>Pilot với đối tác camera, chủ nhà hoặc cơ sở chăm sóc để kiểm chứng giá bán.</p></div><div class="card good"><h3>Kêu gọi</h3><p>Tìm 1–2 đối tác thử nghiệm, bộ camera/gateway và cố vấn AI biên/quyền riêng tư.</p></div></div>
+        <h2>Từ ý tưởng đến sản phẩm thị trường trong 19 tuần.</h2>
+        <div class="grid two"><div class="card"><h3>Phase 1 · 0–1 tháng</h3><p>Hoàn thiện MVP: access control, emergency alerts và demo run ổn định.</p></div><div class="card"><h3>Phase 2 · 3 tuần</h3><p>Benchmark trên các gateway/camera phổ biến để đo FPS, độ trễ và độ ổn định.</p></div><div class="card"><h3>Phase 3 · 1–3 tháng</h3><p>Trial với đối tác camera, chủ nhà, viện dưỡng lão hoặc trung tâm phục hồi chức năng để kiểm chứng chức năng và giá.</p></div><div class="card good"><h3>Kêu gọi đối tác</h3><p>Tìm 1–2 cặp đối tác thử nghiệm và cùng đưa sản phẩm Việt Nam ra thị trường quốc tế với tính năng ổn định hơn, giá thấp hơn.</p></div></div>
+        <p class="quote">Kết luận: SYL có thể triển khai và launch ra thị trường trong 19 tuần, tính từ lúc hình thành ý tưởng đến sản phẩm hoàn chỉnh.</p>
       </div>
       <footer class="footer"><span>12 / 12</span><div class="progress"><div class="bar"></div></div><div class="controls"><button data-prev>‹</button><button data-next>›</button></div></footer>
+    </section>
+
+    <section class="slide" style="--progress: 100%">
+      <div class="topbar"><div class="brand"><span class="mark"></span>SYL</div><span>Closing</span></div>
+      <div class="content closing-lockup">
+        <img class="closing-logo" src="assets/logo.jpg" alt="SYL logo" />
+        <p class="team-name">melphins</p>
+      </div>
+      <footer class="footer"><span>13 / 13</span><div class="progress"><div class="bar"></div></div><div class="controls"><button data-prev>‹</button><button data-next>›</button></div></footer>
     </section>
   </main>
 
   <script>
     const slides = [...document.querySelectorAll('.slide')];
     let current = 0;
+    slides.forEach((slide, index) => {
+      slide.style.setProperty('--progress', `${((index + 1) / slides.length) * 100}%`);
+      const counter = slide.querySelector('.footer span');
+      if (counter) counter.textContent = `${String(index + 1).padStart(2, '0')} / ${slides.length}`;
+    });
     function show(index) {
       current = Math.max(0, Math.min(slides.length - 1, index));
       slides.forEach((slide, i) => slide.classList.toggle('active', i === current));
