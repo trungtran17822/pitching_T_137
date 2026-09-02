@@ -151,6 +151,36 @@
       box-shadow: var(--shadow);
     }
     .diagram img { display: block; width: 100%; height: auto; border-radius: 4px; }
+    .video-stage {
+      width: min(1120px, 100%);
+      margin: 0 auto;
+      align-self: center;
+    }
+    .slide-video {
+      display: block;
+      width: 100%;
+      max-height: 68vh;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #050807;
+      box-shadow: var(--shadow);
+    }
+    .intro-video {
+      height: min(76vh, 720px);
+      object-fit: contain;
+    }
+    .demo-frame {
+      margin-top: 22px;
+      display: grid;
+      gap: 12px;
+    }
+    .combined-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 22px;
+    }
+    .stack { display: grid; gap: 10px; }
     .closing-lockup { display: grid; justify-items: center; gap: 28px; text-align: center; }
     .closing-logo {
       width: min(720px, 74vw);
@@ -208,6 +238,8 @@
       .split .grid { margin-top: 0; }
       .split.arch .card { min-height: 72px; padding: 10px; }
       .diagram { padding: 6px; }
+      .slide-video { max-height: 62vh; }
+      .intro-video { height: 70vh; }
       button { width: 34px; height: 34px; }
     }
 
@@ -215,7 +247,7 @@
       body { overflow: auto; }
       .deck { height: auto; }
       .slide { position: relative; min-height: 100vh; opacity: 1; pointer-events: auto; transform: none; }
-      .grid, .grid.two, .grid.four, .flow, .split, .split.arch { grid-template-columns: 1fr; }
+      .grid, .grid.two, .grid.four, .flow, .split, .split.arch, .combined-grid { grid-template-columns: 1fr; }
       .flow .step { min-height: auto; }
       .num { margin-bottom: 14px; }
       .controls, .progress { display: none; }
@@ -226,13 +258,10 @@
 </head>
 <body>
   <main class="deck" id="deck">
-    <section class="slide hero active" style="--slide-bg: url('assets/syl-hero.png'); --progress: 8.33%">
-      <div class="topbar"><div class="brand"><span class="mark"></span></div><span>AI Safety Camera · 2026</span></div>
-      <div class="content">
-        <div class="kicker">Fall detection · Stranger alert · Privacy by role</div>
-        <h1>SYL</h1>
-        <p class="lead">Lớp AI an toàn cho gia đình có người cao tuổi: phát hiện té ngã, cảnh báo người lạ và kích hoạt hỗ trợ khẩn cấp đúng lúc.</p>
-        <div class="chiprow"><span class="chip">YOLO Pose</span><span class="chip">Real-time alerts</span><span class="chip">WebRTC/HLS streaming</span><span class="chip">B2B2C</span></div>
+    <section class="slide active">
+      <div class="topbar"><div class="brand"><span class="mark"></span></div><span>Intro Video</span></div>
+      <div class="video-stage">
+        <video class="slide-video intro-video" src="intro.mp4" controls autoplay muted playsinline preload="metadata"></video>
       </div>
       <footer class="footer"><span>01 / 12</span><div class="progress"><div class="bar"></div></div><div class="controls"><button data-prev>‹</button><button data-next>›</button></div></footer>
     </section>
@@ -324,25 +353,37 @@
       <footer class="footer"><span>09 / 12</span><div class="progress"><div class="bar"></div></div><div class="controls"><button data-prev>‹</button><button data-next>›</button></div></footer>
     </section>
 
-    <section class="slide" style="--progress: 83.33%">
-      <div class="topbar"><div class="brand"><span class="mark"></span></div><span>Kinh doanh</span></div>
+    <section class="slide">
+      <div class="topbar"><div class="brand"><span class="mark"></span></div><span>Product Demo</span></div>
       <div class="content">
-        <div class="kicker">Business Model</div>
-        <h2>Gateway AI + hợp tác phân phối B2B2C.</h2>
-        <div class="grid"><div class="price"><h3>Standard</h3><strong>5.2tr</strong><p>Raspberry Pi 5 4GB + hệ thống SYL cho nhu cầu cơ bản.</p></div><div class="price"><h3>Plus</h3><strong>8.5tr</strong><p>Raspberry Pi 5 8GB + hệ thống SYL cho cấu hình mạnh hơn.</p></div><div class="price"><h3>Pro</h3><strong>10tr</strong><p>8GB + nâng cấp bản mới nhất, miễn phí 6 tháng đăng ký đầu.</p></div></div>
-        <p class="lead">Giai đoạn đầu bán sỉ qua đối tác camera; dài hạn chuyển sang hoa hồng/doanh thu theo sản phẩm bán ra.</p>
+        <div class="kicker">Demo</div>
+        <h2>Product demo: SYL phát hiện, ghi nhận và cảnh báo theo thời gian thực.</h2>
+        <div class="demo-frame">
+          <video class="slide-video" src="demo.mp4" controls playsinline preload="metadata"></video>
+        </div>
       </div>
-      <footer class="footer"><span>10 / 12</span><div class="progress"><div class="bar"></div></div><div class="controls"><button data-prev>‹</button><button data-next>›</button></div></footer>
+      <footer class="footer"><span>10 / 13</span><div class="progress"><div class="bar"></div></div><div class="controls"><button data-prev>‹</button><button data-next>›</button></div></footer>
     </section>
 
-    <section class="slide" style="--progress: 91.66%">
-      <div class="topbar"><div class="brand"><span class="mark"></span></div><span>Cạnh tranh</span></div>
+    <section class="slide">
+      <div class="topbar"><div class="brand"><span class="mark"></span></div><span>Business & Competition</span></div>
       <div class="content">
-        <div class="kicker">Competitive Position</div>
-        <h2>SYL nằm giữa camera phổ thông và hệ thống chuyên dụng đắt tiền.</h2>
-        <div class="grid"><div class="card"><h3>EZVIZ/IMOU</h3><p>Mạnh về giá và phân phối, nhưng chủ yếu là motion detection hoặc human detection.</p></div><div class="card warn"><h3>Hanwha/i-PRO/Hikvision</h3><p>Có hướng fall detection chuyên dụng nhưng chi phí cao hoặc chưa dễ tiếp cận tại Việt Nam.</p></div><div class="card good"><h3>SYL</h3><p>Định vị là lớp AI chăm sóc: fall detection, stranger alert, evidence và phân quyền.</p></div></div>
+        <div class="kicker">Business Model · Competitive Position</div>
+        <h2>SYL có mức giá dễ tiếp cận hơn camera chuyên dụng, nhưng thông minh hơn camera phổ thông.</h2>
+        <div class="combined-grid">
+          <div class="stack">
+            <div class="price"><h3>Standard</h3><strong>5.2tr</strong><p>Raspberry Pi 5 4GB + hệ thống SYL cho nhu cầu cơ bản.</p></div>
+            <div class="price"><h3>Plus</h3><strong>8.5tr</strong><p>Raspberry Pi 5 8GB + hệ thống SYL cho cấu hình mạnh hơn.</p></div>
+            <div class="price"><h3>Pro</h3><strong>10tr</strong><p>8GB + nâng cấp bản mới nhất, miễn phí 6 tháng đăng ký đầu.</p></div>
+          </div>
+          <div class="stack">
+            <div class="card"><h3>EZVIZ/IMOU</h3><p>Mạnh về giá và phân phối, nhưng chủ yếu là motion detection hoặc human detection.</p></div>
+            <div class="card warn"><h3>Hanwha/i-PRO/Hikvision</h3><p>Có hướng fall detection chuyên dụng nhưng chi phí cao hoặc chưa dễ tiếp cận tại Việt Nam.</p></div>
+            <div class="card good"><h3>SYL</h3><p>Định vị là lớp AI chăm sóc: fall detection, stranger alert, evidence và phân quyền.</p></div>
+          </div>
+        </div>
       </div>
-      <footer class="footer"><span>11 / 12</span><div class="progress"><div class="bar"></div></div><div class="controls"><button data-prev>‹</button><button data-next>›</button></div></footer>
+      <footer class="footer"><span>11 / 13</span><div class="progress"><div class="bar"></div></div><div class="controls"><button data-prev>‹</button><button data-next>›</button></div></footer>
     </section>
 
     <section class="slide" style="--progress: 100%">

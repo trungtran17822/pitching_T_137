@@ -9,6 +9,8 @@ OUT = Path("SYL_pitch_deck_13_slides.pptx")
 HERO = Path("assets/syl-hero.png")
 DIAGRAM = Path("assets/overview-diagram.png")
 LOGO = Path("assets/logo.jpg")
+INTRO_VIDEO = Path("intro.mp4")
+DEMO_VIDEO = Path("demo.mp4")
 EMU = 914400
 SLIDE_W = 13.333333 * EMU
 SLIDE_H = 7.5 * EMU
@@ -89,17 +91,32 @@ def image(rel_id: str, x: float, y: float, w: float, h: float, name: str) -> str
     </p:pic>"""
 
 
+def video_object(video_rel_id: str, media_rel_id: str, poster_rel_id: str, x: float, y: float, w: float, h: float, title: str) -> str:
+    return f"""
+    <p:pic>
+      <p:nvPicPr>
+        <p:cNvPr id="{shape_id()}" name="{esc(title)}"><a:hlinkClick action="ppaction://media"/></p:cNvPr>
+        <p:cNvPicPr><a:picLocks noChangeAspect="1"/></p:cNvPicPr>
+        <p:nvPr>
+          <a:videoFile r:link="{video_rel_id}"/>
+          <p:extLst><p:ext uri="{{DAA4B4D4-6D71-4841-9C94-3DE7FCFBF8DC}}"><p14:media r:embed="{media_rel_id}"/></p:ext></p:extLst>
+        </p:nvPr>
+      </p:nvPicPr>
+      <p:blipFill><a:blip r:embed="{poster_rel_id}"/><a:stretch><a:fillRect/></a:stretch></p:blipFill>
+      <p:spPr><a:xfrm><a:off x="{emu(x)}" y="{emu(y)}"/><a:ext cx="{emu(w)}" cy="{emu(h)}"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></p:spPr>
+    </p:pic>"""
+
+
 def footer(index: int, total: int) -> str:
     return text_box(11.72, 6.86, 0.95, 0.16, f"{index:02d} / {total}", 8.5, True, "#A8C4C0", "r")
 
 
 slides = [
     {
-        "type": "hero",
-        "kicker": "Fall detection · Stranger alert · Privacy by role",
-        "title": "SYL",
-        "lead": "Lớp AI an toàn cho gia đình có người cao tuổi: phát hiện té ngã, cảnh báo người lạ và kích hoạt hỗ trợ khẩn cấp đúng lúc.",
-        "chips": ["YOLO Pose", "Real-time alerts", "WebRTC/HLS streaming", "B2B2C"],
+        "type": "intro_video",
+        "kicker": "Intro Video",
+        "title": "SYL intro video",
+        "video": "intro.mp4",
     },
     {
         "kicker": "Problem",
@@ -186,18 +203,20 @@ slides = [
         ],
     },
     {
-        "kicker": "Business Model",
-        "title": "Gateway AI + hợp tác phân phối B2B2C.",
+        "type": "demo_video",
+        "kicker": "Demo",
+        "title": "Product demo: SYL phát hiện, ghi nhận và cảnh báo theo thời gian thực.",
+        "video": "demo.mp4",
+    },
+    {
+        "type": "business_competition",
+        "kicker": "Business Model · Competitive Position",
+        "title": "SYL có mức giá dễ tiếp cận hơn camera chuyên dụng, nhưng thông minh hơn camera phổ thông.",
         "prices": [
             ("Standard", "5.2tr", "Raspberry Pi 5 4GB + hệ thống SYL cho nhu cầu cơ bản."),
             ("Plus", "8.5tr", "Raspberry Pi 5 8GB + hệ thống SYL cho cấu hình mạnh hơn."),
             ("Pro", "10tr", "8GB + nâng cấp bản mới nhất, miễn phí 6 tháng đăng ký đầu."),
         ],
-        "lead": "Giai đoạn đầu bán sỉ qua đối tác camera; dài hạn chuyển sang hoa hồng/doanh thu theo sản phẩm bán ra.",
-    },
-    {
-        "kicker": "Competitive Position",
-        "title": "SYL nằm giữa camera phổ thông và hệ thống chuyên dụng đắt tiền.",
         "cards": [
             ("EZVIZ/IMOU", "Mạnh về giá và phân phối, nhưng chủ yếu là motion detection hoặc human detection."),
             ("Hanwha/i-PRO/Hikvision", "Có hướng fall detection chuyên dụng nhưng chi phí cao hoặc chưa dễ tiếp cận tại Việt Nam."),
@@ -274,7 +293,20 @@ def build_slide(slide: dict, index: int, total: int) -> str:
     reset_ids()
     shapes = bg()
 
-    if slide.get("type") == "hero":
+    if slide.get("type") == "intro_video":
+        shapes += topbar()
+        shapes += text_box(0.92, 1.02, 4.8, 0.28, slide["kicker"], 11.5, True, "#59E0D0")
+        shapes += rect(0.92, 1.35, 11.5, 4.9, fill="#050807", line="#B8D8A4", alpha=96000)
+        shapes += video_object("rId3", "rId4", "rId2", 1.15, 1.55, 11.05, 4.5, "intro.mp4")
+        shapes += text_box(0.92, 6.32, 11.5, 0.26, "Intro video: intro.mp4", 12, True, "#D8F4EF", "ctr")
+    elif slide.get("type") == "demo_video":
+        shapes += topbar()
+        shapes += text_box(0.92, 1.02, 4.8, 0.28, slide["kicker"], 11.5, True, "#59E0D0")
+        shapes += text_box(0.88, 1.47, 11.5, 0.85, slide["title"], 27, True)
+        shapes += rect(1.05, 2.55, 11.25, 3.78, fill="#050807", line="#B8D8A4", alpha=96000)
+        shapes += video_object("rId3", "rId4", "rId2", 1.28, 2.75, 10.78, 3.38, "demo.mp4")
+        shapes += text_box(0.92, 6.42, 11.5, 0.2, "Demo video: demo.mp4", 10.5, True, "#A8C4C0", "ctr")
+    elif slide.get("type") == "hero":
         shapes += image("rId3", 0, 0, 13.333333, 7.5, "syl-hero.png")
         shapes += f"""
         <p:sp>
@@ -311,11 +343,23 @@ def build_slide(slide: dict, index: int, total: int) -> str:
                 shapes += rect(x, yy, 5.55, 1.05, fill="#1A2B20", line="#B8D8A4")
                 shapes += text_box(x + 0.17, yy + 0.12, 5.18, 0.24, head, 13.8, True, "#EEFDF8")
                 shapes += text_box(x + 0.17, yy + 0.43, 5.15, 0.43, body, 8.8, False, "#A8C4C0")
-        if "cards" in slide and slide.get("type") not in ("architecture", "roadmap"):
+        if slide.get("type") == "business_competition":
+            for i, (name, price, body) in enumerate(slide["prices"]):
+                yy = 3.0 + i * 1.05
+                shapes += rect(0.92, yy, 5.45, 0.82, fill="#1A2B20", line="#B8D8A4")
+                shapes += text_box(1.1, yy + 0.12, 2.1, 0.2, name, 13.2, True, "#EEFDF8")
+                shapes += text_box(3.25, yy + 0.12, 1.25, 0.2, price, 13.2, True, "#FFD166")
+                shapes += text_box(1.1, yy + 0.42, 4.95, 0.18, body, 7.9, False, "#A8C4C0")
+            for i, (head, body) in enumerate(slide["cards"]):
+                yy = 3.0 + i * 1.05
+                shapes += rect(6.65, yy, 5.55, 0.82, fill="#1A2B20", line="#B8D8A4")
+                shapes += text_box(6.83, yy + 0.12, 5.15, 0.2, head, 13.2, True, "#EEFDF8")
+                shapes += text_box(6.83, yy + 0.42, 5.05, 0.18, body, 7.9, False, "#A8C4C0")
+        if "cards" in slide and slide.get("type") not in ("architecture", "roadmap", "business_competition"):
             cols = 4 if len(slide["cards"]) == 4 else 3
             y = 3.75 if len(slide["cards"]) > 4 else (4.1 if "lead" in slide else 3.9)
             shapes += card_group(slide["cards"], y=y, cols=cols)
-        if "prices" in slide:
+        if "prices" in slide and slide.get("type") != "business_competition":
             shapes += card_group([(f"{name} · {price}", body) for name, price, body in slide["prices"]], y=4.0, cols=3)
         if slide.get("type") == "architecture":
             shapes += rect(0.72, 2.72, 7.75, 3.72, fill="#FFFFFF", line="#B8D8A4", alpha=98000)
@@ -332,7 +376,7 @@ def build_slide(slide: dict, index: int, total: int) -> str:
 
     shapes += footer(index, total)
     return f"""<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<p:sld xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:p="http://schemas.openxmlformats.org/presentationml/2006/main">
+<p:sld xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:p="http://schemas.openxmlformats.org/presentationml/2006/main" xmlns:p14="http://schemas.microsoft.com/office/powerpoint/2010/main">
   <p:cSld>{shapes}</p:cSld>
   <p:clrMapOvr><a:masterClrMapping/></p:clrMapOvr>
 </p:sld>"""
@@ -347,12 +391,18 @@ def slide_rels(slide: dict) -> str:
         rels.append('<Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="../media/syl-hero.png"/>')
     if slide.get("type") == "architecture":
         rels.append('<Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="../media/overview-diagram.png"/>')
+    if slide.get("type") == "intro_video":
+        rels.append('<Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/video" Target="../media/intro.mp4"/>')
+        rels.append('<Relationship Id="rId4" Type="http://schemas.microsoft.com/office/2007/relationships/media" Target="../media/intro.mp4"/>')
+    if slide.get("type") == "demo_video":
+        rels.append('<Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/video" Target="../media/demo.mp4"/>')
+        rels.append('<Relationship Id="rId4" Type="http://schemas.microsoft.com/office/2007/relationships/media" Target="../media/demo.mp4"/>')
     return f"""<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">{''.join(rels)}</Relationships>"""
 
 
 def build_pptx() -> None:
-    for asset in (HERO, DIAGRAM, LOGO):
+    for asset in (HERO, DIAGRAM, LOGO, INTRO_VIDEO, DEMO_VIDEO):
         if not asset.exists():
             raise FileNotFoundError(asset)
     if OUT.exists():
@@ -367,6 +417,7 @@ def build_pptx() -> None:
   <Default Extension="png" ContentType="image/png"/>
   <Default Extension="jpg" ContentType="image/jpeg"/>
   <Default Extension="jpeg" ContentType="image/jpeg"/>
+  <Default Extension="mp4" ContentType="video/mp4"/>
   <Override PartName="/ppt/presentation.xml" ContentType="application/vnd.openxmlformats-officedocument.presentationml.presentation.main+xml"/>
   <Override PartName="/ppt/slideMasters/slideMaster1.xml" ContentType="application/vnd.openxmlformats-officedocument.presentationml.slideMaster+xml"/>
   <Override PartName="/ppt/slideLayouts/slideLayout1.xml" ContentType="application/vnd.openxmlformats-officedocument.presentationml.slideLayout+xml"/>
@@ -446,6 +497,8 @@ def build_pptx() -> None:
         z.write(HERO, "ppt/media/syl-hero.png")
         z.write(DIAGRAM, "ppt/media/overview-diagram.png")
         z.write(LOGO, "ppt/media/logo.jpg")
+        z.write(INTRO_VIDEO, "ppt/media/intro.mp4")
+        z.write(DEMO_VIDEO, "ppt/media/demo.mp4")
         for i, slide in enumerate(slides, start=1):
             z.writestr(f"ppt/slides/slide{i}.xml", build_slide(slide, i, total))
             z.writestr(f"ppt/slides/_rels/slide{i}.xml.rels", slide_rels(slide))
