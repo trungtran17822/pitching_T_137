@@ -5,12 +5,17 @@ import zipfile
 from pathlib import Path
 
 
-OUT = Path("SYL_pitch_deck_14_slides.pptx")
+OUT = Path("SYL_pitch_deck_13_slides.pptx")
 HERO = Path("assets/syl-hero.png")
 DIAGRAM = Path("assets/overview-diagram.png")
 LOGO = Path("assets/logo.jpg")
-INTRO_VIDEO = Path("intro.mp4")
 DEMO_VIDEO = Path("demo.mp4")
+SURVEY_IMAGES = {
+    "missed_alert": Path("assets/survey/missed-alert.png"),
+    "support_solution": Path("assets/survey/support-solution.png"),
+    "early_access": Path("assets/survey/early-access.png"),
+    "false_alarm": Path("assets/survey/false-alarm.png"),
+}
 EMU = 914400
 SLIDE_W = 13.333333 * EMU
 SLIDE_H = 7.5 * EMU
@@ -113,12 +118,6 @@ def footer(index: int, total: int) -> str:
 
 slides = [
     {
-        "type": "intro_video",
-        "kicker": "Intro Video",
-        "title": "SYL intro video",
-        "video": "intro.mp4",
-    },
-    {
         "type": "hero",
         "kicker": "Fall detection · Stranger alert · Privacy by role",
         "title": "SYL",
@@ -136,12 +135,19 @@ slides = [
         ],
     },
     {
+        "type": "survey_market",
         "kicker": "Market Signal",
         "title": "Survey xác nhận nỗi lo thật và mức sẵn sàng thử nghiệm.",
         "metrics": [
-            ("85%", "người khảo sát có người lớn tuổi trong gia đình và lo lắng khi họ ở nhà một mình."),
-            ("66,7%", "tin dùng thiết bị điện tử để theo dõi hoặc hỗ trợ người thân lớn tuổi tại nhà."),
-            ("59% / 38,5%", "quan tâm đến sản phẩm / chắc chắn muốn tham gia trải nghiệm demo."),
+            ("52", "câu trả lời khảo sát về nhu cầu chăm sóc người thân lớn tuổi tại nhà."),
+            ("46,2%", "từng gặp sự cố thật nhưng camera không cảnh báo kịp thời."),
+            ("94,2%", "quan tâm hoặc sẵn sàng tham gia trải nghiệm thử sản phẩm."),
+        ],
+        "bars": [
+            ("Thiết bị điện tử", 61.5),
+            ("Quan tâm demo", 53.8),
+            ("Sự cố bị miss", 46.2),
+            ("Sẵn sàng thử", 40.4),
         ],
         "quote": "Nền thị trường: khoảng 16,1 triệu người cao tuổi tại Việt Nam và 1,5–1,9 triệu ca té ngã mỗi năm tạo nhu cầu rõ cho cảnh báo sớm tại nhà.",
     },
@@ -296,17 +302,23 @@ def steps_group(items: list[tuple[str, str, str]]) -> str:
     return out
 
 
+def survey_chart_group(items: list[tuple[str, float]]) -> str:
+    out = rect(0.92, 4.35, 5.35, 1.42, fill="#1A2B20", line="#B8D8A4", alpha=85000)
+    out += text_box(1.12, 4.5, 4.9, 0.2, "Tín hiệu nhu cầu từ khảo sát", 12.5, True, "#EEFDF8")
+    for i, (label, value) in enumerate(items):
+        y = 4.82 + i * 0.22
+        out += text_box(1.12, y, 1.55, 0.12, label, 6.8, False, "#A8C4C0")
+        out += rect(2.72, y + 0.01, 2.55, 0.08, fill="#2B3A24", line="#2B3A24", alpha=90000)
+        out += rect(2.72, y + 0.01, 2.55 * value / 100, 0.08, fill="#59E0D0", line="#59E0D0", alpha=100000)
+        out += text_box(5.42, y, 0.5, 0.12, f"{str(value).replace('.', ',')}%", 6.8, True, "#70F0A8", "r")
+    return out
+
+
 def build_slide(slide: dict, index: int, total: int) -> str:
     reset_ids()
     shapes = bg()
 
-    if slide.get("type") == "intro_video":
-        shapes += topbar()
-        shapes += text_box(0.92, 1.02, 4.8, 0.28, slide["kicker"], 11.5, True, "#59E0D0")
-        shapes += rect(0.92, 1.35, 11.5, 4.9, fill="#050807", line="#B8D8A4", alpha=96000)
-        shapes += video_object("rId3", "rId4", "rId2", 1.15, 1.55, 11.05, 4.5, "intro.mp4")
-        shapes += text_box(0.92, 6.32, 11.5, 0.26, "Intro video: intro.mp4", 12, True, "#D8F4EF", "ctr")
-    elif slide.get("type") == "demo_video":
+    if slide.get("type") == "demo_video":
         shapes += topbar()
         shapes += text_box(0.92, 1.02, 4.8, 0.28, slide["kicker"], 11.5, True, "#59E0D0")
         shapes += text_box(0.88, 1.47, 11.5, 0.85, slide["title"], 27, True)
@@ -339,7 +351,23 @@ def build_slide(slide: dict, index: int, total: int) -> str:
         shapes += text_box(0.88, 1.47, 11.5, 1.15, slide["title"], 29, True)
         if "lead" in slide:
             shapes += text_box(0.94, 2.78, 9.4, 0.55, slide["lead"], 13.2, False, "#CFE7E3")
-        if "metrics" in slide:
+        if slide.get("type") == "survey_market":
+            for i, (num, body) in enumerate(slide["metrics"]):
+                x = 0.92 + i * 1.82
+                out_w = 1.65
+                shapes += rect(x, 3.0, out_w, 1.08, fill="#1A2B20", line="#B8D8A4")
+                shapes += text_box(x + 0.12, 3.16, out_w - 0.24, 0.33, num, 20, True, "#70F0A8")
+                shapes += text_box(x + 0.12, 3.58, out_w - 0.24, 0.28, body, 6.8, False, "#A8C4C0")
+            shapes += survey_chart_group(slide["bars"])
+            shapes += rect(6.52, 2.85, 2.72, 1.23, fill="#FFFFFF", line="#B8D8A4", alpha=98000)
+            shapes += image("rId3", 6.61, 2.94, 2.54, 1.05, "missed-alert.png")
+            shapes += rect(9.45, 2.85, 2.72, 1.23, fill="#FFFFFF", line="#B8D8A4", alpha=98000)
+            shapes += image("rId4", 9.54, 2.94, 2.54, 1.05, "support-solution.png")
+            shapes += rect(6.52, 4.25, 2.72, 1.23, fill="#FFFFFF", line="#B8D8A4", alpha=98000)
+            shapes += image("rId5", 6.61, 4.34, 2.54, 1.05, "early-access.png")
+            shapes += rect(9.45, 4.25, 2.72, 1.23, fill="#FFFFFF", line="#B8D8A4", alpha=98000)
+            shapes += image("rId6", 9.54, 4.34, 2.54, 1.05, "false-alarm.png")
+        elif "metrics" in slide:
             shapes += metric_group(slide["metrics"])
         if "steps" in slide:
             shapes += steps_group(slide["steps"])
@@ -398,9 +426,11 @@ def slide_rels(slide: dict) -> str:
         rels.append('<Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="../media/syl-hero.png"/>')
     if slide.get("type") == "architecture":
         rels.append('<Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="../media/overview-diagram.png"/>')
-    if slide.get("type") == "intro_video":
-        rels.append('<Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/video" Target="../media/intro.mp4"/>')
-        rels.append('<Relationship Id="rId4" Type="http://schemas.microsoft.com/office/2007/relationships/media" Target="../media/intro.mp4"/>')
+    if slide.get("type") == "survey_market":
+        rels.append('<Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="../media/survey-missed-alert.png"/>')
+        rels.append('<Relationship Id="rId4" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="../media/survey-support-solution.png"/>')
+        rels.append('<Relationship Id="rId5" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="../media/survey-early-access.png"/>')
+        rels.append('<Relationship Id="rId6" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="../media/survey-false-alarm.png"/>')
     if slide.get("type") == "demo_video":
         rels.append('<Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/video" Target="../media/demo.mp4"/>')
         rels.append('<Relationship Id="rId4" Type="http://schemas.microsoft.com/office/2007/relationships/media" Target="../media/demo.mp4"/>')
@@ -409,7 +439,7 @@ def slide_rels(slide: dict) -> str:
 
 
 def build_pptx() -> None:
-    for asset in (HERO, DIAGRAM, LOGO, INTRO_VIDEO, DEMO_VIDEO):
+    for asset in (HERO, DIAGRAM, LOGO, DEMO_VIDEO, *SURVEY_IMAGES.values()):
         if not asset.exists():
             raise FileNotFoundError(asset)
     if OUT.exists():
@@ -504,8 +534,11 @@ def build_pptx() -> None:
         z.write(HERO, "ppt/media/syl-hero.png")
         z.write(DIAGRAM, "ppt/media/overview-diagram.png")
         z.write(LOGO, "ppt/media/logo.jpg")
-        z.write(INTRO_VIDEO, "ppt/media/intro.mp4")
         z.write(DEMO_VIDEO, "ppt/media/demo.mp4")
+        z.write(SURVEY_IMAGES["missed_alert"], "ppt/media/survey-missed-alert.png")
+        z.write(SURVEY_IMAGES["support_solution"], "ppt/media/survey-support-solution.png")
+        z.write(SURVEY_IMAGES["early_access"], "ppt/media/survey-early-access.png")
+        z.write(SURVEY_IMAGES["false_alarm"], "ppt/media/survey-false-alarm.png")
         for i, slide in enumerate(slides, start=1):
             z.writestr(f"ppt/slides/slide{i}.xml", build_slide(slide, i, total))
             z.writestr(f"ppt/slides/_rels/slide{i}.xml.rels", slide_rels(slide))

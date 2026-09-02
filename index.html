@@ -174,6 +174,54 @@
       display: grid;
       gap: 12px;
     }
+    .survey-layout {
+      display: grid;
+      grid-template-columns: 1.02fr .98fr;
+      gap: 18px;
+      align-items: start;
+      margin-top: 20px;
+    }
+    .chart-card {
+      min-height: 0;
+      display: grid;
+      gap: 12px;
+    }
+    .bar-chart {
+      display: grid;
+      gap: 10px;
+    }
+    .bar-row {
+      display: grid;
+      grid-template-columns: 120px 1fr 54px;
+      gap: 10px;
+      align-items: center;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .track {
+      height: 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .12);
+      overflow: hidden;
+    }
+    .fill {
+      width: var(--value);
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--cyan), var(--green));
+    }
+    .survey-proof {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .survey-proof img {
+      width: 100%;
+      border-radius: 7px;
+      border: 1px solid rgba(255,255,255,.18);
+      box-shadow: var(--shadow);
+      background: #fff;
+    }
     .combined-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -240,6 +288,9 @@
       .diagram { padding: 6px; }
       .slide-video { max-height: 62vh; }
       .intro-video { height: 70vh; }
+      .survey-layout { grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
+      .bar-row { grid-template-columns: 96px 1fr 48px; font-size: 12px; }
+      .survey-proof { gap: 8px; }
       button { width: 34px; height: 34px; }
     }
 
@@ -247,7 +298,7 @@
       body { overflow: auto; }
       .deck { height: auto; }
       .slide { position: relative; min-height: 100vh; opacity: 1; pointer-events: auto; transform: none; }
-      .grid, .grid.two, .grid.four, .flow, .split, .split.arch, .combined-grid { grid-template-columns: 1fr; }
+      .grid, .grid.two, .grid.four, .flow, .split, .split.arch, .combined-grid, .survey-layout, .survey-proof { grid-template-columns: 1fr; }
       .flow .step { min-height: auto; }
       .num { margin-bottom: 14px; }
       .controls, .progress { display: none; }
@@ -258,15 +309,7 @@
 </head>
 <body>
   <main class="deck" id="deck">
-    <section class="slide active">
-      <div class="topbar"><div class="brand"><span class="mark"></span></div><span>Intro Video</span></div>
-      <div class="video-stage">
-        <video class="slide-video intro-video" src="intro.mp4" controls autoplay muted playsinline preload="metadata"></video>
-      </div>
-      <footer class="footer"><span>01 / 12</span><div class="progress"><div class="bar"></div></div><div class="controls"><button data-prev>‹</button><button data-next>›</button></div></footer>
-    </section>
-
-    <section class="slide hero" style="--slide-bg: url('assets/syl-hero.png')">
+    <section class="slide hero active" style="--slide-bg: url('assets/syl-hero.png')">
       <div class="topbar"><div class="brand"><span class="mark"></span></div><span>AI Safety Camera · 2026</span></div>
       <div class="content">
         <div class="kicker">Fall detection · Stranger alert · Privacy by role</div>
@@ -293,7 +336,30 @@
       <div class="content">
         <div class="kicker">Market Signal</div>
         <h2>Survey xác nhận nỗi lo thật và mức sẵn sàng thử nghiệm.</h2>
-        <div class="grid"><div class="metric good"><strong>85%</strong><span>người khảo sát có người lớn tuổi trong gia đình và lo lắng khi họ ở nhà một mình.</span></div><div class="metric"><strong>66,7%</strong><span>tin dùng thiết bị điện tử để theo dõi hoặc hỗ trợ người thân lớn tuổi tại nhà.</span></div><div class="metric"><strong>59% / 38,5%</strong><span>quan tâm đến sản phẩm / chắc chắn muốn tham gia trải nghiệm demo.</span></div></div>
+        <div class="survey-layout">
+          <div>
+            <div class="grid">
+              <div class="metric good"><strong>52</strong><span>câu trả lời khảo sát, phản ánh nhu cầu chăm sóc người thân lớn tuổi tại nhà.</span></div>
+              <div class="metric"><strong>46,2%</strong><span>từng gặp sự cố thật nhưng camera không cảnh báo kịp thời.</span></div>
+              <div class="metric"><strong>94,2%</strong><span>quan tâm hoặc sẵn sàng tham gia trải nghiệm thử sản phẩm.</span></div>
+            </div>
+            <div class="card chart-card">
+              <h3>Tín hiệu nhu cầu từ khảo sát</h3>
+              <div class="bar-chart">
+                <div class="bar-row"><span>Thiết bị điện tử</span><div class="track"><div class="fill" style="--value: 61.5%"></div></div><b>61,5%</b></div>
+                <div class="bar-row"><span>Quan tâm demo</span><div class="track"><div class="fill" style="--value: 53.8%"></div></div><b>53,8%</b></div>
+                <div class="bar-row"><span>Sự cố bị miss</span><div class="track"><div class="fill" style="--value: 46.2%"></div></div><b>46,2%</b></div>
+                <div class="bar-row"><span>Sẵn sàng thử</span><div class="track"><div class="fill" style="--value: 40.4%"></div></div><b>40,4%</b></div>
+              </div>
+            </div>
+          </div>
+          <div class="survey-proof">
+            <img src="assets/survey/missed-alert.png" alt="Survey chart about real incidents not alerted in time" />
+            <img src="assets/survey/support-solution.png" alt="Survey chart about solutions used for elderly care" />
+            <img src="assets/survey/early-access.png" alt="Survey chart about early access interest" />
+            <img src="assets/survey/false-alarm.png" alt="Survey chart about false alarms from cameras" />
+          </div>
+        </div>
         <p class="quote">Nền thị trường: khoảng 16,1 triệu người cao tuổi tại Việt Nam và 1,5–1,9 triệu ca té ngã mỗi năm tạo nhu cầu rõ cho cảnh báo sớm tại nhà.</p>
       </div>
       <footer class="footer"><span>03 / 12</span><div class="progress"><div class="bar"></div></div><div class="controls"><button data-prev>‹</button><button data-next>›</button></div></footer>
