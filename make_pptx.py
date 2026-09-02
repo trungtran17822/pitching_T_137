@@ -5,7 +5,7 @@ import zipfile
 from pathlib import Path
 
 
-OUT = Path("SYL_pitch_deck_13_slides.pptx")
+OUT = Path("SYL_pitch_deck_14_slides.pptx")
 HERO = Path("assets/syl-hero.png")
 DIAGRAM = Path("assets/overview-diagram.png")
 LOGO = Path("assets/logo.jpg")
@@ -119,6 +119,13 @@ slides = [
         "video": "intro.mp4",
     },
     {
+        "type": "hero",
+        "kicker": "Fall detection · Stranger alert · Privacy by role",
+        "title": "SYL",
+        "lead": "Lớp AI an toàn cho gia đình có người cao tuổi: phát hiện té ngã, cảnh báo người lạ và kích hoạt hỗ trợ khẩn cấp đúng lúc.",
+        "chips": ["YOLO Pose", "Real-time alerts", "WebRTC/HLS streaming", "B2B2C"],
+    },
+    {
         "kicker": "Problem",
         "title": "Khoảnh khắc nguy hiểm nhất thường xảy ra khi không ai đang nhìn.",
         "lead": "Gia đình cần một hệ thống biết phân biệt sự cố thật với chuyển động bình thường, thay vì chỉ gửi thêm nhiều thông báo nhiễu.",
@@ -193,16 +200,6 @@ slides = [
         "quote": "Web, API và Media Gateway đã triển khai trên VPS; kết nối thành công camera IP LAN qua SSH Tunnel và gửi email kèm snapshot/video evidence.",
     },
     {
-        "kicker": "Privacy & Roles",
-        "title": "Cảnh báo khẩn cấp phải đi cùng quyền riêng tư có kiểm soát.",
-        "cards": [
-            ("Admin", "Thêm camera, phân quyền, xem dashboard và kiểm tra lỗi hệ thống."),
-            ("Gia đình", "Chỉ xem camera được cấp phép và nhận cảnh báo liên quan đến người thân."),
-            ("Bác sĩ", "Được cấp quyền tạm thời khi có sự cố, phục vụ tư vấn hoặc đánh giá nhanh."),
-            ("5 phút", "Quyền xem tình huống khẩn cấp tự thu hồi để giảm rủi ro lạm dụng dữ liệu."),
-        ],
-    },
-    {
         "type": "demo_video",
         "kicker": "Demo",
         "title": "Product demo: SYL phát hiện, ghi nhận và cảnh báo theo thời gian thực.",
@@ -221,6 +218,16 @@ slides = [
             ("EZVIZ/IMOU", "Mạnh về giá và phân phối, nhưng chủ yếu là motion detection hoặc human detection."),
             ("Hanwha/i-PRO/Hikvision", "Có hướng fall detection chuyên dụng nhưng chi phí cao hoặc chưa dễ tiếp cận tại Việt Nam."),
             ("SYL", "Định vị là lớp AI chăm sóc: fall detection, stranger alert, evidence và phân quyền."),
+        ],
+    },
+    {
+        "kicker": "Privacy & Roles",
+        "title": "Cảnh báo khẩn cấp phải đi cùng quyền riêng tư có kiểm soát.",
+        "cards": [
+            ("Admin", "Thêm camera, phân quyền, xem dashboard và kiểm tra lỗi hệ thống."),
+            ("Gia đình", "Chỉ xem camera được cấp phép và nhận cảnh báo liên quan đến người thân."),
+            ("Bác sĩ", "Được cấp quyền tạm thời khi có sự cố, phục vụ tư vấn hoặc đánh giá nhanh."),
+            ("5 phút", "Quyền xem tình huống khẩn cấp tự thu hồi để giảm rủi ro lạm dụng dữ liệu."),
         ],
     },
     {
