@@ -140,14 +140,16 @@ slides = [
         "title": "Survey xác nhận nỗi lo thật và mức sẵn sàng thử nghiệm.",
         "metrics": [
             ("52", "câu trả lời khảo sát về nhu cầu chăm sóc người thân lớn tuổi tại nhà."),
-            ("46,2%", "từng gặp sự cố thật nhưng camera không cảnh báo kịp thời."),
-            ("94,2%", "quan tâm hoặc sẵn sàng tham gia trải nghiệm thử sản phẩm."),
+            ("85%", "có người lớn tuổi trong gia đình và lo lắng khi họ ở nhà một mình."),
+            ("66,7%", "tin dùng thiết bị điện tử để hỗ trợ theo dõi người thân lớn tuổi."),
         ],
         "bars": [
-            ("Thiết bị điện tử", 61.5),
-            ("Quan tâm demo", 53.8),
+            ("Có NCT & lo lắng", 85),
+            ("Tin thiết bị điện tử", 66.7),
+            ("Quan tâm sản phẩm", 59),
             ("Sự cố bị miss", 46.2),
-            ("Sẵn sàng thử", 40.4),
+            ("Chắc chắn demo", 38.5),
+            ("Báo động giả", 34.6),
         ],
         "quote": "Nền thị trường: khoảng 16,1 triệu người cao tuổi tại Việt Nam và 1,5–1,9 triệu ca té ngã mỗi năm tạo nhu cầu rõ cho cảnh báo sớm tại nhà.",
     },
@@ -303,14 +305,14 @@ def steps_group(items: list[tuple[str, str, str]]) -> str:
 
 
 def survey_chart_group(items: list[tuple[str, float]]) -> str:
-    out = rect(0.72, 4.36, 4.9, 1.46, fill="#1A2B20", line="#B8D8A4", alpha=85000)
-    out += text_box(0.92, 4.51, 4.45, 0.2, "Tín hiệu nhu cầu từ khảo sát", 12.2, True, "#EEFDF8")
+    out = rect(0.72, 4.22, 4.9, 1.72, fill="#1A2B20", line="#B8D8A4", alpha=85000)
+    out += text_box(0.92, 4.36, 4.45, 0.2, "Tín hiệu nhu cầu từ report & survey", 12.0, True, "#EEFDF8")
     for i, (label, value) in enumerate(items):
-        y = 4.84 + i * 0.22
-        out += text_box(0.92, y, 1.38, 0.12, label, 6.6, False, "#A8C4C0")
-        out += rect(2.34, y + 0.01, 2.35, 0.08, fill="#2B3A24", line="#2B3A24", alpha=90000)
-        out += rect(2.34, y + 0.01, 2.35 * value / 100, 0.08, fill="#59E0D0", line="#59E0D0", alpha=100000)
-        out += text_box(4.84, y, 0.5, 0.12, f"{str(value).replace('.', ',')}%", 6.6, True, "#70F0A8", "r")
+        y = 4.67 + i * 0.2
+        out += text_box(0.92, y, 1.52, 0.12, label, 6.15, False, "#A8C4C0")
+        out += rect(2.48, y + 0.01, 2.18, 0.08, fill="#2B3A24", line="#2B3A24", alpha=90000)
+        out += rect(2.48, y + 0.01, 2.18 * value / 100, 0.08, fill="#59E0D0", line="#59E0D0", alpha=100000)
+        out += text_box(4.78, y, 0.55, 0.12, f"{str(value).replace('.', ',')}%", 6.15, True, "#70F0A8", "r")
     return out
 
 
