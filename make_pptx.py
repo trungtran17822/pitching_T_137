@@ -314,6 +314,50 @@ def survey_chart_group(items: list[tuple[str, float]]) -> str:
     return out
 
 
+def mini_bars(x: float, y: float, values: list[float], title: str, scale: float = 1.0) -> str:
+    height = 0.72 * scale
+    out = rect(x, y, 2.25, height, fill="#1A2B20", line="#B8D8A4", alpha=83000)
+    out += text_box(x + 0.14, y + 0.1, 1.9, 0.12, title, 7.8, True, "#EEFDF8")
+    bar_w = 0.32
+    gap = 0.11
+    base = y + 0.58 * scale
+    for i, value in enumerate(values):
+        h = 0.34 * value * scale
+        bx = x + 0.18 + i * (bar_w + gap)
+        out += rect(bx, base - h, bar_w, h, fill="#59E0D0", line="#59E0D0", alpha=100000)
+    return out
+
+
+def mini_ring(x: float, y: float, label: str, title: str, scale: float = 1.0) -> str:
+    out = rect(x, y, 2.25, 0.72 * scale, fill="#1A2B20", line="#B8D8A4", alpha=83000)
+    out += text_box(x + 0.14, y + 0.1, 1.2, 0.12, title, 7.8, True, "#EEFDF8")
+    out += text_box(x + 1.22, y + 0.24 * scale, 0.82, 0.18, label, 13.5 * scale, True, "#70F0A8", "ctr")
+    return out
+
+
+def visual_row(kind: str, y: float = 5.82, scale: float = 1.0) -> str:
+    presets = {
+        "problem": [("bars", "Risk stack", [0.38, 0.68, 0.92]), ("ring", "False alarm", "34,6%"), ("ring", "Missed alert", "46,2%")],
+        "solution": [("ring", "Fall recall", "≥85%"), ("ring", "Stranger F1", "83%"), ("bars", "Evidence flow", [0.3, 0.58, 0.86])],
+        "product": [("bars", "Camera", [0.5, 0.7]), ("bars", "AI pipeline", [0.35, 0.65, 0.9]), ("bars", "Response", [0.45, 0.8])],
+        "architecture": [("bars", "Streaming", [0.45, 0.78, 0.58]), ("ring", "AI services", "83%"), ("bars", "Storage", [0.8, 0.48, 0.64])],
+        "tech": [("bars", "Runtime", [0.53, 0.73, 1.0]), ("ring", "Coverage", "100%"), ("bars", "Pipeline", [0.4, 0.62, 0.76, 0.92])],
+        "traction": [("ring", "Test pass", "100%"), ("bars", "FPS range", [0.53, 0.73, 1.0]), ("ring", "F1 score", "83%")],
+        "business": [("bars", "Price ladder", [0.52, 0.85, 1.0]), ("bars", "Positioning", [0.45, 0.75, 0.55]), ("bars", "Go-to-market", [0.48, 0.78, 0.96])],
+        "roles": [("bars", "Access scope", [1.0, 0.64, 0.36]), ("ring", "Doctor window", "5p"), ("bars", "Data risk", [0.9, 0.52, 0.24])],
+        "roadmap": [("bars", "MVP", [0.33]), ("bars", "Benchmark", [0.25]), ("bars", "Trial", [1.0])],
+    }
+    items = presets[kind]
+    out = ""
+    for i, item in enumerate(items):
+        x = 0.92 + i * 2.45
+        if item[0] == "bars":
+            out += mini_bars(x, y, item[2], item[1], scale)
+        else:
+            out += mini_ring(x, y, item[2], item[1], scale)
+    return out
+
+
 def build_slide(slide: dict, index: int, total: int) -> str:
     reset_ids()
     shapes = bg()
@@ -405,9 +449,27 @@ def build_slide(slide: dict, index: int, total: int) -> str:
                 shapes += text_box(8.9, yy + 0.11, 3.5, 0.2, head, 11.8, True, "#EEFDF8")
                 shapes += text_box(8.9, yy + 0.36, 3.48, 0.22, body, 7.5, False, "#A8C4C0")
         if "quote" in slide:
-            qy = 5.92 if slide.get("type") == "roadmap" else 5.78
+            qy = 6.2 if slide.get("type") == "roadmap" or slide.get("kicker") == "Traction" else 5.78
             shapes += rect(0.92, qy, 10.8, 0.55, fill="#2B3A24", line="#7FB069", alpha=76000)
-            shapes += text_box(1.12, qy + 0.15, 10.2, 0.22, slide["quote"], 11.2 if slide.get("type") == "roadmap" else 11.5, False, "#D8F4EF")
+            shapes += text_box(1.12, qy + 0.14, 10.2, 0.22, slide["quote"], 9.4 if slide.get("type") == "roadmap" or slide.get("kicker") == "Traction" else 11.5, False, "#D8F4EF")
+        viz_map = {
+            "Problem": "problem",
+            "Solution": "solution",
+            "Product Flow": "product",
+            "Tech Stack": "tech",
+            "Traction": "traction",
+            "Privacy & Roles": "roles",
+        }
+        if slide.get("type") == "architecture":
+            shapes += visual_row("architecture")
+        elif slide.get("type") == "business_competition":
+            shapes += visual_row("business")
+        elif slide.get("type") == "roadmap":
+            shapes += visual_row("roadmap", y=5.62, scale=0.55)
+        elif slide.get("kicker") == "Traction":
+            shapes += visual_row("traction", y=5.48, scale=0.7)
+        elif slide.get("kicker") in viz_map:
+            shapes += visual_row(viz_map[slide["kicker"]])
 
     shapes += footer(index, total)
     return f"""<?xml version="1.0" encoding="UTF-8" standalone="yes"?>

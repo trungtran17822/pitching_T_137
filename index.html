@@ -229,6 +229,73 @@
       margin-top: 22px;
     }
     .stack { display: grid; gap: 10px; }
+    .viz-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 18px;
+    }
+    .mini-chart {
+      min-height: 96px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(31, 48, 34, .72);
+      box-shadow: var(--shadow);
+    }
+    .mini-chart h4 {
+      margin: 0 0 10px;
+      color: var(--text);
+      font-size: 14px;
+    }
+    .mini-bars { display: flex; align-items: end; gap: 8px; height: 54px; }
+    .mini-bars i {
+      flex: 1;
+      height: var(--h);
+      min-height: 10px;
+      border-radius: 6px 6px 2px 2px;
+      background: linear-gradient(180deg, var(--cyan), var(--green));
+      opacity: var(--o, 1);
+    }
+    .ring {
+      width: 82px;
+      height: 82px;
+      border-radius: 50%;
+      margin: 0 auto;
+      background: conic-gradient(var(--green) var(--value), rgba(255,255,255,.13) 0);
+      display: grid;
+      place-items: center;
+    }
+    .ring span {
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: #14241b;
+      display: grid;
+      place-items: center;
+      color: var(--green);
+      font-weight: 900;
+    }
+    .timeline-viz {
+      display: grid;
+      grid-template-columns: 4fr 3fr 12fr;
+      gap: 8px;
+      margin-top: 18px;
+      align-items: center;
+    }
+    .timeline-viz span {
+      height: 16px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--cyan), var(--green));
+      opacity: var(--o, 1);
+    }
+    .legend {
+      display: flex;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 8px;
+    }
     .closing-lockup { display: grid; justify-items: center; gap: 28px; text-align: center; }
     .closing-logo {
       width: min(720px, 74vw);
@@ -291,6 +358,12 @@
       .survey-layout { grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
       .bar-row { grid-template-columns: 96px 1fr 48px; font-size: 12px; }
       .survey-proof { gap: 8px; }
+      .viz-row { gap: 8px; margin-top: 12px; }
+      .mini-chart { min-height: 76px; padding: 10px; }
+      .mini-chart h4 { font-size: 12px; margin-bottom: 7px; }
+      .mini-bars { height: 38px; }
+      .ring { width: 64px; height: 64px; }
+      .ring span { width: 45px; height: 45px; font-size: 13px; }
       button { width: 34px; height: 34px; }
     }
 
@@ -298,7 +371,7 @@
       body { overflow: auto; }
       .deck { height: auto; }
       .slide { position: relative; min-height: 100vh; opacity: 1; pointer-events: auto; transform: none; }
-      .grid, .grid.two, .grid.four, .flow, .split, .split.arch, .combined-grid, .survey-layout, .survey-proof { grid-template-columns: 1fr; }
+      .grid, .grid.two, .grid.four, .flow, .split, .split.arch, .combined-grid, .survey-layout, .survey-proof, .viz-row { grid-template-columns: 1fr; }
       .flow .step { min-height: auto; }
       .num { margin-bottom: 14px; }
       .controls, .progress { display: none; }
@@ -327,6 +400,7 @@
         <h2>Khoảnh khắc nguy hiểm nhất thường xảy ra khi không ai đang nhìn.</h2>
         <p class="lead">Gia đình cần một hệ thống biết phân biệt sự cố thật với chuyển động bình thường, thay vì chỉ gửi thêm nhiều thông báo nhiễu.</p>
         <div class="grid"><div class="card warn"><h3>Phát hiện trễ</h3><p>Người đi làm hoặc sống xa không thể luôn theo dõi camera để biết cha mẹ gặp sự cố.</p></div><div class="card warn"><h3>Alert fatigue</h3><p>Motion alert quá nhiều khiến người dùng dễ tắt thông báo và bỏ lỡ cảnh báo quan trọng.</p></div><div class="card warn"><h3>Rủi ro riêng tư</h3><p>Camera gia đình phải kiểm soát ai được xem, xem trong bao lâu và xem vì lý do gì.</p></div></div>
+        <div class="viz-row"><div class="mini-chart"><h4>Mức độ rủi ro</h4><div class="mini-bars"><i style="--h: 38%; --o: .55"></i><i style="--h: 68%; --o: .75"></i><i style="--h: 92%"></i></div></div><div class="mini-chart"><h4>False alarm</h4><div class="ring" style="--value: 34.6%"><span>34,6%</span></div></div><div class="mini-chart"><h4>Missed alert</h4><div class="ring" style="--value: 46.2%"><span>46,2%</span></div></div></div>
       </div>
       <footer class="footer"><span>02 / 12</span><div class="progress"><div class="bar"></div></div><div class="controls"><button data-prev>‹</button><button data-next>›</button></div></footer>
     </section>
@@ -372,6 +446,7 @@
         <h2>SYL biến camera hiện có thành hệ thống chăm sóc chủ động.</h2>
         <p class="lead">Gateway AI kết nối camera IP, phân tích hình ảnh thời gian thực và gửi cảnh báo có bằng chứng đến đúng người xử lý.</p>
         <div class="grid"><div class="card"><h3>Phát hiện té ngã</h3><p>Nhận biết tư thế/ngữ cảnh nguy hiểm để kích hoạt cảnh báo khẩn.</p></div><div class="card"><h3>Phát hiện người lạ</h3><p>Đối chiếu người nhà với người lạ để giảm rủi ro an ninh trong nhà.</p></div><div class="card"><h3>Bằng chứng tức thì</h3><p>Email/app gửi snapshot hoặc video evidence để gia đình xác minh nhanh.</p></div></div>
+        <div class="viz-row"><div class="mini-chart"><h4>Fall recall mục tiêu</h4><div class="ring" style="--value: 85%"><span>≥85%</span></div></div><div class="mini-chart"><h4>Stranger F1</h4><div class="ring" style="--value: 83.05%"><span>83%</span></div></div><div class="mini-chart"><h4>Evidence flow</h4><div class="mini-bars"><i style="--h: 30%"></i><i style="--h: 58%"></i><i style="--h: 86%"></i></div></div></div>
       </div>
       <footer class="footer"><span>04 / 12</span><div class="progress"><div class="bar"></div></div><div class="controls"><button data-prev>‹</button><button data-next>›</button></div></footer>
     </section>
@@ -382,6 +457,7 @@
         <div class="kicker">Product Flow</div>
         <h2>Từ camera đến hành động khẩn cấp trong vài bước.</h2>
         <div class="flow"><div class="step"><div class="num">01</div><b>Stream</b><span>Camera IP gửi RTSP qua mạng LAN hoặc tunnel bảo mật.</span></div><div class="step"><div class="num">02</div><b>Infer</b><span>Model pose/face chạy inference và bám theo người trong khung hình.</span></div><div class="step"><div class="num">03</div><b>Classify</b><span>Temporal classifier xác định té ngã, bất động hoặc người lạ.</span></div><div class="step"><div class="num">04</div><b>Alert</b><span>Hệ thống gửi cảnh báo real-time kèm bằng chứng.</span></div><div class="step"><div class="num">05</div><b>Respond</b><span>Gia đình/admin/bác sĩ phối hợp xử lý trên app.</span></div></div>
+        <div class="timeline-viz"><span style="--o: .65"></span><span style="--o: .82"></span><span></span></div><div class="legend"><span>Camera</span><span>AI pipeline</span><span>Response</span></div>
       </div>
       <footer class="footer"><span>05 / 12</span><div class="progress"><div class="bar"></div></div><div class="controls"><button data-prev>‹</button><button data-next>›</button></div></footer>
     </section>
@@ -395,6 +471,7 @@
           <div class="grid two"><div class="card"><h3>Ingestion</h3><p>IMOU/IP Camera qua RTSP, SSH reverse tunnel, MediaMTX và FFmpeg để đưa luồng về server.</p></div><div class="card"><h3>AI pipeline</h3><p>YOLO Pose ONNX, ONNX Runtime, OpenCV, ByteTrack, Temporal Fall Classifier, YuNet & SFace.</p></div><div class="card"><h3>Backend</h3><p>FastAPI, WebSocket, Pydantic, LangChain/LangGraph; điều phối model, alert và quyền truy cập.</p></div><div class="card"><h3>Data layer</h3><p>PostgreSQL cho metadata, Redis cache, MinIO Object Storage cho snapshot/video evidence.</p></div></div>
           <figure class="diagram"><img src="assets/overview-diagram.png" alt="SYL overview architecture diagram" /></figure>
         </div>
+        <div class="viz-row"><div class="mini-chart"><h4>Streaming</h4><div class="mini-bars"><i style="--h: 45%"></i><i style="--h: 78%"></i><i style="--h: 58%"></i></div></div><div class="mini-chart"><h4>AI services</h4><div class="ring" style="--value: 83%"><span>83%</span></div></div><div class="mini-chart"><h4>Storage layers</h4><div class="mini-bars"><i style="--h: 80%"></i><i style="--h: 48%"></i><i style="--h: 64%"></i></div></div></div>
       </div>
       <footer class="footer"><span>06 / 12</span><div class="progress"><div class="bar"></div></div><div class="controls"><button data-prev>‹</button><button data-next>›</button></div></footer>
     </section>
@@ -405,6 +482,7 @@
         <div class="kicker">Tech Stack</div>
         <h2>Nền tảng đủ sâu để chạy real-time, đủ gọn để triển khai thực tế.</h2>
         <div class="grid"><div class="card"><h3>Computer Vision</h3><p>YOLO Pose, ONNX Runtime, OpenCV, ByteTrack, Temporal Fall Classifier, YuNet & SFace.</p></div><div class="card"><h3>Streaming</h3><p>MediaMTX, WebRTC/HLS, FFmpeg và SSH Reverse Tunnel cho camera LAN.</p></div><div class="card"><h3>Frontend</h3><p>React, TypeScript, Vite, hls.js, Canvas overlay; prototype React Native cho mobile.</p></div><div class="card"><h3>Backend</h3><p>FastAPI, WebSocket, Pydantic, LangChain/LangGraph cho workflow cảnh báo.</p></div><div class="card"><h3>Storage</h3><p>PostgreSQL, Redis và MinIO để lưu metadata, cache và object evidence.</p></div><div class="card"><h3>DevOps</h3><p>Docker Compose, Caddy HTTPS, uv, pnpm, Pytest, Ruff và MyPy.</p></div></div>
+        <div class="viz-row"><div class="mini-chart"><h4>Runtime</h4><div class="mini-bars"><i style="--h: 53%"></i><i style="--h: 70%"></i><i style="--h: 100%"></i></div></div><div class="mini-chart"><h4>Coverage</h4><div class="ring" style="--value: 100%"><span>100%</span></div></div><div class="mini-chart"><h4>Pipeline depth</h4><div class="mini-bars"><i style="--h: 40%"></i><i style="--h: 62%"></i><i style="--h: 76%"></i><i style="--h: 92%"></i></div></div></div>
       </div>
       <footer class="footer"><span>07 / 12</span><div class="progress"><div class="bar"></div></div><div class="controls"><button data-prev>‹</button><button data-next>›</button></div></footer>
     </section>
@@ -415,6 +493,7 @@
         <div class="kicker">Traction</div>
         <h2>Không chỉ là ý tưởng: hệ thống đã chạy được end-to-end.</h2>
         <div class="grid"><div class="metric good"><strong>543/543</strong><span>automated tests passed; Ruff và TypeScript type-check đạt 100%.</span></div><div class="metric"><strong>8–15 FPS</strong><span>runtime YOLO26n-pose, phụ thuộc cấu hình máy và điều kiện mạng.</span></div><div class="metric"><strong>83.05%</strong><span>F1 cho bài toán phát hiện người lạ trong thử nghiệm nội bộ.</span></div></div>
+        <div class="viz-row"><div class="mini-chart"><h4>Test pass</h4><div class="ring" style="--value: 100%"><span>100%</span></div></div><div class="mini-chart"><h4>FPS range</h4><div class="mini-bars"><i style="--h: 53%"></i><i style="--h: 73%"></i><i style="--h: 100%"></i></div></div><div class="mini-chart"><h4>F1 score</h4><div class="ring" style="--value: 83.05%"><span>83%</span></div></div></div>
         <p class="quote">Web, API và Media Gateway đã triển khai trên VPS; kết nối thành công camera IP LAN qua SSH Tunnel và gửi email kèm snapshot/video evidence.</p>
       </div>
       <footer class="footer"><span>08 / 12</span><div class="progress"><div class="bar"></div></div><div class="controls"><button data-prev>‹</button><button data-next>›</button></div></footer>
@@ -449,6 +528,7 @@
             <div class="card good"><h3>SYL</h3><p>Định vị là lớp AI chăm sóc: fall detection, stranger alert, evidence và phân quyền.</p></div>
           </div>
         </div>
+        <div class="viz-row"><div class="mini-chart"><h4>Price ladder</h4><div class="mini-bars"><i style="--h: 52%"></i><i style="--h: 85%"></i><i style="--h: 100%"></i></div></div><div class="mini-chart"><h4>Positioning</h4><div class="timeline-viz"><span style="--o: .55"></span><span></span><span style="--o: .75"></span></div><div class="legend"><span>Mass</span><span>SYL</span><span>Premium</span></div></div><div class="mini-chart"><h4>Go-to-market</h4><div class="mini-bars"><i style="--h: 48%"></i><i style="--h: 78%"></i><i style="--h: 96%"></i></div></div></div>
       </div>
       <footer class="footer"><span>11 / 13</span><div class="progress"><div class="bar"></div></div><div class="controls"><button data-prev>‹</button><button data-next>›</button></div></footer>
     </section>
@@ -459,6 +539,7 @@
         <div class="kicker">Privacy & Roles</div>
         <h2>Cảnh báo khẩn cấp phải đi cùng quyền riêng tư có kiểm soát.</h2>
         <div class="grid four"><div class="card"><h3>Admin</h3><p>Thêm camera, phân quyền, xem dashboard và kiểm tra lỗi hệ thống.</p></div><div class="card"><h3>Gia đình</h3><p>Chỉ xem camera được cấp phép và nhận cảnh báo liên quan đến người thân.</p></div><div class="card"><h3>Bác sĩ</h3><p>Được cấp quyền tạm thời khi có sự cố, phục vụ tư vấn hoặc đánh giá nhanh.</p></div><div class="card"><h3>5 phút</h3><p>Quyền xem tình huống khẩn cấp tự thu hồi để giảm rủi ro lạm dụng dữ liệu.</p></div></div>
+        <div class="viz-row"><div class="mini-chart"><h4>Access scope</h4><div class="mini-bars"><i style="--h: 100%"></i><i style="--h: 64%"></i><i style="--h: 36%"></i></div></div><div class="mini-chart"><h4>Doctor window</h4><div class="ring" style="--value: 8.3%"><span>5p</span></div></div><div class="mini-chart"><h4>Data risk</h4><div class="mini-bars"><i style="--h: 90%; --o: .45"></i><i style="--h: 52%; --o: .75"></i><i style="--h: 24%"></i></div></div></div>
       </div>
       <footer class="footer"><span>12 / 14</span><div class="progress"><div class="bar"></div></div><div class="controls"><button data-prev>‹</button><button data-next>›</button></div></footer>
     </section>
@@ -469,6 +550,7 @@
         <div class="kicker">Next Step</div>
         <h2>Từ ý tưởng đến sản phẩm thị trường trong 19 tuần.</h2>
         <div class="grid two"><div class="card"><h3>Phase 1 · 0–1 tháng</h3><p>Hoàn thiện MVP: access control, emergency alerts và demo run ổn định.</p></div><div class="card"><h3>Phase 2 · 3 tuần</h3><p>Benchmark trên các gateway/camera phổ biến để đo FPS, độ trễ và độ ổn định.</p></div><div class="card"><h3>Phase 3 · 1–3 tháng</h3><p>Trial với đối tác camera, chủ nhà, viện dưỡng lão hoặc trung tâm phục hồi chức năng để kiểm chứng chức năng và giá.</p></div><div class="card good"><h3>Kêu gọi đối tác</h3><p>Tìm 1–2 cặp đối tác thử nghiệm và cùng đưa sản phẩm Việt Nam ra thị trường quốc tế với tính năng ổn định hơn, giá thấp hơn.</p></div></div>
+        <div class="timeline-viz"><span style="--o: .75"></span><span style="--o: .9"></span><span></span></div><div class="legend"><span>0–1 tháng</span><span>3 tuần</span><span>1–3 tháng</span></div>
         <p class="quote">Kết luận: SYL có thể triển khai và launch ra thị trường trong 19 tuần, tính từ lúc hình thành ý tưởng đến sản phẩm hoàn chỉnh.</p>
       </div>
       <footer class="footer"><span>12 / 12</span><div class="progress"><div class="bar"></div></div><div class="controls"><button data-prev>‹</button><button data-next>›</button></div></footer>
