@@ -140,17 +140,23 @@
     }
 
     .split { display: grid; grid-template-columns: .82fr 1.18fr; gap: 16px; align-items: center; margin-top: 20px; }
-    .split.arch { grid-template-columns: .54fr 1.46fr; align-items: start; }
-    .split.arch .grid.two { grid-template-columns: 1fr; gap: 10px; margin-top: 0; }
-    .split.arch .card { min-height: 86px; padding: 12px; }
+    .split.arch { grid-template-columns: .42fr 1.58fr; align-items: stretch; gap: 14px; }
+    .split.arch .grid.two { grid-template-columns: 1fr; gap: 8px; margin-top: 0; }
+    .split.arch .card { min-height: 74px; padding: 10px 12px; }
+    .split.arch .card h3 { font-size: clamp(15px, 1.35vw, 18px); margin-bottom: 5px; }
+    .split.arch .card p { font-size: clamp(11.5px, 1vw, 13.5px); line-height: 1.24; }
     .diagram {
       border: 1px solid var(--line);
       border-radius: 8px;
       background: rgba(255, 255, 255, .92);
-      padding: 8px;
+      padding: 6px;
       box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    .diagram img { display: block; width: 100%; height: auto; border-radius: 4px; }
+    .diagram img { display: block; width: 100%; max-height: 48vh; object-fit: contain; border-radius: 4px; }
+    .split.arch + .viz-row { display: none; }
     .video-stage {
       width: min(1120px, 100%);
       margin: 0 auto;
@@ -176,15 +182,33 @@
     }
     .survey-layout {
       display: grid;
-      grid-template-columns: 1.02fr .98fr;
-      gap: 18px;
+      grid-template-columns: .72fr 1.28fr;
+      gap: 16px;
       align-items: start;
-      margin-top: 20px;
+      margin-top: 16px;
+    }
+    .survey-layout .grid {
+      grid-template-columns: 1fr;
+      gap: 8px;
+      margin-top: 0;
+    }
+    .survey-layout .metric {
+      min-height: 78px;
+      padding: 10px 12px;
+    }
+    .survey-layout .metric strong {
+      font-size: clamp(24px, 2.45vw, 34px);
+      margin-bottom: 4px;
+    }
+    .survey-layout .metric span {
+      font-size: clamp(11.5px, 1vw, 13.5px);
+      line-height: 1.22;
     }
     .chart-card {
       min-height: 0;
       display: grid;
-      gap: 12px;
+      gap: 9px;
+      margin-top: 10px;
     }
     .bar-chart {
       display: grid;
@@ -213,10 +237,12 @@
     .survey-proof {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px;
+      gap: 14px;
     }
     .survey-proof img {
       width: 100%;
+      min-height: 146px;
+      object-fit: contain;
       border-radius: 7px;
       border: 1px solid rgba(255,255,255,.18);
       box-shadow: var(--shadow);
@@ -349,15 +375,17 @@
       .step b { font-size: 16px; }
       .step span { font-size: 12.5px; }
       .split { gap: 12px; margin-top: 14px; }
-      .split.arch { grid-template-columns: .5fr 1.5fr; }
+      .split.arch { grid-template-columns: .38fr 1.62fr; gap: 10px; }
       .split .grid { margin-top: 0; }
-      .split.arch .card { min-height: 72px; padding: 10px; }
-      .diagram { padding: 6px; }
+      .split.arch .card { min-height: 60px; padding: 8px 10px; }
+      .diagram { padding: 5px; }
+      .diagram img { max-height: 46vh; }
       .slide-video { max-height: 62vh; }
       .intro-video { height: 70vh; }
-      .survey-layout { grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
+      .survey-layout { grid-template-columns: .68fr 1.32fr; gap: 12px; margin-top: 12px; }
       .bar-row { grid-template-columns: 96px 1fr 48px; font-size: 12px; }
-      .survey-proof { gap: 8px; }
+      .survey-proof { gap: 10px; }
+      .survey-proof img { min-height: 126px; }
       .viz-row { gap: 8px; margin-top: 12px; }
       .mini-chart { min-height: 76px; padding: 10px; }
       .mini-chart h4 { font-size: 12px; margin-bottom: 7px; }
@@ -372,6 +400,7 @@
       .deck { height: auto; }
       .slide { position: relative; min-height: 100vh; opacity: 1; pointer-events: auto; transform: none; }
       .grid, .grid.two, .grid.four, .flow, .split, .split.arch, .combined-grid, .survey-layout, .survey-proof, .viz-row { grid-template-columns: 1fr; }
+      .diagram img, .survey-proof img { max-height: none; min-height: 0; }
       .flow .step { min-height: auto; }
       .num { margin-bottom: 14px; }
       .controls, .progress { display: none; }

@@ -303,14 +303,14 @@ def steps_group(items: list[tuple[str, str, str]]) -> str:
 
 
 def survey_chart_group(items: list[tuple[str, float]]) -> str:
-    out = rect(0.92, 4.35, 5.35, 1.42, fill="#1A2B20", line="#B8D8A4", alpha=85000)
-    out += text_box(1.12, 4.5, 4.9, 0.2, "Tín hiệu nhu cầu từ khảo sát", 12.5, True, "#EEFDF8")
+    out = rect(0.72, 4.36, 4.9, 1.46, fill="#1A2B20", line="#B8D8A4", alpha=85000)
+    out += text_box(0.92, 4.51, 4.45, 0.2, "Tín hiệu nhu cầu từ khảo sát", 12.2, True, "#EEFDF8")
     for i, (label, value) in enumerate(items):
-        y = 4.82 + i * 0.22
-        out += text_box(1.12, y, 1.55, 0.12, label, 6.8, False, "#A8C4C0")
-        out += rect(2.72, y + 0.01, 2.55, 0.08, fill="#2B3A24", line="#2B3A24", alpha=90000)
-        out += rect(2.72, y + 0.01, 2.55 * value / 100, 0.08, fill="#59E0D0", line="#59E0D0", alpha=100000)
-        out += text_box(5.42, y, 0.5, 0.12, f"{str(value).replace('.', ',')}%", 6.8, True, "#70F0A8", "r")
+        y = 4.84 + i * 0.22
+        out += text_box(0.92, y, 1.38, 0.12, label, 6.6, False, "#A8C4C0")
+        out += rect(2.34, y + 0.01, 2.35, 0.08, fill="#2B3A24", line="#2B3A24", alpha=90000)
+        out += rect(2.34, y + 0.01, 2.35 * value / 100, 0.08, fill="#59E0D0", line="#59E0D0", alpha=100000)
+        out += text_box(4.84, y, 0.5, 0.12, f"{str(value).replace('.', ',')}%", 6.6, True, "#70F0A8", "r")
     return out
 
 
@@ -397,20 +397,20 @@ def build_slide(slide: dict, index: int, total: int) -> str:
             shapes += text_box(0.94, 2.78, 9.4, 0.55, slide["lead"], 13.2, False, "#CFE7E3")
         if slide.get("type") == "survey_market":
             for i, (num, body) in enumerate(slide["metrics"]):
-                x = 0.92 + i * 1.82
-                out_w = 1.65
-                shapes += rect(x, 3.0, out_w, 1.08, fill="#1A2B20", line="#B8D8A4")
-                shapes += text_box(x + 0.12, 3.16, out_w - 0.24, 0.33, num, 20, True, "#70F0A8")
-                shapes += text_box(x + 0.12, 3.58, out_w - 0.24, 0.28, body, 6.8, False, "#A8C4C0")
+                x = 0.72 + i * 1.65
+                out_w = 1.48
+                shapes += rect(x, 2.9, out_w, 1.08, fill="#1A2B20", line="#B8D8A4")
+                shapes += text_box(x + 0.1, 3.06, out_w - 0.2, 0.32, num, 18.2, True, "#70F0A8")
+                shapes += text_box(x + 0.1, 3.47, out_w - 0.2, 0.31, body, 6.25, False, "#A8C4C0")
             shapes += survey_chart_group(slide["bars"])
-            shapes += rect(6.52, 2.85, 2.72, 1.23, fill="#FFFFFF", line="#B8D8A4", alpha=98000)
-            shapes += image("rId3", 6.61, 2.94, 2.54, 1.05, "missed-alert.png")
-            shapes += rect(9.45, 2.85, 2.72, 1.23, fill="#FFFFFF", line="#B8D8A4", alpha=98000)
-            shapes += image("rId4", 9.54, 2.94, 2.54, 1.05, "support-solution.png")
-            shapes += rect(6.52, 4.25, 2.72, 1.23, fill="#FFFFFF", line="#B8D8A4", alpha=98000)
-            shapes += image("rId5", 6.61, 4.34, 2.54, 1.05, "early-access.png")
-            shapes += rect(9.45, 4.25, 2.72, 1.23, fill="#FFFFFF", line="#B8D8A4", alpha=98000)
-            shapes += image("rId6", 9.54, 4.34, 2.54, 1.05, "false-alarm.png")
+            shapes += rect(5.88, 2.78, 3.12, 1.48, fill="#FFFFFF", line="#B8D8A4", alpha=98000)
+            shapes += image("rId3", 5.98, 2.88, 2.92, 1.28, "missed-alert.png")
+            shapes += rect(9.18, 2.78, 3.12, 1.48, fill="#FFFFFF", line="#B8D8A4", alpha=98000)
+            shapes += image("rId4", 9.28, 2.88, 2.92, 1.28, "support-solution.png")
+            shapes += rect(5.88, 4.48, 3.12, 1.48, fill="#FFFFFF", line="#B8D8A4", alpha=98000)
+            shapes += image("rId5", 5.98, 4.58, 2.92, 1.28, "early-access.png")
+            shapes += rect(9.18, 4.48, 3.12, 1.48, fill="#FFFFFF", line="#B8D8A4", alpha=98000)
+            shapes += image("rId6", 9.28, 4.58, 2.92, 1.28, "false-alarm.png")
         elif "metrics" in slide:
             shapes += metric_group(slide["metrics"])
         if "steps" in slide:
@@ -441,13 +441,13 @@ def build_slide(slide: dict, index: int, total: int) -> str:
         if "prices" in slide and slide.get("type") != "business_competition":
             shapes += card_group([(f"{name} · {price}", body) for name, price, body in slide["prices"]], y=4.0, cols=3)
         if slide.get("type") == "architecture":
-            shapes += rect(0.72, 2.72, 7.75, 3.72, fill="#FFFFFF", line="#B8D8A4", alpha=98000)
-            shapes += image("rId3", 0.9, 2.9, 7.38, 3.36, "overview-diagram.png")
+            shapes += rect(0.65, 2.62, 8.25, 3.98, fill="#FFFFFF", line="#B8D8A4", alpha=98000)
+            shapes += image("rId3", 0.8, 2.77, 7.95, 3.68, "overview-diagram.png")
             for i, (head, body) in enumerate(slide["cards"]):
-                yy = 2.72 + i * 0.93
-                shapes += rect(8.72, yy, 3.88, 0.76, fill="#1A2B20", line="#B8D8A4")
-                shapes += text_box(8.9, yy + 0.11, 3.5, 0.2, head, 11.8, True, "#EEFDF8")
-                shapes += text_box(8.9, yy + 0.36, 3.48, 0.22, body, 7.5, False, "#A8C4C0")
+                yy = 2.62 + i * 0.84
+                shapes += rect(9.12, yy, 3.33, 0.68, fill="#1A2B20", line="#B8D8A4")
+                shapes += text_box(9.27, yy + 0.09, 3.0, 0.18, head, 10.8, True, "#EEFDF8")
+                shapes += text_box(9.27, yy + 0.31, 2.96, 0.21, body, 6.8, False, "#A8C4C0")
         if "quote" in slide:
             qy = 6.2 if slide.get("type") == "roadmap" or slide.get("kicker") == "Traction" else 5.78
             shapes += rect(0.92, qy, 10.8, 0.55, fill="#2B3A24", line="#7FB069", alpha=76000)
@@ -460,9 +460,7 @@ def build_slide(slide: dict, index: int, total: int) -> str:
             "Traction": "traction",
             "Privacy & Roles": "roles",
         }
-        if slide.get("type") == "architecture":
-            shapes += visual_row("architecture")
-        elif slide.get("type") == "business_competition":
+        if slide.get("type") == "business_competition":
             shapes += visual_row("business")
         elif slide.get("type") == "roadmap":
             shapes += visual_row("roadmap", y=5.62, scale=0.55)
