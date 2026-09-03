@@ -245,8 +245,8 @@ slides = [
         "cards": [
             ("Phase 1 · 0–1 tháng", "Hoàn thiện MVP: access control, emergency alerts và demo run ổn định."),
             ("Phase 2 · 3 tuần", "Benchmark trên các gateway/camera phổ biến để đo FPS, độ trễ và độ ổn định."),
-            ("Phase 3 · 1–3 tháng", "Trial với đối tác camera, chủ nhà, viện dưỡng lão hoặc trung tâm phục hồi chức năng để kiểm chứng chức năng và giá."),
-            ("Kêu gọi đối tác", "Tìm 1–2 cặp đối tác thử nghiệm và cùng đưa sản phẩm Việt Nam ra thị trường quốc tế với tính năng ổn định hơn, giá thấp hơn."),
+            ("What Partner Receives", "Camera partners provide cameras, dedicated technical support team and price discount. Site partners provide a testing site and receive a 3-month free product trial."),
+            ("3-month Pilot Goal", "Confirm Recall ≥85% and Precision with acceptable alert latency on the partner's real-world hardware/network, not only in internal testing."),
         ],
         "quote": "Kết luận: SYL có thể triển khai và launch ra thị trường trong 19 tuần, tính từ lúc hình thành ý tưởng đến sản phẩm hoàn chỉnh.",
     },
@@ -420,10 +420,10 @@ def build_slide(slide: dict, index: int, total: int) -> str:
         if slide.get("type") == "roadmap":
             for i, (head, body) in enumerate(slide["cards"]):
                 x = 0.92 + (i % 2) * 5.86
-                yy = 3.2 + (i // 2) * 1.32
-                shapes += rect(x, yy, 5.55, 1.05, fill="#1A2B20", line="#B8D8A4")
+                yy = 3.1 + (i // 2) * 1.42
+                shapes += rect(x, yy, 5.55, 1.16, fill="#1A2B20", line="#B8D8A4")
                 shapes += text_box(x + 0.17, yy + 0.12, 5.18, 0.24, head, 13.8, True, "#EEFDF8")
-                shapes += text_box(x + 0.17, yy + 0.43, 5.15, 0.43, body, 8.8, False, "#A8C4C0")
+                shapes += text_box(x + 0.17, yy + 0.43, 5.15, 0.55, body, 7.8, False, "#A8C4C0")
         if slide.get("type") == "business_competition":
             for i, (name, price, body) in enumerate(slide["prices"]):
                 yy = 3.0 + i * 1.05
