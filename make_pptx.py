@@ -17,6 +17,10 @@ SURVEY_IMAGES = {
     "false_alarm": Path("assets/survey/false-alarm.png"),
 }
 TECH_IMAGES = {
+    "val_epoch": Path("assets/tech/val-epoch.jpg"),
+    "threshold": Path("assets/tech/threshold.jpg"),
+    "test_clf": Path("assets/tech/test-clf.jpg"),
+    "test_distribution": Path("assets/tech/test-distribution.jpg"),
     "validation_metrics": Path("assets/tech/validation-metrics.jpg"),
     "confusion_matrix": Path("assets/tech/confusion-matrix.jpg"),
     "fall_probability": Path("assets/tech/fall-probability.jpg"),
@@ -267,11 +271,11 @@ slides = [
         "kicker": "Model Training",
         "title": "Quá trình huấn luyện ổn định, các metric vượt ngưỡng mục tiêu trong nhiều epoch.",
         "points": [
-            ("Validation ổn định", "Precision, Recall, F1 và Specificity duy trì trên target 0.90 sau giai đoạn hội tụ."),
-            ("Checkpoint selection", "Chọn model theo metric tổng hợp thay vì chỉ tối ưu một chỉ số đơn lẻ."),
-            ("Triển khai thực tế", "Pipeline được đóng gói để chạy inference real-time trên gateway và camera phổ biến."),
+            ("Validation theo epoch", "Theo dõi Precision, Recall, F1 và Specificity qua từng epoch để kiểm tra độ ổn định."),
+            ("Threshold tuning", "Chọn ngưỡng dự đoán phù hợp thay vì cố định một threshold cảm tính."),
+            ("Classification check", "Kiểm tra lỗi false positive/false negative để ưu tiên dữ liệu re-train tiếp theo."),
         ],
-        "images": ["validation_metrics"],
+        "images": ["val_epoch", "threshold", "test_clf"],
     },
     {
         "type": "eval_retrain",
@@ -290,15 +294,12 @@ slides = [
         "images": ["eval_retrain"],
     },
     {
-        "type": "test_evidence",
+        "type": "test_distribution",
         "kicker": "Model Evidence",
-        "title": "Bằng chứng kiểm thử cho thấy classifier tách nhóm fall/non-fall rõ ràng.",
+        "title": "Phân phối xác suất dự đoán trên tập test cho thấy hai nhóm fall/non-fall tách biệt rõ.",
         "points": [
-            ("Confusion matrix", "Tỷ lệ phân loại đúng cao ở cả nhóm fall và non-fall, giúp giảm cảnh báo sai."),
-            ("Probability threshold", "Ngưỡng dự đoán tách rõ phần lớn video test, thuận lợi cho cảnh báo có kiểm soát."),
-            ("Evidence-driven tuning", "Các lỗi còn lại được dùng để điều chỉnh threshold và ưu tiên dữ liệu re-train tiếp theo."),
         ],
-        "images": ["confusion_matrix", "fall_probability"],
+        "images": ["test_distribution"],
     },
 ]
 
@@ -383,7 +384,7 @@ def mini_ring(x: float, y: float, label: str, title: str, scale: float = 1.0) ->
 
 def visual_row(kind: str, y: float = 5.82, scale: float = 1.0) -> str:
     presets = {
-        "problem": [("bars", "Risk stack", [0.38, 0.68, 0.92]), ("ring", "Báo động giả", "34,6%"), ("ring", "Không báo kịp", "46,2%")],
+        "problem": [("ring", "Mẫu khảo sát", "52"), ("ring", "Báo động giả", "34,6%"), ("ring", "Không báo kịp", "46,2%")],
         "solution": [("ring", "Fall recall", "≥85%"), ("ring", "Stranger F1", "83%"), ("bars", "Evidence flow", [0.3, 0.58, 0.86])],
         "product": [("bars", "Camera", [0.5, 0.7]), ("bars", "AI pipeline", [0.35, 0.65, 0.9]), ("bars", "Response", [0.45, 0.8])],
         "architecture": [("bars", "Streaming", [0.45, 0.78, 0.58]), ("ring", "AI services", "83%"), ("bars", "Storage", [0.8, 0.48, 0.64])],
@@ -441,40 +442,37 @@ def build_slide(slide: dict, index: int, total: int) -> str:
         shapes += text_box(0.88, 1.45, 11.4, 1.05, slide["title"], 27.5, True)
         for i, (head, body) in enumerate(slide["points"]):
             yy = 2.86 + i * 1.06
-            shapes += rect(0.92, yy, 3.45, 0.86, fill="#1A2B20", line="#B8D8A4")
-            shapes += text_box(1.08, yy + 0.12, 3.1, 0.2, head, 12.3, True, "#EEFDF8")
-            shapes += text_box(1.08, yy + 0.41, 3.08, 0.24, body, 7.5, False, "#A8C4C0")
-        shapes += rect(4.62, 2.74, 7.78, 3.64, fill="#FFFFFF", line="#B8D8A4", alpha=98000)
-        shapes += image("rId3", 4.76, 2.88, 7.5, 3.36, "validation-metrics.jpg")
+            shapes += rect(0.78, yy, 3.25, 0.82, fill="#1A2B20", line="#B8D8A4")
+            shapes += text_box(0.94, yy + 0.11, 2.92, 0.19, head, 11.7, True, "#EEFDF8")
+            shapes += text_box(0.94, yy + 0.38, 2.9, 0.23, body, 7.05, False, "#A8C4C0")
+        shapes += rect(4.22, 2.76, 4.18, 3.02, fill="#FFFFFF", line="#B8D8A4", alpha=98000)
+        shapes += image("rId3", 4.36, 2.9, 3.9, 2.74, "val-epoch.jpg")
+        shapes += rect(8.62, 2.76, 1.94, 3.02, fill="#FFFFFF", line="#B8D8A4", alpha=98000)
+        shapes += image("rId4", 8.74, 2.9, 1.7, 2.74, "threshold.jpg")
+        shapes += rect(10.78, 2.76, 1.94, 3.02, fill="#FFFFFF", line="#B8D8A4", alpha=98000)
+        shapes += image("rId5", 10.9, 2.9, 1.7, 2.74, "test-clf.jpg")
     elif slide.get("type") == "eval_retrain":
         shapes += topbar()
         shapes += text_box(0.92, 0.94, 4.8, 0.28, slide["kicker"], 11.5, True, "#59E0D0")
-        shapes += text_box(0.88, 1.34, 11.45, 0.94, slide["title"], 27.5, True)
+        shapes += text_box(0.88, 1.28, 11.45, 0.82, slide["title"], 25.5, True)
         for i, (num, body) in enumerate(slide["metrics"]):
             x = 0.92 + i * 3.93
-            shapes += rect(x, 2.48, 3.65, 0.88, fill="#1A2B20", line="#70F0A8")
-            shapes += text_box(x + 0.16, 2.62, 3.32, 0.24, num, 19.5, True, "#70F0A8")
-            shapes += text_box(x + 0.16, 2.94, 3.25, 0.16, body, 7.8, False, "#A8C4C0")
-        shapes += rect(0.82, 3.62, 7.18, 2.98, fill="#FFFFFF", line="#B8D8A4", alpha=98000)
-        shapes += image("rId3", 0.96, 3.76, 6.9, 2.7, "eval-retrain.jpg")
+            shapes += rect(x, 2.32, 3.65, 0.82, fill="#1A2B20", line="#70F0A8")
+            shapes += text_box(x + 0.16, 2.45, 3.32, 0.24, num, 18.7, True, "#70F0A8")
+            shapes += text_box(x + 0.16, 2.75, 3.25, 0.16, body, 7.6, False, "#A8C4C0")
+        shapes += rect(0.82, 3.4, 7.18, 3.02, fill="#FFFFFF", line="#B8D8A4", alpha=98000)
+        shapes += image("rId3", 0.96, 3.54, 6.9, 2.74, "eval-retrain.jpg")
         for i, (head, body) in enumerate(slide["points"]):
-            yy = 3.62 + i * 0.99
-            shapes += rect(8.28, yy, 4.08, 0.78, fill="#1A2B20", line="#B8D8A4")
-            shapes += text_box(8.46, yy + 0.1, 3.7, 0.19, head, 11.5, True, "#EEFDF8")
-            shapes += text_box(8.46, yy + 0.35, 3.62, 0.22, body, 7.2, False, "#A8C4C0")
-    elif slide.get("type") == "test_evidence":
+            yy = 3.4 + i * 0.97
+            shapes += rect(8.28, yy, 4.08, 0.74, fill="#1A2B20", line="#B8D8A4")
+            shapes += text_box(8.46, yy + 0.09, 3.7, 0.18, head, 11.0, True, "#EEFDF8")
+            shapes += text_box(8.46, yy + 0.33, 3.62, 0.21, body, 6.9, False, "#A8C4C0")
+    elif slide.get("type") == "test_distribution":
         shapes += topbar()
         shapes += text_box(0.92, 1.02, 4.8, 0.28, slide["kicker"], 11.5, True, "#59E0D0")
-        shapes += text_box(0.88, 1.45, 11.4, 1.05, slide["title"], 27.5, True)
-        shapes += rect(0.82, 2.86, 3.68, 3.08, fill="#FFFFFF", line="#B8D8A4", alpha=98000)
-        shapes += image("rId3", 0.96, 3.0, 3.4, 2.8, "confusion-matrix.jpg")
-        shapes += rect(4.72, 2.86, 3.68, 3.08, fill="#FFFFFF", line="#B8D8A4", alpha=98000)
-        shapes += image("rId4", 4.86, 3.0, 3.4, 2.8, "fall-probability.jpg")
-        for i, (head, body) in enumerate(slide["points"]):
-            yy = 2.86 + i * 1.02
-            shapes += rect(8.68, yy, 3.74, 0.8, fill="#1A2B20", line="#B8D8A4")
-            shapes += text_box(8.86, yy + 0.1, 3.35, 0.19, head, 11.6, True, "#EEFDF8")
-            shapes += text_box(8.86, yy + 0.36, 3.32, 0.22, body, 7.1, False, "#A8C4C0")
+        shapes += text_box(0.88, 1.45, 11.4, 1.0, slide["title"], 27.0, True)
+        shapes += rect(1.08, 2.78, 11.18, 3.64, fill="#FFFFFF", line="#B8D8A4", alpha=98000)
+        shapes += image("rId3", 1.22, 2.92, 10.9, 3.36, "test-distribution.jpg")
     else:
         shapes += topbar()
         shapes += text_box(0.92, 1.02, 4.8, 0.28, slide["kicker"], 11.5, True, "#59E0D0")
@@ -581,12 +579,13 @@ def slide_rels(slide: dict) -> str:
         rels.append('<Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/video" Target="../media/demo.mp4"/>')
         rels.append('<Relationship Id="rId4" Type="http://schemas.microsoft.com/office/2007/relationships/media" Target="../media/demo.mp4"/>')
     if slide.get("type") == "tech_training":
-        rels.append('<Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="../media/tech-validation-metrics.jpg"/>')
+        rels.append('<Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="../media/tech-val-epoch.jpg"/>')
+        rels.append('<Relationship Id="rId4" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="../media/tech-threshold.jpg"/>')
+        rels.append('<Relationship Id="rId5" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="../media/tech-test-clf.jpg"/>')
     if slide.get("type") == "eval_retrain":
         rels.append('<Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="../media/tech-eval-retrain.jpg"/>')
-    if slide.get("type") == "test_evidence":
-        rels.append('<Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="../media/tech-confusion-matrix.jpg"/>')
-        rels.append('<Relationship Id="rId4" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="../media/tech-fall-probability.jpg"/>')
+    if slide.get("type") == "test_distribution":
+        rels.append('<Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="../media/tech-test-distribution.jpg"/>')
     return f"""<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">{''.join(rels)}</Relationships>"""
 
@@ -692,6 +691,10 @@ def build_pptx() -> None:
         z.write(SURVEY_IMAGES["support_solution"], "ppt/media/survey-support-solution.png")
         z.write(SURVEY_IMAGES["early_access"], "ppt/media/survey-early-access.png")
         z.write(SURVEY_IMAGES["false_alarm"], "ppt/media/survey-false-alarm.png")
+        z.write(TECH_IMAGES["val_epoch"], "ppt/media/tech-val-epoch.jpg")
+        z.write(TECH_IMAGES["threshold"], "ppt/media/tech-threshold.jpg")
+        z.write(TECH_IMAGES["test_clf"], "ppt/media/tech-test-clf.jpg")
+        z.write(TECH_IMAGES["test_distribution"], "ppt/media/tech-test-distribution.jpg")
         z.write(TECH_IMAGES["validation_metrics"], "ppt/media/tech-validation-metrics.jpg")
         z.write(TECH_IMAGES["confusion_matrix"], "ppt/media/tech-confusion-matrix.jpg")
         z.write(TECH_IMAGES["fall_probability"], "ppt/media/tech-fall-probability.jpg")

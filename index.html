@@ -311,6 +311,9 @@
     .tech-shot-grid.single {
       grid-template-columns: 1fr;
     }
+    .tech-shot-grid.three {
+      grid-template-columns: 1.15fr .85fr .85fr;
+    }
     .tech-shot {
       display: grid;
       align-items: center;
@@ -329,13 +332,14 @@
       border-radius: 4px;
     }
     .tech-shot-grid .tech-shot img { max-height: 31vh; }
+    .tech-shot-grid.three .tech-shot img { max-height: 34vh; }
     .eval-slide .content { width: min(1220px, 100%); }
-    .eval-slide h2 { font-size: clamp(30px, 3.6vw, 50px); }
+    .eval-slide h2 { font-size: clamp(28px, 3.15vw, 44px); max-width: 1160px; }
     .eval-metrics {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 10px;
-      margin-bottom: 12px;
+      margin: 18px 0 12px;
     }
     .eval-metrics .metric {
       min-height: 86px;
@@ -343,6 +347,28 @@
       background: linear-gradient(180deg, rgba(112, 240, 168, .18), rgba(31, 48, 34, .82));
     }
     .eval-metrics strong { color: var(--green); font-size: clamp(24px, 2.9vw, 40px); }
+    .evidence-slide .content { width: min(1240px, 100%); }
+    .evidence-slide h2 { font-size: clamp(28px, 3.2vw, 44px); max-width: 1120px; }
+    .evidence-slide .tech-layout.wide {
+      grid-template-columns: 1.42fr .58fr;
+      gap: 18px;
+      margin-top: 22px;
+    }
+    .evidence-slide .tech-shot-grid {
+      grid-template-columns: .82fr 1.18fr;
+      gap: 18px;
+    }
+    .evidence-slide .tech-shot { padding: 10px; }
+    .evidence-slide .tech-shot-grid .tech-shot img { max-height: 39vh; }
+    .evidence-slide .tech-points { gap: 10px; }
+    .evidence-slide .card { min-height: 86px; padding: 12px 14px; }
+    .evidence-slide .card h3 { font-size: clamp(15px, 1.25vw, 18px); }
+    .evidence-slide .card p { font-size: clamp(11.5px, .95vw, 13px); line-height: 1.22; }
+    .distribution-slide .content { width: min(1180px, 100%); }
+    .distribution-slide h2 { font-size: clamp(28px, 3.2vw, 44px); max-width: 1040px; }
+    .distribution-slide .tech-layout.wide { grid-template-columns: 1fr; margin-top: 18px; }
+    .distribution-slide .tech-shot { padding: 10px; }
+    .distribution-slide .tech-shot img { max-height: 52vh; }
     .viz-row {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -524,12 +550,27 @@
       .tech-slide .card p,
       .eval-slide .card p { font-size: 10.8px; line-height: 1.16; }
       .tech-shot-grid { gap: 8px; }
+      .tech-shot-grid.three { grid-template-columns: 1fr 1fr 1fr; }
       .tech-shot { padding: 5px; }
       .tech-shot img { max-height: 40vh; }
       .tech-shot-grid .tech-shot img { max-height: 26vh; }
-      .eval-metrics { gap: 8px; margin-bottom: 8px; }
+      .tech-shot-grid.three .tech-shot img { max-height: 25vh; }
+      .eval-metrics { gap: 8px; margin: 14px 0 8px; }
       .eval-metrics .metric { min-height: 62px; padding: 8px 10px; }
       .eval-metrics strong { font-size: 24px; }
+      .evidence-slide .content { width: min(1120px, 100%); }
+      .evidence-slide h2 { font-size: 32px; line-height: .98; }
+      .evidence-slide .tech-layout.wide { grid-template-columns: 1.5fr .5fr; gap: 10px; margin-top: 12px; }
+      .evidence-slide .tech-shot-grid { gap: 10px; }
+      .evidence-slide .tech-shot { padding: 6px; }
+      .evidence-slide .tech-shot-grid .tech-shot img { max-height: 35vh; }
+      .evidence-slide .card { min-height: 62px; padding: 8px 10px; }
+      .evidence-slide .card h3 { font-size: 14px; margin-bottom: 3px; }
+      .evidence-slide .card p { font-size: 10.3px; line-height: 1.14; }
+      .distribution-slide .content { width: min(1080px, 100%); }
+      .distribution-slide h2 { font-size: 32px; line-height: .98; }
+      .distribution-slide .tech-layout.wide { margin-top: 12px; }
+      .distribution-slide .tech-shot img { max-height: 48vh; }
       .viz-row { gap: 8px; margin-top: 12px; }
       .mini-chart { min-height: 76px; padding: 10px; }
       .mini-chart h4 { font-size: 12px; margin-bottom: 7px; }
@@ -565,6 +606,7 @@
       .tech-layout,
       .tech-layout.wide,
       .tech-shot-grid,
+      .tech-shot-grid.three,
       .eval-metrics { grid-template-columns: 1fr; }
       .tech-shot img,
       .tech-shot-grid .tech-shot img { max-height: none; }
@@ -591,7 +633,7 @@
         <h2>Khoảnh khắc nguy hiểm nhất thường xảy ra khi không ai đang nhìn.</h2>
         <p class="lead">Gia đình cần một hệ thống biết phân biệt sự cố thật với chuyển động bình thường, thay vì chỉ gửi thêm nhiều thông báo nhiễu.</p>
         <div class="grid"><div class="card warn"><h3>Phát hiện trễ</h3><p>Người đi làm hoặc sống xa không thể luôn theo dõi camera để biết cha mẹ gặp sự cố.</p></div><div class="card warn"><h3>Alert fatigue</h3><p>Motion alert quá nhiều khiến người dùng dễ tắt thông báo và bỏ lỡ cảnh báo quan trọng.</p></div><div class="card warn"><h3>Rủi ro riêng tư</h3><p>Camera gia đình phải kiểm soát ai được xem, xem trong bao lâu và xem vì lý do gì.</p></div></div>
-        <div class="viz-row"><div class="mini-chart"><h4>Mức độ rủi ro</h4><div class="mini-bars"><i style="--h: 38%; --o: .55"></i><i style="--h: 68%; --o: .75"></i><i style="--h: 92%"></i></div></div><div class="mini-chart"><h4>Báo động giả</h4><div class="ring" style="--value: 34.6%"><span>34,6%</span></div></div><div class="mini-chart"><h4>Không báo kịp</h4><div class="ring" style="--value: 46.2%"><span>46,2%</span></div></div></div>
+        <div class="viz-row"><div class="mini-chart"><h4>Mẫu khảo sát</h4><div class="ring" style="--value: 100%"><span>52</span></div></div><div class="mini-chart"><h4>Báo động giả</h4><div class="ring" style="--value: 34.6%"><span>34,6%</span></div></div><div class="mini-chart"><h4>Không báo kịp</h4><div class="ring" style="--value: 46.2%"><span>46,2%</span></div></div></div>
       </div>
       <footer class="footer"><span>02 / 12</span><div class="progress"><div class="bar"></div></div><div class="controls"><button data-prev>‹</button><button data-next>›</button></div></footer>
     </section>
@@ -766,14 +808,16 @@
       <div class="content">
         <div class="kicker">Model Training</div>
         <h2>Quá trình huấn luyện ổn định, các metric vượt ngưỡng mục tiêu trong nhiều epoch.</h2>
-        <div class="tech-layout">
+        <div class="tech-layout wide">
           <div class="tech-points">
-            <div class="card good"><h3>Validation ổn định</h3><p>Precision, Recall, F1 và Specificity duy trì trên target 0.90 sau giai đoạn hội tụ.</p></div>
-            <div class="card"><h3>Checkpoint selection</h3><p>Chọn model theo metric tổng hợp thay vì chỉ tối ưu một chỉ số đơn lẻ.</p></div>
-            <div class="card"><h3>Triển khai thực tế</h3><p>Pipeline được đóng gói để chạy inference real-time trên gateway và camera phổ biến.</p></div>
+            <div class="card good"><h3>Validation theo epoch</h3><p>Theo dõi Precision, Recall, F1 và Specificity qua từng epoch để kiểm tra độ ổn định.</p></div>
+            <div class="card"><h3>Threshold tuning</h3><p>Chọn ngưỡng dự đoán phù hợp thay vì cố định một threshold cảm tính.</p></div>
+            <div class="card"><h3>Classification check</h3><p>Kiểm tra lỗi false positive/false negative để ưu tiên dữ liệu re-train tiếp theo.</p></div>
           </div>
-          <div class="tech-shot-grid single">
-            <figure class="tech-shot"><img src="assets/tech/validation-metrics.jpg" alt="Validation metrics by epoch" /></figure>
+          <div class="tech-shot-grid three">
+            <figure class="tech-shot"><img src="assets/tech/val-epoch.jpg" alt="Validation metrics by epoch" /></figure>
+            <figure class="tech-shot"><img src="assets/tech/threshold.jpg" alt="Optimal validation threshold by epoch" /></figure>
+            <figure class="tech-shot"><img src="assets/tech/test-clf.jpg" alt="Test classification errors" /></figure>
           </div>
         </div>
       </div>
@@ -802,21 +846,13 @@
       <footer class="footer"><span>15 / 16</span><div class="progress"><div class="bar"></div></div><div class="controls"><button data-prev>‹</button><button data-next>›</button></div></footer>
     </section>
 
-    <section class="slide tech-slide">
+    <section class="slide tech-slide distribution-slide">
       <div class="topbar"><div class="brand"><span class="mark"></span></div><span>Test Evidence</span></div>
       <div class="content">
         <div class="kicker">Model Evidence</div>
-        <h2>Bằng chứng kiểm thử cho thấy classifier tách nhóm fall/non-fall rõ ràng.</h2>
+        <h2>Phân phối xác suất dự đoán trên tập test cho thấy hai nhóm fall/non-fall tách biệt rõ.</h2>
         <div class="tech-layout wide">
-          <div class="tech-shot-grid">
-            <figure class="tech-shot"><img src="assets/tech/confusion-matrix.jpg" alt="Normalized test confusion matrix" /></figure>
-            <figure class="tech-shot"><img src="assets/tech/fall-probability.jpg" alt="Fall probability by test video" /></figure>
-          </div>
-          <div class="tech-points">
-            <div class="card good"><h3>Confusion matrix</h3><p>Tỷ lệ phân loại đúng cao ở cả nhóm fall và non-fall, giúp giảm cảnh báo sai.</p></div>
-            <div class="card"><h3>Probability threshold</h3><p>Ngưỡng dự đoán tách rõ phần lớn video test, thuận lợi cho cảnh báo có kiểm soát.</p></div>
-            <div class="card"><h3>Evidence-driven tuning</h3><p>Các lỗi còn lại được dùng để điều chỉnh threshold và ưu tiên dữ liệu re-train tiếp theo.</p></div>
-          </div>
+          <figure class="tech-shot"><img src="assets/tech/test-distribution.jpg" alt="Test prediction probability distribution" /></figure>
         </div>
       </div>
       <footer class="footer"><span>16 / 16</span><div class="progress"><div class="bar"></div></div><div class="controls"><button data-prev>‹</button><button data-next>›</button></div></footer>
