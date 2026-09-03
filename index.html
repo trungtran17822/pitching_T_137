@@ -369,6 +369,11 @@
     .distribution-slide .tech-layout.wide { grid-template-columns: 1fr; margin-top: 18px; }
     .distribution-slide .tech-shot { padding: 10px; }
     .distribution-slide .tech-shot img { max-height: 52vh; }
+    .chart-focus-slide .content { width: min(1200px, 100%); }
+    .chart-focus-slide h2 { font-size: clamp(28px, 3.15vw, 44px); max-width: 1080px; }
+    .chart-focus-slide .tech-layout.wide { grid-template-columns: 1fr; margin-top: 18px; }
+    .chart-focus-slide .tech-shot { padding: 10px; }
+    .chart-focus-slide .tech-shot img { max-height: 52vh; }
     .viz-row {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -571,6 +576,10 @@
       .distribution-slide h2 { font-size: 32px; line-height: .98; }
       .distribution-slide .tech-layout.wide { margin-top: 12px; }
       .distribution-slide .tech-shot img { max-height: 48vh; }
+      .chart-focus-slide .content { width: min(1080px, 100%); }
+      .chart-focus-slide h2 { font-size: 32px; line-height: .98; }
+      .chart-focus-slide .tech-layout.wide { margin-top: 12px; }
+      .chart-focus-slide .tech-shot img { max-height: 48vh; }
       .viz-row { gap: 8px; margin-top: 12px; }
       .mini-chart { min-height: 76px; padding: 10px; }
       .mini-chart h4 { font-size: 12px; margin-bottom: 7px; }
@@ -803,25 +812,46 @@
       <footer class="footer"><span>13 / 13</span><div class="progress"><div class="bar"></div></div><div class="controls"><button data-prev>‹</button><button data-next>›</button></div></footer>
     </section>
 
-    <section class="slide tech-slide">
+    <section class="slide tech-slide chart-focus-slide">
       <div class="topbar"><div class="brand"><span class="mark"></span></div><span>Kỹ thuật</span></div>
       <div class="content">
         <div class="kicker">Model Training</div>
-        <h2>Quá trình huấn luyện ổn định, các metric vượt ngưỡng mục tiêu trong nhiều epoch.</h2>
+        <h2>Validation theo epoch cho thấy metric duy trì ổn định trên ngưỡng mục tiêu.</h2>
         <div class="tech-layout wide">
-          <div class="tech-points">
-            <div class="card good"><h3>Validation theo epoch</h3><p>Theo dõi Precision, Recall, F1 và Specificity qua từng epoch để kiểm tra độ ổn định.</p></div>
-            <div class="card"><h3>Threshold tuning</h3><p>Chọn ngưỡng dự đoán phù hợp thay vì cố định một threshold cảm tính.</p></div>
-            <div class="card"><h3>Classification check</h3><p>Kiểm tra lỗi false positive/false negative để ưu tiên dữ liệu re-train tiếp theo.</p></div>
-          </div>
-          <div class="tech-shot-grid three">
+          <div class="tech-shot-grid single">
             <figure class="tech-shot"><img src="assets/tech/val-epoch.jpg" alt="Validation metrics by epoch" /></figure>
+          </div>
+        </div>
+      </div>
+      <footer class="footer"><span>14 / 18</span><div class="progress"><div class="bar"></div></div><div class="controls"><button data-prev>‹</button><button data-next>›</button></div></footer>
+    </section>
+
+    <section class="slide tech-slide chart-focus-slide">
+      <div class="topbar"><div class="brand"><span class="mark"></span></div><span>Threshold</span></div>
+      <div class="content">
+        <div class="kicker">Threshold Tuning</div>
+        <h2>Ngưỡng validation được theo dõi qua từng epoch để chọn điểm cắt phù hợp.</h2>
+        <div class="tech-layout wide">
+          <div class="tech-shot-grid single">
             <figure class="tech-shot"><img src="assets/tech/threshold.jpg" alt="Optimal validation threshold by epoch" /></figure>
+          </div>
+        </div>
+      </div>
+      <footer class="footer"><span>15 / 18</span><div class="progress"><div class="bar"></div></div><div class="controls"><button data-prev>‹</button><button data-next>›</button></div></footer>
+    </section>
+
+    <section class="slide tech-slide chart-focus-slide">
+      <div class="topbar"><div class="brand"><span class="mark"></span></div><span>Classification</span></div>
+      <div class="content">
+        <div class="kicker">Test Classification</div>
+        <h2>Biểu đồ lỗi phân loại giúp định hướng dữ liệu cần bổ sung cho re-train.</h2>
+        <div class="tech-layout wide">
+          <div class="tech-shot-grid single">
             <figure class="tech-shot"><img src="assets/tech/test-clf.jpg" alt="Test classification errors" /></figure>
           </div>
         </div>
       </div>
-      <footer class="footer"><span>14 / 16</span><div class="progress"><div class="bar"></div></div><div class="controls"><button data-prev>‹</button><button data-next>›</button></div></footer>
+      <footer class="footer"><span>16 / 18</span><div class="progress"><div class="bar"></div></div><div class="controls"><button data-prev>‹</button><button data-next>›</button></div></footer>
     </section>
 
     <section class="slide tech-slide eval-slide">
@@ -843,7 +873,7 @@
           </div>
         </div>
       </div>
-      <footer class="footer"><span>15 / 16</span><div class="progress"><div class="bar"></div></div><div class="controls"><button data-prev>‹</button><button data-next>›</button></div></footer>
+      <footer class="footer"><span>17 / 18</span><div class="progress"><div class="bar"></div></div><div class="controls"><button data-prev>‹</button><button data-next>›</button></div></footer>
     </section>
 
     <section class="slide tech-slide distribution-slide">
@@ -855,7 +885,7 @@
           <figure class="tech-shot"><img src="assets/tech/test-distribution.jpg" alt="Test prediction probability distribution" /></figure>
         </div>
       </div>
-      <footer class="footer"><span>16 / 16</span><div class="progress"><div class="bar"></div></div><div class="controls"><button data-prev>‹</button><button data-next>›</button></div></footer>
+      <footer class="footer"><span>18 / 18</span><div class="progress"><div class="bar"></div></div><div class="controls"><button data-prev>‹</button><button data-next>›</button></div></footer>
     </section>
   </main>
 

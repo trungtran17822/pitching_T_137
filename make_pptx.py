@@ -5,7 +5,7 @@ import zipfile
 from pathlib import Path
 
 
-OUT = Path("SYL_pitch_deck_16_slides.pptx")
+OUT = Path("SYL_pitch_deck_18_slides.pptx")
 HERO = Path("assets/syl-hero.png")
 DIAGRAM = Path("assets/overview-diagram.png")
 LOGO = Path("assets/logo.jpg")
@@ -267,15 +267,25 @@ slides = [
         "lead": "melphins",
     },
     {
-        "type": "tech_training",
+        "type": "chart_focus",
         "kicker": "Model Training",
-        "title": "Quá trình huấn luyện ổn định, các metric vượt ngưỡng mục tiêu trong nhiều epoch.",
-        "points": [
-            ("Validation theo epoch", "Theo dõi Precision, Recall, F1 và Specificity qua từng epoch để kiểm tra độ ổn định."),
-            ("Threshold tuning", "Chọn ngưỡng dự đoán phù hợp thay vì cố định một threshold cảm tính."),
-            ("Classification check", "Kiểm tra lỗi false positive/false negative để ưu tiên dữ liệu re-train tiếp theo."),
-        ],
-        "images": ["val_epoch", "threshold", "test_clf"],
+        "title": "Validation theo epoch cho thấy metric duy trì ổn định trên ngưỡng mục tiêu.",
+        "image": "val_epoch",
+        "media": "tech-val-epoch.jpg",
+    },
+    {
+        "type": "chart_focus",
+        "kicker": "Threshold Tuning",
+        "title": "Ngưỡng validation được theo dõi qua từng epoch để chọn điểm cắt phù hợp.",
+        "image": "threshold",
+        "media": "tech-threshold.jpg",
+    },
+    {
+        "type": "chart_focus",
+        "kicker": "Test Classification",
+        "title": "Biểu đồ lỗi phân loại giúp định hướng dữ liệu cần bổ sung cho re-train.",
+        "image": "test_clf",
+        "media": "tech-test-clf.jpg",
     },
     {
         "type": "eval_retrain",
@@ -436,21 +446,12 @@ def build_slide(slide: dict, index: int, total: int) -> str:
         shapes += rect(1.48, 0.7, 10.38, 5.0, fill="#FFFFFF", line="#B8D8A4", alpha=98000)
         shapes += image("rId2", 1.95, 1.2, 9.45, 4.05, "logo.jpg")
         shapes += text_box(0.92, 6.0, 11.5, 0.45, slide["lead"], 25, True, "#EEFDF8", "ctr")
-    elif slide.get("type") == "tech_training":
+    elif slide.get("type") == "chart_focus":
         shapes += topbar()
         shapes += text_box(0.92, 1.02, 4.8, 0.28, slide["kicker"], 11.5, True, "#59E0D0")
-        shapes += text_box(0.88, 1.45, 11.4, 1.05, slide["title"], 27.5, True)
-        for i, (head, body) in enumerate(slide["points"]):
-            yy = 2.86 + i * 1.06
-            shapes += rect(0.78, yy, 3.25, 0.82, fill="#1A2B20", line="#B8D8A4")
-            shapes += text_box(0.94, yy + 0.11, 2.92, 0.19, head, 11.7, True, "#EEFDF8")
-            shapes += text_box(0.94, yy + 0.38, 2.9, 0.23, body, 7.05, False, "#A8C4C0")
-        shapes += rect(4.22, 2.76, 4.18, 3.02, fill="#FFFFFF", line="#B8D8A4", alpha=98000)
-        shapes += image("rId3", 4.36, 2.9, 3.9, 2.74, "val-epoch.jpg")
-        shapes += rect(8.62, 2.76, 1.94, 3.02, fill="#FFFFFF", line="#B8D8A4", alpha=98000)
-        shapes += image("rId4", 8.74, 2.9, 1.7, 2.74, "threshold.jpg")
-        shapes += rect(10.78, 2.76, 1.94, 3.02, fill="#FFFFFF", line="#B8D8A4", alpha=98000)
-        shapes += image("rId5", 10.9, 2.9, 1.7, 2.74, "test-clf.jpg")
+        shapes += text_box(0.88, 1.44, 11.4, 0.92, slide["title"], 27.0, True)
+        shapes += rect(0.86, 2.66, 11.6, 3.82, fill="#FFFFFF", line="#B8D8A4", alpha=98000)
+        shapes += image("rId3", 1.02, 2.82, 11.28, 3.5, slide["media"])
     elif slide.get("type") == "eval_retrain":
         shapes += topbar()
         shapes += text_box(0.92, 0.94, 4.8, 0.28, slide["kicker"], 11.5, True, "#59E0D0")
@@ -578,10 +579,8 @@ def slide_rels(slide: dict) -> str:
     if slide.get("type") == "demo_video":
         rels.append('<Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/video" Target="../media/demo.mp4"/>')
         rels.append('<Relationship Id="rId4" Type="http://schemas.microsoft.com/office/2007/relationships/media" Target="../media/demo.mp4"/>')
-    if slide.get("type") == "tech_training":
-        rels.append('<Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="../media/tech-val-epoch.jpg"/>')
-        rels.append('<Relationship Id="rId4" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="../media/tech-threshold.jpg"/>')
-        rels.append('<Relationship Id="rId5" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="../media/tech-test-clf.jpg"/>')
+    if slide.get("type") == "chart_focus":
+        rels.append(f'<Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="../media/{slide["media"]}"/>')
     if slide.get("type") == "eval_retrain":
         rels.append('<Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="../media/tech-eval-retrain.jpg"/>')
     if slide.get("type") == "test_distribution":
