@@ -7,4 +7,4 @@ fps: giao động từ 3.22 đến 5.55 phụ thuộc vào đường truyền m�
 On local
 average latency: 155.544
 p95: 194.355
-fps: 6.43
+fps: 6.43 đến 8.45

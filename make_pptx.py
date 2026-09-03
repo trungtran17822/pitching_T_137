@@ -294,7 +294,7 @@ slides = [
         "comparison": [
             ("Average latency", "332,467 ms", "155,544 ms"),
             ("p95 latency", "511,749 ms", "194,355 ms"),
-            ("FPS", "3,22–5,55 FPS\nphụ thuộc đường truyền", "6,43 FPS"),
+            ("FPS", "3,22–5,55 FPS\nphụ thuộc đường truyền", "6,43–8,45 FPS"),
         ],
         "images": ["eval_retrain"],
     },
