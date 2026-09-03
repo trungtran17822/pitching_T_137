@@ -245,8 +245,8 @@ slides = [
         "cards": [
             ("Phase 1 · 0–1 tháng", "Hoàn thiện MVP: access control, emergency alerts và demo run ổn định."),
             ("Phase 2 · 3 tuần", "Benchmark trên các gateway/camera phổ biến để đo FPS, độ trễ và độ ổn định."),
-            ("What Partner Receives", "Camera partners provide cameras, dedicated technical support team and price discount. Site partners provide a testing site and receive a 3-month free product trial."),
-            ("3-month Pilot Goal", "Confirm Recall ≥85% and Precision with acceptable alert latency on the partner's real-world hardware/network, not only in internal testing."),
+            ("Đối tác nhận được gì", "Đối tác camera cung cấp camera, đội hỗ trợ kỹ thuật riêng và ưu đãi giá. Đối tác địa điểm cung cấp nơi thử nghiệm và được dùng thử sản phẩm miễn phí 3 tháng."),
+            ("Mục tiêu pilot 3 tháng", "Xác nhận hệ thống đạt Recall ≥85% và Precision với độ trễ cảnh báo chấp nhận được trên phần cứng/mạng thực tế của đối tác, không chỉ trong môi trường test nội bộ."),
         ],
         "quote": "Kết luận: SYL có thể triển khai và launch ra thị trường trong 19 tuần, tính từ lúc hình thành ý tưởng đến sản phẩm hoàn chỉnh.",
     },
