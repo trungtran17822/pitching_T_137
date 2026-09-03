@@ -291,15 +291,10 @@ slides = [
         "type": "eval_retrain",
         "kicker": "Highlighted Evaluation",
         "title": "Eval re-train xác nhận hiệu năng trên locked test và điều kiện chạy gần real-time.",
-        "metrics": [
-            ("332,467ms", "độ trễ trung bình."),
-            ("511,749ms", "p95 latency."),
-            ("3,22–14,85 FPS", "dao động theo đường truyền mạng."),
-        ],
-        "points": [
-            ("Locked test", "So sánh trực tiếp best validation với locked test để kiểm tra khả năng tổng quát hóa."),
-            ("Target", "Các cột metric được đối chiếu với target 0.90, giúp pitch rõ hơn về mức sẵn sàng thử nghiệm."),
-            ("Ứng dụng pilot", "Chỉ số latency/FPS là cơ sở để đo lại trên hardware và network thật của đối tác."),
+        "comparison": [
+            ("Average latency", "332,467 ms", "155,544 ms"),
+            ("p95 latency", "511,749 ms", "194,355 ms"),
+            ("FPS", "3,22–5,55 FPS\nphụ thuộc đường truyền", "6,43 FPS"),
         ],
         "images": ["eval_retrain"],
     },
@@ -456,18 +451,23 @@ def build_slide(slide: dict, index: int, total: int) -> str:
         shapes += topbar()
         shapes += text_box(0.92, 0.94, 4.8, 0.28, slide["kicker"], 11.5, True, "#59E0D0")
         shapes += text_box(0.88, 1.28, 11.45, 0.82, slide["title"], 25.5, True)
-        for i, (num, body) in enumerate(slide["metrics"]):
-            x = 0.92 + i * 3.93
-            shapes += rect(x, 2.32, 3.65, 0.82, fill="#1A2B20", line="#70F0A8")
-            shapes += text_box(x + 0.16, 2.45, 3.32, 0.24, num, 18.7, True, "#70F0A8")
-            shapes += text_box(x + 0.16, 2.75, 3.25, 0.16, body, 7.6, False, "#A8C4C0")
-        shapes += rect(0.82, 3.4, 7.18, 3.02, fill="#FFFFFF", line="#B8D8A4", alpha=98000)
-        shapes += image("rId3", 0.96, 3.54, 6.9, 2.74, "eval-retrain.jpg")
-        for i, (head, body) in enumerate(slide["points"]):
-            yy = 3.4 + i * 0.97
-            shapes += rect(8.28, yy, 4.08, 0.74, fill="#1A2B20", line="#B8D8A4")
-            shapes += text_box(8.46, yy + 0.09, 3.7, 0.18, head, 11.0, True, "#EEFDF8")
-            shapes += text_box(8.46, yy + 0.33, 3.62, 0.21, body, 6.9, False, "#A8C4C0")
+        shapes += rect(0.82, 2.74, 7.18, 3.66, fill="#FFFFFF", line="#B8D8A4", alpha=98000)
+        shapes += image("rId3", 0.96, 2.9, 6.9, 3.34, "eval-retrain.jpg")
+        table_x, table_y = 8.24, 2.74
+        widths = [1.22, 1.42, 1.42]
+        shapes += rect(table_x, table_y, 4.12, 3.02, fill="#1A2B20", line="#B8D8A4")
+        shapes += rect(table_x, table_y, 4.12, 0.52, fill="#24402F", line="#B8D8A4")
+        headers = ["Metric", "On VPS", "On local"]
+        cx = table_x
+        for i, head in enumerate(headers):
+            shapes += text_box(cx + 0.08, table_y + 0.16, widths[i] - 0.12, 0.18, head, 9.2, True, "#70F0A8")
+            cx += widths[i]
+        for r, (metric, vps, local) in enumerate(slide["comparison"]):
+            yy = table_y + 0.52 + r * 0.78
+            shapes += rect(table_x, yy, 4.12, 0.78, fill="#1A2B20", line="#B8D8A4", alpha=78000)
+            shapes += text_box(table_x + 0.08, yy + 0.19, widths[0] - 0.12, 0.2, metric, 7.8, False, "#A8C4C0")
+            shapes += text_box(table_x + widths[0] + 0.08, yy + 0.15, widths[1] - 0.12, 0.36, vps, 8.2, True, "#EEFDF8")
+            shapes += text_box(table_x + widths[0] + widths[1] + 0.08, yy + 0.15, widths[2] - 0.12, 0.36, local, 8.2, True, "#EEFDF8")
     elif slide.get("type") == "test_distribution":
         shapes += topbar()
         shapes += text_box(0.92, 1.02, 4.8, 0.28, slide["kicker"], 11.5, True, "#59E0D0")

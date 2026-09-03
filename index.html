@@ -347,6 +347,34 @@
       background: linear-gradient(180deg, rgba(112, 240, 168, .18), rgba(31, 48, 34, .82));
     }
     .eval-metrics strong { color: var(--green); font-size: clamp(24px, 2.9vw, 40px); }
+    .compare-table {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      background: rgba(31, 48, 34, .82);
+      box-shadow: var(--shadow);
+    }
+    .compare-table table {
+      width: 100%;
+      border-collapse: collapse;
+      color: var(--text);
+      font-size: clamp(12px, 1.05vw, 15px);
+    }
+    .compare-table th,
+    .compare-table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(231, 216, 181, .18);
+      text-align: left;
+      vertical-align: top;
+    }
+    .compare-table th {
+      color: var(--green);
+      font-size: clamp(14px, 1.28vw, 18px);
+      background: rgba(112, 240, 168, .08);
+    }
+    .compare-table tr:last-child td { border-bottom: 0; }
+    .compare-table td:first-child { color: var(--muted); width: 34%; }
+    .compare-table strong { color: var(--text); font-weight: 900; }
     .evidence-slide .content { width: min(1240px, 100%); }
     .evidence-slide h2 { font-size: clamp(28px, 3.2vw, 44px); max-width: 1120px; }
     .evidence-slide .tech-layout.wide {
@@ -563,6 +591,10 @@
       .eval-metrics { gap: 8px; margin: 14px 0 8px; }
       .eval-metrics .metric { min-height: 62px; padding: 8px 10px; }
       .eval-metrics strong { font-size: 24px; }
+      .compare-table table { font-size: 10.6px; }
+      .compare-table th,
+      .compare-table td { padding: 8px 9px; }
+      .compare-table th { font-size: 13px; }
       .evidence-slide .content { width: min(1120px, 100%); }
       .evidence-slide h2 { font-size: 32px; line-height: .98; }
       .evidence-slide .tech-layout.wide { grid-template-columns: 1.5fr .5fr; gap: 10px; margin-top: 12px; }
@@ -859,17 +891,19 @@
       <div class="content">
         <div class="kicker">Highlighted Evaluation</div>
         <h2>Eval re-train xác nhận hiệu năng trên locked test và điều kiện chạy gần real-time.</h2>
-        <div class="eval-metrics">
-          <div class="metric good"><strong>332,467ms</strong><span>độ trễ trung bình.</span></div>
-          <div class="metric good"><strong>511,749ms</strong><span>p95 latency.</span></div>
-          <div class="metric"><strong>3,22–14,85 FPS</strong><span>dao động theo đường truyền mạng.</span></div>
-        </div>
         <div class="tech-layout wide">
           <figure class="tech-shot"><img src="assets/tech/eval-retrain.jpg" alt="Best validation versus locked test" /></figure>
-          <div class="tech-points">
-            <div class="card good"><h3>Locked test</h3><p>So sánh trực tiếp best validation với locked test để kiểm tra khả năng tổng quát hóa.</p></div>
-            <div class="card"><h3>Target</h3><p>Các cột metric được đối chiếu với target 0.90, giúp pitch rõ hơn về mức sẵn sàng thử nghiệm.</p></div>
-            <div class="card"><h3>Ứng dụng pilot</h3><p>Chỉ số latency/FPS là cơ sở để đo lại trên hardware và network thật của đối tác.</p></div>
+          <div class="compare-table" aria-label="Comparison between VPS and local evaluation">
+            <table>
+              <thead>
+                <tr><th>Metric</th><th>On VPS</th><th>On local</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Average latency</td><td><strong>332,467 ms</strong></td><td><strong>155,544 ms</strong></td></tr>
+                <tr><td>p95 latency</td><td><strong>511,749 ms</strong></td><td><strong>194,355 ms</strong></td></tr>
+                <tr><td>FPS</td><td><strong>3,22–5,55 FPS</strong><br />phụ thuộc vào đường truyền mạng</td><td><strong>6,43 FPS</strong></td></tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
