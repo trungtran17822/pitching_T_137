@@ -281,6 +281,68 @@
     .business-slide .card p,
     .business-slide .price p { font-size: clamp(11.8px, 1vw, 13.5px); line-height: 1.25; }
     .business-slide .viz-row { margin-top: 12px; }
+    .roadmap-slide h2 { font-size: clamp(28px, 3.6vw, 50px); }
+    .roadmap-slide .grid.two { margin-top: 18px; gap: 12px; }
+    .roadmap-slide .card { min-height: 108px; padding: 14px; }
+    .roadmap-slide .card h3 { font-size: clamp(16px, 1.45vw, 20px); }
+    .roadmap-slide .card p { font-size: clamp(12px, 1.05vw, 14px); line-height: 1.25; }
+    .roadmap-slide .timeline-viz { margin-top: 12px; }
+    .tech-slide .content { width: min(1180px, 100%); }
+    .tech-slide h2 { font-size: clamp(28px, 3.4vw, 48px); max-width: 1060px; }
+    .tech-layout {
+      display: grid;
+      grid-template-columns: .72fr 1.28fr;
+      gap: 16px;
+      align-items: stretch;
+      margin-top: 18px;
+    }
+    .tech-layout.wide {
+      grid-template-columns: 1.08fr .92fr;
+    }
+    .tech-points {
+      display: grid;
+      gap: 10px;
+    }
+    .tech-shot-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .tech-shot-grid.single {
+      grid-template-columns: 1fr;
+    }
+    .tech-shot {
+      display: grid;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .94);
+      padding: 8px;
+      box-shadow: var(--shadow);
+      min-height: 0;
+    }
+    .tech-shot img {
+      display: block;
+      width: 100%;
+      max-height: 46vh;
+      object-fit: contain;
+      border-radius: 4px;
+    }
+    .tech-shot-grid .tech-shot img { max-height: 31vh; }
+    .eval-slide .content { width: min(1220px, 100%); }
+    .eval-slide h2 { font-size: clamp(30px, 3.6vw, 50px); }
+    .eval-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .eval-metrics .metric {
+      min-height: 86px;
+      padding: 12px 14px;
+      background: linear-gradient(180deg, rgba(112, 240, 168, .18), rgba(31, 48, 34, .82));
+    }
+    .eval-metrics strong { color: var(--green); font-size: clamp(24px, 2.9vw, 40px); }
     .viz-row {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -438,6 +500,36 @@
       .business-slide .price p { font-size: 10.8px; line-height: 1.16; }
       .business-slide .viz-row { margin-top: 8px; }
       .business-slide .mini-chart { min-height: 64px; padding: 8px; }
+      .roadmap-slide h2 { font-size: 35px; }
+      .roadmap-slide .grid.two { gap: 9px; margin-top: 12px; }
+      .roadmap-slide .card { min-height: 82px; padding: 9px 11px; }
+      .roadmap-slide .card h3 { font-size: 15px; margin-bottom: 4px; }
+      .roadmap-slide .card p { font-size: 10.6px; line-height: 1.14; }
+      .roadmap-slide .timeline-viz { margin-top: 9px; }
+      .roadmap-slide .legend { font-size: 10px; margin-top: 5px; }
+      .roadmap-slide .quote { margin-top: 9px; font-size: 13px; line-height: 1.18; padding-left: 14px; }
+      .tech-slide .content,
+      .eval-slide .content { width: min(1080px, 100%); }
+      .tech-slide h2,
+      .eval-slide h2 { font-size: 34px; line-height: .98; }
+      .tech-layout,
+      .tech-layout.wide { gap: 10px; margin-top: 12px; }
+      .tech-layout { grid-template-columns: .66fr 1.34fr; }
+      .tech-layout.wide { grid-template-columns: 1.12fr .88fr; }
+      .tech-points { gap: 7px; }
+      .tech-slide .card,
+      .eval-slide .card { min-height: 66px; padding: 9px 11px; }
+      .tech-slide .card h3,
+      .eval-slide .card h3 { font-size: 15px; margin-bottom: 4px; }
+      .tech-slide .card p,
+      .eval-slide .card p { font-size: 10.8px; line-height: 1.16; }
+      .tech-shot-grid { gap: 8px; }
+      .tech-shot { padding: 5px; }
+      .tech-shot img { max-height: 40vh; }
+      .tech-shot-grid .tech-shot img { max-height: 26vh; }
+      .eval-metrics { gap: 8px; margin-bottom: 8px; }
+      .eval-metrics .metric { min-height: 62px; padding: 8px 10px; }
+      .eval-metrics strong { font-size: 24px; }
       .viz-row { gap: 8px; margin-top: 12px; }
       .mini-chart { min-height: 76px; padding: 10px; }
       .mini-chart h4 { font-size: 12px; margin-bottom: 7px; }
@@ -469,6 +561,13 @@
       .business-slide .stack { gap: 10px; }
       .business-slide .card,
       .business-slide .price { min-height: auto; }
+      .roadmap-slide .card { min-height: auto; }
+      .tech-layout,
+      .tech-layout.wide,
+      .tech-shot-grid,
+      .eval-metrics { grid-template-columns: 1fr; }
+      .tech-shot img,
+      .tech-shot-grid .tech-shot img { max-height: none; }
     }
   </style>
 </head>
@@ -492,7 +591,7 @@
         <h2>Khoảnh khắc nguy hiểm nhất thường xảy ra khi không ai đang nhìn.</h2>
         <p class="lead">Gia đình cần một hệ thống biết phân biệt sự cố thật với chuyển động bình thường, thay vì chỉ gửi thêm nhiều thông báo nhiễu.</p>
         <div class="grid"><div class="card warn"><h3>Phát hiện trễ</h3><p>Người đi làm hoặc sống xa không thể luôn theo dõi camera để biết cha mẹ gặp sự cố.</p></div><div class="card warn"><h3>Alert fatigue</h3><p>Motion alert quá nhiều khiến người dùng dễ tắt thông báo và bỏ lỡ cảnh báo quan trọng.</p></div><div class="card warn"><h3>Rủi ro riêng tư</h3><p>Camera gia đình phải kiểm soát ai được xem, xem trong bao lâu và xem vì lý do gì.</p></div></div>
-        <div class="viz-row"><div class="mini-chart"><h4>Mức độ rủi ro</h4><div class="mini-bars"><i style="--h: 38%; --o: .55"></i><i style="--h: 68%; --o: .75"></i><i style="--h: 92%"></i></div></div><div class="mini-chart"><h4>False alarm</h4><div class="ring" style="--value: 34.6%"><span>34,6%</span></div></div><div class="mini-chart"><h4>Missed alert</h4><div class="ring" style="--value: 46.2%"><span>46,2%</span></div></div></div>
+        <div class="viz-row"><div class="mini-chart"><h4>Mức độ rủi ro</h4><div class="mini-bars"><i style="--h: 38%; --o: .55"></i><i style="--h: 68%; --o: .75"></i><i style="--h: 92%"></i></div></div><div class="mini-chart"><h4>Báo động giả</h4><div class="ring" style="--value: 34.6%"><span>34,6%</span></div></div><div class="mini-chart"><h4>Không báo kịp</h4><div class="ring" style="--value: 46.2%"><span>46,2%</span></div></div></div>
       </div>
       <footer class="footer"><span>02 / 12</span><div class="progress"><div class="bar"></div></div><div class="controls"><button data-prev>‹</button><button data-next>›</button></div></footer>
     </section>
@@ -517,11 +616,11 @@
                 <div class="bar-row"><span>Đang dùng camera</span><div class="track"><div class="fill" style="--value: 90.4%"></div></div><b>90,4%</b></div>
                 <div class="bar-row"><span>Lo ngại cloud cao</span><div class="track"><div class="fill" style="--value: 73.1%"></div></div><b>73,1%</b></div>
                 <div class="bar-row"><span>Quan tâm sản phẩm</span><div class="track"><div class="fill" style="--value: 59%"></div></div><b>59%</b></div>
-                <div class="bar-row"><span>Sự cố bị miss</span><div class="track"><div class="fill" style="--value: 46.2%"></div></div><b>46,2%</b></div>
+                <div class="bar-row"><span>Có sự cố không báo kịp</span><div class="track"><div class="fill" style="--value: 46.2%"></div></div><b>46,2%</b></div>
                 <div class="bar-row"><span>Chắc chắn demo</span><div class="track"><div class="fill" style="--value: 38.5%"></div></div><b>38,5%</b></div>
                 <div class="bar-row"><span>Báo động giả</span><div class="track"><div class="fill" style="--value: 34.6%"></div></div><b>34,6%</b></div>
               </div>
-              <p class="source-note">Nguồn: report T_137 và 52 câu trả lời survey; cloud cao = mức 4-5.</p>
+              <p class="source-note">Nguồn: report T_137 và 52 câu trả lời survey; missed/false alarm lấy từ ảnh survey; cloud cao = mức 4–5.</p>
             </div>
           </div>
           <div class="survey-proof">
@@ -641,13 +740,13 @@
       <footer class="footer"><span>12 / 14</span><div class="progress"><div class="bar"></div></div><div class="controls"><button data-prev>‹</button><button data-next>›</button></div></footer>
     </section>
 
-    <section class="slide" style="--progress: 100%">
+    <section class="slide roadmap-slide" style="--progress: 100%">
       <div class="topbar"><div class="brand"><span class="mark"></span></div><span>Roadmap & Ask</span></div>
       <div class="content">
         <div class="kicker">Next Step</div>
         <h2>Từ ý tưởng đến sản phẩm thị trường trong 19 tuần.</h2>
-        <div class="grid two"><div class="card"><h3>Phase 1 · 0–1 tháng</h3><p>Hoàn thiện MVP: access control, emergency alerts và demo run ổn định.</p></div><div class="card"><h3>Phase 2 · 3 tuần</h3><p>Benchmark trên các gateway/camera phổ biến để đo FPS, độ trễ và độ ổn định.</p></div><div class="card"><h3>Đối tác nhận được gì</h3><p>Đối tác camera cung cấp camera, đội hỗ trợ kỹ thuật riêng và ưu đãi giá. Đối tác địa điểm cung cấp nơi thử nghiệm và được dùng thử sản phẩm miễn phí 3 tháng.</p></div><div class="card good"><h3>Mục tiêu pilot 3 tháng</h3><p>Xác nhận hệ thống đạt Recall ≥85% và Precision với độ trễ cảnh báo chấp nhận được trên phần cứng/mạng thực tế của đối tác, không chỉ trong môi trường test nội bộ.</p></div></div>
-        <div class="timeline-viz"><span style="--o: .75"></span><span style="--o: .9"></span><span></span></div><div class="legend"><span>0–1 tháng</span><span>3 tuần</span><span>1–3 tháng</span></div>
+        <div class="grid two"><div class="card"><h3>Phase 1 · 0–4 tuần</h3><p>Hoàn thiện MVP: access control, emergency alerts và demo run ổn định.</p></div><div class="card"><h3>Phase 2 · 3 tuần</h3><p>Benchmark trên các gateway/camera phổ biến để đo FPS, độ trễ và độ ổn định.</p></div><div class="card"><h3>Đối tác nhận được gì</h3><p>Đang tìm 2 đối tác cung cấp camera và 1 đối tác cung cấp địa điểm thử nghiệm. Đổi lại: đối tác camera nhận đội kỹ thuật hỗ trợ riêng + ưu đãi giá; đối tác địa điểm nhận sản phẩm dùng thử miễn phí 3 tháng.</p></div><div class="card good"><h3>Mục tiêu pilot · 4–12 tuần</h3><p>Xác nhận hệ thống đạt Recall ≥85% và Precision với độ trễ cảnh báo chấp nhận được trên phần cứng/mạng thực tế của đối tác, không chỉ trong môi trường test nội bộ.</p></div></div>
+        <div class="timeline-viz"><span style="--o: .75"></span><span style="--o: .9"></span><span></span></div><div class="legend"><span>0–4 tuần</span><span>3 tuần</span><span>4–12 tuần</span></div>
         <p class="quote">Kết luận: SYL có thể triển khai và launch ra thị trường trong 19 tuần, tính từ lúc hình thành ý tưởng đến sản phẩm hoàn chỉnh.</p>
       </div>
       <footer class="footer"><span>12 / 12</span><div class="progress"><div class="bar"></div></div><div class="controls"><button data-prev>‹</button><button data-next>›</button></div></footer>
@@ -660,6 +759,67 @@
         <p class="team-name">melphins</p>
       </div>
       <footer class="footer"><span>13 / 13</span><div class="progress"><div class="bar"></div></div><div class="controls"><button data-prev>‹</button><button data-next>›</button></div></footer>
+    </section>
+
+    <section class="slide tech-slide">
+      <div class="topbar"><div class="brand"><span class="mark"></span></div><span>Kỹ thuật</span></div>
+      <div class="content">
+        <div class="kicker">Model Training</div>
+        <h2>Quá trình huấn luyện ổn định, các metric vượt ngưỡng mục tiêu trong nhiều epoch.</h2>
+        <div class="tech-layout">
+          <div class="tech-points">
+            <div class="card good"><h3>Validation ổn định</h3><p>Precision, Recall, F1 và Specificity duy trì trên target 0.90 sau giai đoạn hội tụ.</p></div>
+            <div class="card"><h3>Checkpoint selection</h3><p>Chọn model theo metric tổng hợp thay vì chỉ tối ưu một chỉ số đơn lẻ.</p></div>
+            <div class="card"><h3>Triển khai thực tế</h3><p>Pipeline được đóng gói để chạy inference real-time trên gateway và camera phổ biến.</p></div>
+          </div>
+          <div class="tech-shot-grid single">
+            <figure class="tech-shot"><img src="assets/tech/validation-metrics.jpg" alt="Validation metrics by epoch" /></figure>
+          </div>
+        </div>
+      </div>
+      <footer class="footer"><span>14 / 16</span><div class="progress"><div class="bar"></div></div><div class="controls"><button data-prev>‹</button><button data-next>›</button></div></footer>
+    </section>
+
+    <section class="slide tech-slide eval-slide">
+      <div class="topbar"><div class="brand"><span class="mark"></span></div><span>Eval Re-train</span></div>
+      <div class="content">
+        <div class="kicker">Highlighted Evaluation</div>
+        <h2>Eval re-train xác nhận hiệu năng trên locked test và điều kiện chạy gần real-time.</h2>
+        <div class="eval-metrics">
+          <div class="metric good"><strong>332,467ms</strong><span>độ trễ trung bình.</span></div>
+          <div class="metric good"><strong>511,749ms</strong><span>p95 latency.</span></div>
+          <div class="metric"><strong>3,22–14,85 FPS</strong><span>dao động theo đường truyền mạng.</span></div>
+        </div>
+        <div class="tech-layout wide">
+          <figure class="tech-shot"><img src="assets/tech/eval-retrain.jpg" alt="Best validation versus locked test" /></figure>
+          <div class="tech-points">
+            <div class="card good"><h3>Locked test</h3><p>So sánh trực tiếp best validation với locked test để kiểm tra khả năng tổng quát hóa.</p></div>
+            <div class="card"><h3>Target</h3><p>Các cột metric được đối chiếu với target 0.90, giúp pitch rõ hơn về mức sẵn sàng thử nghiệm.</p></div>
+            <div class="card"><h3>Ứng dụng pilot</h3><p>Chỉ số latency/FPS là cơ sở để đo lại trên hardware và network thật của đối tác.</p></div>
+          </div>
+        </div>
+      </div>
+      <footer class="footer"><span>15 / 16</span><div class="progress"><div class="bar"></div></div><div class="controls"><button data-prev>‹</button><button data-next>›</button></div></footer>
+    </section>
+
+    <section class="slide tech-slide">
+      <div class="topbar"><div class="brand"><span class="mark"></span></div><span>Test Evidence</span></div>
+      <div class="content">
+        <div class="kicker">Model Evidence</div>
+        <h2>Bằng chứng kiểm thử cho thấy classifier tách nhóm fall/non-fall rõ ràng.</h2>
+        <div class="tech-layout wide">
+          <div class="tech-shot-grid">
+            <figure class="tech-shot"><img src="assets/tech/confusion-matrix.jpg" alt="Normalized test confusion matrix" /></figure>
+            <figure class="tech-shot"><img src="assets/tech/fall-probability.jpg" alt="Fall probability by test video" /></figure>
+          </div>
+          <div class="tech-points">
+            <div class="card good"><h3>Confusion matrix</h3><p>Tỷ lệ phân loại đúng cao ở cả nhóm fall và non-fall, giúp giảm cảnh báo sai.</p></div>
+            <div class="card"><h3>Probability threshold</h3><p>Ngưỡng dự đoán tách rõ phần lớn video test, thuận lợi cho cảnh báo có kiểm soát.</p></div>
+            <div class="card"><h3>Evidence-driven tuning</h3><p>Các lỗi còn lại được dùng để điều chỉnh threshold và ưu tiên dữ liệu re-train tiếp theo.</p></div>
+          </div>
+        </div>
+      </div>
+      <footer class="footer"><span>16 / 16</span><div class="progress"><div class="bar"></div></div><div class="controls"><button data-prev>‹</button><button data-next>›</button></div></footer>
     </section>
   </main>
 

@@ -5,7 +5,7 @@ import zipfile
 from pathlib import Path
 
 
-OUT = Path("SYL_pitch_deck_13_slides.pptx")
+OUT = Path("SYL_pitch_deck_16_slides.pptx")
 HERO = Path("assets/syl-hero.png")
 DIAGRAM = Path("assets/overview-diagram.png")
 LOGO = Path("assets/logo.jpg")
@@ -15,6 +15,12 @@ SURVEY_IMAGES = {
     "support_solution": Path("assets/survey/support-solution.png"),
     "early_access": Path("assets/survey/early-access.png"),
     "false_alarm": Path("assets/survey/false-alarm.png"),
+}
+TECH_IMAGES = {
+    "validation_metrics": Path("assets/tech/validation-metrics.jpg"),
+    "confusion_matrix": Path("assets/tech/confusion-matrix.jpg"),
+    "fall_probability": Path("assets/tech/fall-probability.jpg"),
+    "eval_retrain": Path("assets/tech/eval-retrain.jpg"),
 }
 EMU = 914400
 SLIDE_W = 13.333333 * EMU
@@ -147,7 +153,7 @@ slides = [
             ("Có NCT & lo lắng", 85),
             ("Tin thiết bị điện tử", 66.7),
             ("Quan tâm sản phẩm", 59),
-            ("Sự cố bị miss", 46.2),
+            ("Có sự cố không báo kịp", 46.2),
             ("Chắc chắn demo", 38.5),
             ("Báo động giả", 34.6),
         ],
@@ -243,10 +249,10 @@ slides = [
         "kicker": "Next Step",
         "title": "Từ ý tưởng đến sản phẩm thị trường trong 19 tuần.",
         "cards": [
-            ("Phase 1 · 0–1 tháng", "Hoàn thiện MVP: access control, emergency alerts và demo run ổn định."),
+            ("Phase 1 · 0–4 tuần", "Hoàn thiện MVP: access control, emergency alerts và demo run ổn định."),
             ("Phase 2 · 3 tuần", "Benchmark trên các gateway/camera phổ biến để đo FPS, độ trễ và độ ổn định."),
-            ("Đối tác nhận được gì", "Đối tác camera cung cấp camera, đội hỗ trợ kỹ thuật riêng và ưu đãi giá. Đối tác địa điểm cung cấp nơi thử nghiệm và được dùng thử sản phẩm miễn phí 3 tháng."),
-            ("Mục tiêu pilot 3 tháng", "Xác nhận hệ thống đạt Recall ≥85% và Precision với độ trễ cảnh báo chấp nhận được trên phần cứng/mạng thực tế của đối tác, không chỉ trong môi trường test nội bộ."),
+            ("Đối tác nhận được gì", "Đang tìm 2 đối tác cung cấp camera và 1 đối tác cung cấp địa điểm thử nghiệm. Đổi lại: đối tác camera nhận đội kỹ thuật hỗ trợ riêng + ưu đãi giá; đối tác địa điểm nhận sản phẩm dùng thử miễn phí 3 tháng."),
+            ("Mục tiêu pilot · 4–12 tuần", "Xác nhận hệ thống đạt Recall ≥85% và Precision với độ trễ cảnh báo chấp nhận được trên phần cứng/mạng thực tế của đối tác, không chỉ trong môi trường test nội bộ."),
         ],
         "quote": "Kết luận: SYL có thể triển khai và launch ra thị trường trong 19 tuần, tính từ lúc hình thành ý tưởng đến sản phẩm hoàn chỉnh.",
     },
@@ -255,6 +261,44 @@ slides = [
         "kicker": "Thank you",
         "title": "SYL",
         "lead": "melphins",
+    },
+    {
+        "type": "tech_training",
+        "kicker": "Model Training",
+        "title": "Quá trình huấn luyện ổn định, các metric vượt ngưỡng mục tiêu trong nhiều epoch.",
+        "points": [
+            ("Validation ổn định", "Precision, Recall, F1 và Specificity duy trì trên target 0.90 sau giai đoạn hội tụ."),
+            ("Checkpoint selection", "Chọn model theo metric tổng hợp thay vì chỉ tối ưu một chỉ số đơn lẻ."),
+            ("Triển khai thực tế", "Pipeline được đóng gói để chạy inference real-time trên gateway và camera phổ biến."),
+        ],
+        "images": ["validation_metrics"],
+    },
+    {
+        "type": "eval_retrain",
+        "kicker": "Highlighted Evaluation",
+        "title": "Eval re-train xác nhận hiệu năng trên locked test và điều kiện chạy gần real-time.",
+        "metrics": [
+            ("332,467ms", "độ trễ trung bình."),
+            ("511,749ms", "p95 latency."),
+            ("3,22–14,85 FPS", "dao động theo đường truyền mạng."),
+        ],
+        "points": [
+            ("Locked test", "So sánh trực tiếp best validation với locked test để kiểm tra khả năng tổng quát hóa."),
+            ("Target", "Các cột metric được đối chiếu với target 0.90, giúp pitch rõ hơn về mức sẵn sàng thử nghiệm."),
+            ("Ứng dụng pilot", "Chỉ số latency/FPS là cơ sở để đo lại trên hardware và network thật của đối tác."),
+        ],
+        "images": ["eval_retrain"],
+    },
+    {
+        "type": "test_evidence",
+        "kicker": "Model Evidence",
+        "title": "Bằng chứng kiểm thử cho thấy classifier tách nhóm fall/non-fall rõ ràng.",
+        "points": [
+            ("Confusion matrix", "Tỷ lệ phân loại đúng cao ở cả nhóm fall và non-fall, giúp giảm cảnh báo sai."),
+            ("Probability threshold", "Ngưỡng dự đoán tách rõ phần lớn video test, thuận lợi cho cảnh báo có kiểm soát."),
+            ("Evidence-driven tuning", "Các lỗi còn lại được dùng để điều chỉnh threshold và ưu tiên dữ liệu re-train tiếp theo."),
+        ],
+        "images": ["confusion_matrix", "fall_probability"],
     },
 ]
 
@@ -339,7 +383,7 @@ def mini_ring(x: float, y: float, label: str, title: str, scale: float = 1.0) ->
 
 def visual_row(kind: str, y: float = 5.82, scale: float = 1.0) -> str:
     presets = {
-        "problem": [("bars", "Risk stack", [0.38, 0.68, 0.92]), ("ring", "False alarm", "34,6%"), ("ring", "Missed alert", "46,2%")],
+        "problem": [("bars", "Risk stack", [0.38, 0.68, 0.92]), ("ring", "Báo động giả", "34,6%"), ("ring", "Không báo kịp", "46,2%")],
         "solution": [("ring", "Fall recall", "≥85%"), ("ring", "Stranger F1", "83%"), ("bars", "Evidence flow", [0.3, 0.58, 0.86])],
         "product": [("bars", "Camera", [0.5, 0.7]), ("bars", "AI pipeline", [0.35, 0.65, 0.9]), ("bars", "Response", [0.45, 0.8])],
         "architecture": [("bars", "Streaming", [0.45, 0.78, 0.58]), ("ring", "AI services", "83%"), ("bars", "Storage", [0.8, 0.48, 0.64])],
@@ -391,6 +435,46 @@ def build_slide(slide: dict, index: int, total: int) -> str:
         shapes += rect(1.48, 0.7, 10.38, 5.0, fill="#FFFFFF", line="#B8D8A4", alpha=98000)
         shapes += image("rId2", 1.95, 1.2, 9.45, 4.05, "logo.jpg")
         shapes += text_box(0.92, 6.0, 11.5, 0.45, slide["lead"], 25, True, "#EEFDF8", "ctr")
+    elif slide.get("type") == "tech_training":
+        shapes += topbar()
+        shapes += text_box(0.92, 1.02, 4.8, 0.28, slide["kicker"], 11.5, True, "#59E0D0")
+        shapes += text_box(0.88, 1.45, 11.4, 1.05, slide["title"], 27.5, True)
+        for i, (head, body) in enumerate(slide["points"]):
+            yy = 2.86 + i * 1.06
+            shapes += rect(0.92, yy, 3.45, 0.86, fill="#1A2B20", line="#B8D8A4")
+            shapes += text_box(1.08, yy + 0.12, 3.1, 0.2, head, 12.3, True, "#EEFDF8")
+            shapes += text_box(1.08, yy + 0.41, 3.08, 0.24, body, 7.5, False, "#A8C4C0")
+        shapes += rect(4.62, 2.74, 7.78, 3.64, fill="#FFFFFF", line="#B8D8A4", alpha=98000)
+        shapes += image("rId3", 4.76, 2.88, 7.5, 3.36, "validation-metrics.jpg")
+    elif slide.get("type") == "eval_retrain":
+        shapes += topbar()
+        shapes += text_box(0.92, 0.94, 4.8, 0.28, slide["kicker"], 11.5, True, "#59E0D0")
+        shapes += text_box(0.88, 1.34, 11.45, 0.94, slide["title"], 27.5, True)
+        for i, (num, body) in enumerate(slide["metrics"]):
+            x = 0.92 + i * 3.93
+            shapes += rect(x, 2.48, 3.65, 0.88, fill="#1A2B20", line="#70F0A8")
+            shapes += text_box(x + 0.16, 2.62, 3.32, 0.24, num, 19.5, True, "#70F0A8")
+            shapes += text_box(x + 0.16, 2.94, 3.25, 0.16, body, 7.8, False, "#A8C4C0")
+        shapes += rect(0.82, 3.62, 7.18, 2.98, fill="#FFFFFF", line="#B8D8A4", alpha=98000)
+        shapes += image("rId3", 0.96, 3.76, 6.9, 2.7, "eval-retrain.jpg")
+        for i, (head, body) in enumerate(slide["points"]):
+            yy = 3.62 + i * 0.99
+            shapes += rect(8.28, yy, 4.08, 0.78, fill="#1A2B20", line="#B8D8A4")
+            shapes += text_box(8.46, yy + 0.1, 3.7, 0.19, head, 11.5, True, "#EEFDF8")
+            shapes += text_box(8.46, yy + 0.35, 3.62, 0.22, body, 7.2, False, "#A8C4C0")
+    elif slide.get("type") == "test_evidence":
+        shapes += topbar()
+        shapes += text_box(0.92, 1.02, 4.8, 0.28, slide["kicker"], 11.5, True, "#59E0D0")
+        shapes += text_box(0.88, 1.45, 11.4, 1.05, slide["title"], 27.5, True)
+        shapes += rect(0.82, 2.86, 3.68, 3.08, fill="#FFFFFF", line="#B8D8A4", alpha=98000)
+        shapes += image("rId3", 0.96, 3.0, 3.4, 2.8, "confusion-matrix.jpg")
+        shapes += rect(4.72, 2.86, 3.68, 3.08, fill="#FFFFFF", line="#B8D8A4", alpha=98000)
+        shapes += image("rId4", 4.86, 3.0, 3.4, 2.8, "fall-probability.jpg")
+        for i, (head, body) in enumerate(slide["points"]):
+            yy = 2.86 + i * 1.02
+            shapes += rect(8.68, yy, 3.74, 0.8, fill="#1A2B20", line="#B8D8A4")
+            shapes += text_box(8.86, yy + 0.1, 3.35, 0.19, head, 11.6, True, "#EEFDF8")
+            shapes += text_box(8.86, yy + 0.36, 3.32, 0.22, body, 7.1, False, "#A8C4C0")
     else:
         shapes += topbar()
         shapes += text_box(0.92, 1.02, 4.8, 0.28, slide["kicker"], 11.5, True, "#59E0D0")
@@ -496,12 +580,19 @@ def slide_rels(slide: dict) -> str:
     if slide.get("type") == "demo_video":
         rels.append('<Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/video" Target="../media/demo.mp4"/>')
         rels.append('<Relationship Id="rId4" Type="http://schemas.microsoft.com/office/2007/relationships/media" Target="../media/demo.mp4"/>')
+    if slide.get("type") == "tech_training":
+        rels.append('<Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="../media/tech-validation-metrics.jpg"/>')
+    if slide.get("type") == "eval_retrain":
+        rels.append('<Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="../media/tech-eval-retrain.jpg"/>')
+    if slide.get("type") == "test_evidence":
+        rels.append('<Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="../media/tech-confusion-matrix.jpg"/>')
+        rels.append('<Relationship Id="rId4" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="../media/tech-fall-probability.jpg"/>')
     return f"""<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">{''.join(rels)}</Relationships>"""
 
 
 def build_pptx() -> None:
-    for asset in (HERO, DIAGRAM, LOGO, DEMO_VIDEO, *SURVEY_IMAGES.values()):
+    for asset in (HERO, DIAGRAM, LOGO, DEMO_VIDEO, *SURVEY_IMAGES.values(), *TECH_IMAGES.values()):
         if not asset.exists():
             raise FileNotFoundError(asset)
     if OUT.exists():
@@ -601,6 +692,10 @@ def build_pptx() -> None:
         z.write(SURVEY_IMAGES["support_solution"], "ppt/media/survey-support-solution.png")
         z.write(SURVEY_IMAGES["early_access"], "ppt/media/survey-early-access.png")
         z.write(SURVEY_IMAGES["false_alarm"], "ppt/media/survey-false-alarm.png")
+        z.write(TECH_IMAGES["validation_metrics"], "ppt/media/tech-validation-metrics.jpg")
+        z.write(TECH_IMAGES["confusion_matrix"], "ppt/media/tech-confusion-matrix.jpg")
+        z.write(TECH_IMAGES["fall_probability"], "ppt/media/tech-fall-probability.jpg")
+        z.write(TECH_IMAGES["eval_retrain"], "ppt/media/tech-eval-retrain.jpg")
         for i, slide in enumerate(slides, start=1):
             z.writestr(f"ppt/slides/slide{i}.xml", build_slide(slide, i, total))
             z.writestr(f"ppt/slides/_rels/slide{i}.xml.rels", slide_rels(slide))
