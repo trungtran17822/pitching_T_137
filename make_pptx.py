@@ -151,11 +151,11 @@ slides = [
         "metrics": [
             ("52", "câu trả lời khảo sát về nhu cầu chăm sóc người thân lớn tuổi tại nhà."),
             ("85%", "có người lớn tuổi trong gia đình và lo lắng khi họ ở nhà một mình."),
-            ("66,7%", "tin dùng thiết bị điện tử để hỗ trợ theo dõi người thân lớn tuổi."),
+            ("61,5%", "tin dùng thiết bị điện tử để hỗ trợ theo dõi người thân lớn tuổi."),
         ],
         "bars": [
             ("Có NCT & lo lắng", 85),
-            ("Tin thiết bị điện tử", 66.7),
+            ("Tin thiết bị điện tử", 61.5),
             ("Quan tâm sản phẩm", 59),
             ("Có sự cố không báo kịp", 46.2),
             ("Chắc chắn demo", 38.5),
