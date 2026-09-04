@@ -9,6 +9,7 @@ OUT = Path("SYL_pitch_deck_18_slides.pptx")
 HERO = Path("assets/syl-hero.png")
 DIAGRAM = Path("assets/overview-diagram.png")
 LOGO = Path("assets/logo.jpg")
+LANDING_PAGE = Path("assets/landing-page.png")
 DEMO_VIDEO = Path("demo.mp4")
 SURVEY_IMAGES = {
     "missed_alert": Path("assets/survey/missed-alert.png"),
@@ -97,10 +98,19 @@ def text_box(x: float, y: float, w: float, h: float, text: str, size: float = 24
     </p:sp>"""
 
 
-def image(rel_id: str, x: float, y: float, w: float, h: float, name: str) -> str:
+def image(
+    rel_id: str,
+    x: float,
+    y: float,
+    w: float,
+    h: float,
+    name: str,
+    hyperlink_rel_id: str | None = None,
+) -> str:
+    hyperlink = f'<a:hlinkClick r:id="{hyperlink_rel_id}"/>' if hyperlink_rel_id else ""
     return f"""
     <p:pic>
-      <p:nvPicPr><p:cNvPr id="{shape_id()}" name="{esc(name)}"/><p:cNvPicPr><a:picLocks noChangeAspect="1"/></p:cNvPicPr><p:nvPr/></p:nvPicPr>
+      <p:nvPicPr><p:cNvPr id="{shape_id()}" name="{esc(name)}">{hyperlink}</p:cNvPr><p:cNvPicPr><a:picLocks noChangeAspect="1"/></p:cNvPicPr><p:nvPr/></p:nvPicPr>
       <p:blipFill><a:blip r:embed="{rel_id}"/><a:stretch><a:fillRect/></a:stretch></p:blipFill>
       <p:spPr><a:xfrm><a:off x="{emu(x)}" y="{emu(y)}"/><a:ext cx="{emu(w)}" cy="{emu(h)}"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></p:spPr>
     </p:pic>"""
@@ -261,10 +271,8 @@ slides = [
         "quote": "Kết luận: SYL có thể triển khai và launch ra thị trường trong 19 tuần, tính từ lúc hình thành ý tưởng đến sản phẩm hoàn chỉnh.",
     },
     {
-        "type": "closing",
-        "kicker": "Thank you",
-        "title": "SYL",
-        "lead": "melphins",
+        "type": "landing_page",
+        "url": "https://c3-syl-137.vercel.app",
     },
     {
         "type": "chart_focus",
@@ -437,10 +445,8 @@ def build_slide(slide: dict, index: int, total: int) -> str:
             shapes += rect(x, 3.95, 1.68, 0.36, fill="#E7D8B5", line="#B8D8A4", alpha=17000)
             shapes += text_box(x + 0.08, 4.04, 1.5, 0.13, chip, 8.4, True, "#D8F4EF", "ctr")
             x += 1.86
-    elif slide.get("type") == "closing":
-        shapes += rect(1.48, 0.7, 10.38, 5.0, fill="#FFFFFF", line="#B8D8A4", alpha=98000)
-        shapes += image("rId2", 1.95, 1.2, 9.45, 4.05, "logo.jpg")
-        shapes += text_box(0.92, 6.0, 11.5, 0.45, slide["lead"], 25, True, "#EEFDF8", "ctr")
+    elif slide.get("type") == "landing_page":
+        shapes += image("rId3", 0, 0, 13.333333, 7.5, "SYL landing page", "rId4")
     elif slide.get("type") == "chart_focus":
         shapes += topbar()
         shapes += text_box(0.92, 1.02, 4.8, 0.28, slide["kicker"], 11.5, True, "#59E0D0")
@@ -554,7 +560,8 @@ def build_slide(slide: dict, index: int, total: int) -> str:
         elif slide.get("kicker") in viz_map:
             shapes += visual_row(viz_map[slide["kicker"]])
 
-    shapes += footer(index, total)
+    if slide.get("type") != "landing_page":
+        shapes += footer(index, total)
     return f"""<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <p:sld xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:p="http://schemas.openxmlformats.org/presentationml/2006/main" xmlns:p14="http://schemas.microsoft.com/office/powerpoint/2010/main">
   <p:cSld>{shapes}</p:cSld>
@@ -569,6 +576,9 @@ def slide_rels(slide: dict) -> str:
     ]
     if slide.get("type") == "hero":
         rels.append('<Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="../media/syl-hero.png"/>')
+    if slide.get("type") == "landing_page":
+        rels.append('<Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="../media/landing-page.png"/>')
+        rels.append(f'<Relationship Id="rId4" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" Target="{esc(slide["url"])}" TargetMode="External"/>')
     if slide.get("type") == "architecture":
         rels.append('<Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="../media/overview-diagram.png"/>')
     if slide.get("type") == "survey_market":
@@ -590,7 +600,7 @@ def slide_rels(slide: dict) -> str:
 
 
 def build_pptx() -> None:
-    for asset in (HERO, DIAGRAM, LOGO, DEMO_VIDEO, *SURVEY_IMAGES.values(), *TECH_IMAGES.values()):
+    for asset in (HERO, DIAGRAM, LOGO, LANDING_PAGE, DEMO_VIDEO, *SURVEY_IMAGES.values(), *TECH_IMAGES.values()):
         if not asset.exists():
             raise FileNotFoundError(asset)
     if OUT.exists():
@@ -685,6 +695,7 @@ def build_pptx() -> None:
         z.write(HERO, "ppt/media/syl-hero.png")
         z.write(DIAGRAM, "ppt/media/overview-diagram.png")
         z.write(LOGO, "ppt/media/logo.jpg")
+        z.write(LANDING_PAGE, "ppt/media/landing-page.png")
         z.write(DEMO_VIDEO, "ppt/media/demo.mp4")
         z.write(SURVEY_IMAGES["missed_alert"], "ppt/media/survey-missed-alert.png")
         z.write(SURVEY_IMAGES["support_solution"], "ppt/media/survey-support-solution.png")
